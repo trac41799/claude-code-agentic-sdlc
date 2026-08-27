@@ -7,7 +7,7 @@ This file is the entry point Claude Code reads when this repo is opened. It defi
 - Database: Supabase (`website/supabase/`)
 - Deployment: Vercel (auto-deploys when a PR merges to `main` — nobody pushes to `main` directly)
 
-<!-- BEGIN: AGENT-DELEGATION (managed by infiniteleverage skills — do not delete this block) -->
+<!-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills — do not delete this block) -->
 ## Agent delegation (auto-routing)
 
 When you receive a request, **delegate to the right specialist agent** before doing the work yourself. The 4 agents and their triggers:

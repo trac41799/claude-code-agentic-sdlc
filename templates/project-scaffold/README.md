@@ -2,8 +2,8 @@
 
 Brief one-paragraph description of what this project does and who it serves.
 
-> Scaffolded with [Infinite Leverage](https://github.com/talentedgeai/infinite-leverage)
-> (`/il-project`) — a 4-agent team lives in `.claude/`; say what you need and the
+> Scaffolded with [Agentic SDLC](https://github.com/trac41799/claude-code-agentic-sdlc)
+> (`/asdlc-project`) — a 4-agent team lives in `.claude/`; say what you need and the
 > right agent picks it up (see `CLAUDE.md`).
 
 ## Getting started

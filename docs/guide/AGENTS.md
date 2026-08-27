@@ -1,7 +1,7 @@
 # Agent Guide
 
-The Infinite Leverage team is **4 agents**, installed **per project** into that
-project's own `.claude/` — by `/il-project` for a new project, or `/il-adopt` for
+The Agentic SDLC team is **4 agents**, installed **per project** into that
+project's own `.claude/` — by `/asdlc-project` for a new project, or `/asdlc-adopt` for
 a repo that already exists. Nothing lives in `~/.claude/`.
 
 - Agent definitions: [`.claude/agents/`](../../.claude/agents) — 4 files
@@ -76,4 +76,4 @@ Canonical layout: [`templates/project-scaffold/FOLDER-STRUCTURE.md`](../../templ
 
 ## Something not working?
 
-See [`troubleshooting.md`](troubleshooting.md), or run `/il-doctor`.
+See [`troubleshooting.md`](troubleshooting.md), or run `/asdlc-doctor`.

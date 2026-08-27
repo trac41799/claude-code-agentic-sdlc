@@ -6,7 +6,7 @@
 
 **Why:** It existed (`e6af2c8`: "auto-update agents and skills on SessionStart"), then commit `b10639c` (telemetry-hooks rewrite) replaced Stage 2 with a nudge-only version, dropping the auto-apply. It's official to the design; restore it.
 
-**Source of truth:** `infiniteleverage-8-agents-template` → `plugin-staging/hooks/session-start`. Changes propagate to both plugin repos via `rebuild-zips.sh` (+ the mirror Action to `-8-plugin`).
+**Source of truth:** `agentic-sdlc-agents-template` → `plugin-staging/hooks/session-start`. Changes propagate to both plugin repos via `rebuild-zips.sh` (+ the mirror Action to `agentic-sdlc-plugin`).
 
 ---
 
@@ -17,7 +17,7 @@ Current stages: 1 init-check · **2 version-check (nudge-only)** · 3 CLAUDE.md 
 
 ```
 Stage 2 (rewritten):
-  local_v  = ~/.claude/.infiniteleverage-version  (skip entirely if absent)
+  local_v  = ~/.claude/.agentic-sdlc-version  (skip entirely if absent)
   remote_v = curl raw .../main/VERSION  (3s timeout; network fail → silent pass)
   if remote_v is semver AND remote_v != local_v:
      tmp = mktemp -d
@@ -28,11 +28,11 @@ Stage 2 (rewritten):
         for s in tmp/.claude/skills/*/: if ~/.claude/skills/<name> exists → refresh it
         # HOOKS — reuse the CANONICAL installer (handles il_telemetry + session-telemetry-* +
         #         pre-bash + prompt-submit + settings wiring + the obsolete-hook PRUNE)
-        bash tmp/setup-skills/infiniteleverage-patch/scripts/install-hooks.sh tmp
-        echo remote_v > ~/.claude/.infiniteleverage-version
-        echo "[Infinite Leverage] Auto-updated {local_v} → {remote_v} (agents, skills, hooks)."
+        bash tmp/setup-skills/agentic-sdlc-patch/scripts/install-hooks.sh tmp
+        echo remote_v > ~/.claude/.agentic-sdlc-version
+        echo "[Agentic SDLC] Auto-updated {local_v} → {remote_v} (agents, skills, hooks)."
      else:
-        echo "[Infinite Leverage] Template v{remote_v} available (you have v{local_v}). Run /infiniteleverage-patch."   # fallback
+        echo "[Agentic SDLC] Template v{remote_v} available (you have v{local_v}). Run /agentic-sdlc-patch."   # fallback
      rm -rf tmp
   # fail-safe everywhere: any error → silent or fallback; NEVER block the session
 ```
@@ -53,7 +53,7 @@ Stage 2 (rewritten):
 - [ ] **AC:** with a differing version, a session auto-updates agents+skills+hooks and stamps the version; with matching version, nothing happens; with no local version file or no network, silent pass; clone failure → nudge fallback. Telemetry stages still fire.
 
 ### T2 — Rebuild + propagate
-- [ ] `bash scripts/rebuild-zips.sh` → syncs the new `session-start` into the plugin. (Mirror Action carries it to `-8-plugin`.)
+- [ ] `bash scripts/rebuild-zips.sh` → syncs the new `session-start` into the plugin. (Mirror Action carries it to `agentic-sdlc-plugin`.)
 
 ### T3 — Regression rules (`.claude/rules/`)
 - [ ] **Template** `.claude/rules/hooks-regression-check.md` — checklist below.

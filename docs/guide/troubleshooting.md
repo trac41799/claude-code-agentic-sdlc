@@ -10,7 +10,7 @@ Quick fixes for the most common problems operators run into. Written for non-tec
 
 1. Make sure you addressed the agent directly: `@developer fix this bug` or `@product-manager write an epic`.
 2. If you didn't use `@`, Claude picks the most relevant agent automatically. If it picks wrong, add the `@agent-name` prefix.
-3. If no agents respond at all, run `/il-doctor` — it reports whether the 4 agents are actually installed in `.claude/agents/`, and how to refresh them.
+3. If no agents respond at all, run `/asdlc-doctor` — it reports whether the 4 agents are actually installed in `.claude/agents/`, and how to refresh them.
 
 ---
 
@@ -24,7 +24,7 @@ ls .claude/skills/     # expect 16 skill folders
 ls .claude/agents/     # expect 4 agent definitions
 ```
 
-Run `/il-doctor` for a full check. If agents or skills are missing, run `/il-adopt`
+Run `/asdlc-doctor` for a full check. If agents or skills are missing, run `/asdlc-adopt`
 in the project to install/refresh them from the canonical repo.
 
 ---
@@ -79,15 +79,15 @@ If you see this: tell Claude "open a PR instead of pushing directly."
 
 The plugin updates itself through the marketplace — there is no patch command to run.
 To refresh a *project's* copy of the agents and skills after a plugin update, run
-`/il-adopt` inside that project.
+`/asdlc-adopt` inside that project.
 
-Confirm what you have with `/il-doctor`.
+Confirm what you have with `/asdlc-doctor`.
 
 ---
 
 ### "I see 'permission denied' errors"
 
-The Infinite Leverage plugin ships **no hooks and no permission grants** — if something
+The Agentic SDLC plugin ships **no hooks and no permission grants** — if something
 is blocking a command, it is either your own project hook (`.claude/hooks/`, e.g. the
 one `devops-git-guardrails` installs) or Claude Code's normal permission prompt.
 

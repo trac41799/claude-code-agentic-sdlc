@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Infinite Leverage agent templates are recorded here.
+All notable changes to the Agentic SDLC agent templates are recorded here.
 
 Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Removed.
 
@@ -22,7 +22,7 @@ build uses.
   `NEXT_PUBLIC_APP_URL` (read only by the Stripe return URLs) from
   `.env.local.example` — 7 env vars down to 3
 - The `subscriptions` migration and `docs/billing/setup-notes.md`
-- `stripe` from il-project step 9c's dependency install
+- `stripe` from asdlc-project step 9c's dependency install
 
 ### Verified
 - Nothing outside the billing tree imported it (NotificationBell's "subscription" is a
@@ -54,16 +54,16 @@ removed them on refresh. Worse: step 6's gate demanded *exactly* 4 agents, so re
 a legacy project (6 on disk) failed the gate even after a successful copy.
 
 ### Fixed
-- **`il-project` step 6 now retires the v2.4-era set on refresh** — 2 agents
+- **`asdlc-project` step 6 now retires the v2.4-era set on refresh** — 2 agents
   (writer.md, designer.md) and 8 skills (the content pipeline) — by **moving** them to
-  `.claude/retired-il-<date>/`, never deleting, in case a client edited one. On a fresh
+  `.claude/retired-asdlc-<date>/`, never deleting, in case a client edited one. On a fresh
   scaffold the block is a no-op. Verified end to end against a real v2.4.5 tree:
   retired files land in the dated folder, a custom agent and a custom skill placed
   beside them survive untouched, and the step is idempotent
 - **Step 6's gate asserts the canonical 4 are present instead of counting to exactly 4.**
   The exact count was wrong twice over: it failed legacy projects mid-migration, and it
   failed any project that legitimately added its own custom agent
-- **`il-doctor` flags lingering retired agents/skills** inside a project, naming each
+- **`asdlc-doctor` flags lingering retired agents/skills** inside a project, naming each
   one found and the fix (re-run step 6). Verified: FAILs on the legacy tree before
   migration, PASSes after
 
@@ -72,17 +72,17 @@ a legacy project (6 on disk) failed the gate even after a successful copy.
 ## [2.7.0] — 2026-08-27
 
 **Existing repos can finally get the team.** Until now the 4 agents and their skills
-were only installed by `/il-project` — as part of scaffolding a brand-new project.
+were only installed by `/asdlc-project` — as part of scaffolding a brand-new project.
 An already-established repo had no path to them (the plugin itself ships no agents;
 they are always project-scoped).
 
 ### Added
-- **New skill `/il-adopt`** — installs the canonical 4 agents, the 16 workflow
+- **New skill `/asdlc-adopt`** — installs the canonical 4 agents, the 16 workflow
   skills, and `global-engineering.md` into the **current** repo's `.claude/`,
   injects the AGENT-DELEGATION block into the repo's `CLAUDE.md` (creating it if
   missing, replacing only the managed block if not), and seeds persona stubs and
   doc anchors (`docs/product/*`, `docs/brand/style-guide.md`,
-  `docs/project-status.html`) **only where missing**. Mirrors `/il-project`'s
+  `docs/project-status.html`) **only where missing**. Mirrors `/asdlc-project`'s
   version-pinned clone, install gate, and delegation block. Non-destructive:
   detects a previous install and confirms before refreshing canonical files, never
   touches operator-written files, and never commits — it prints the explicit
@@ -128,7 +128,7 @@ not being used.
 - Publishing stays with the developer (`web-publisher-publish`) — the operator now
   supplies the finished post + hero image in `content/topics/{slug}/`.
 - Counts updated everywhere the tooling asserts them: CI (`plugin-ci.yml`),
-  `doctor.sh`, `/il-doctor`, `/il-project` install gate and delegation block,
+  `doctor.sh`, `/asdlc-doctor`, `/asdlc-project` install gate and delegation block,
   routing rules, README, guides, and the slide deck.
 
 ---
@@ -136,7 +136,7 @@ not being used.
 ## [2.5.0] — 2026-08-27
 
 ### Added
-- **New skill `/il-memory-cleanup`** — for operators who switch between several
+- **New skill `/asdlc-memory-cleanup`** — for operators who switch between several
   Claude accounts on one machine and end up with a messy global `CLAUDE.md` and
   memory index. Unlike batch memory consolidators, it is a conversation: the agent
   reads every memory file in full, narrates duplicates / conflicts / stale facts /
@@ -146,7 +146,7 @@ not being used.
   restore command printed; conflicts are always decided by the human, never the
   agent; stale claims require an actual verification check; scope is memory
   content only — settings, permissions, and installs stay untouched (v1 residue is
-  routed to `/il-doctor` instead).
+  routed to `/asdlc-doctor` instead).
 
 ---
 
@@ -198,7 +198,7 @@ a non-technical client starts from the chat they already have.
 
 ### Fixed
 - **The journey order had a bootstrap problem.** Install came before accounts, but the
-  install prompt runs `gh` and `/il-doctor` complains about GitHub auth — and you cannot
+  install prompt runs `gh` and `/asdlc-doctor` complains about GitHub auth — and you cannot
   sign in to an account that does not exist yet. Reordered: **1 Set up your accounts →
   2 Install**. The accounts prompt now also owns the machine-side GitHub connection: it
   installs git/gh if missing (asking once; the client types any password themselves) and
@@ -243,10 +243,10 @@ assumes the reader runs commands or wants to.
 
 ### Added
 - **A plain-English command table** — every command the prompts run, with what it does
-  in one sentence ("Tells Claude Code where Infinite Leverage lives. Run once, ever."),
+  in one sentence ("Tells Claude Code where Agentic SDLC lives. Run once, ever."),
   under the honest heading that nobody needs to memorise them: it exists so none of it
   feels like magic
-- **A rescue prompt** in the troubleshooting section — paste-any-time `/il-doctor`
+- **A rescue prompt** in the troubleshooting section — paste-any-time `/asdlc-doctor`
   wrapper that reports in plain English and fixes what it can
 
 ---
@@ -277,7 +277,7 @@ assumes the reader runs commands or wants to.
   already-installed client following any of them stayed on their old version while the
   conversation reported success. All three prompts now add: "If it says the plugin is
   already installed, update it instead: `claude plugin update
-  infiniteleverage@infiniteleverage`", and the manual Step 1 in the guide gains the same
+  agentic-sdlc@agentic-sdlc`", and the manual Step 1 in the guide gains the same
   under "Already have it installed?"
 
 ---
@@ -308,7 +308,7 @@ assumes the reader runs commands or wants to.
   look-only first pass; explicit "anything not on these lists is yours — leave it alone";
   settings edited surgically with dated backups, never replaced; files archived into a
   dated folder by rename, never deleted; locally-modified files reported, not moved.
-  Edge8-internal machines are pointed at `/edge8-telemetry` instead, which does this
+  Edge8-internal machines are pointed at `/agentic-sdlc-telemetry` instead, which does this
   hash-verified
 
 ---
@@ -336,7 +336,7 @@ Supabase call received `undefined`.
 
 ### Fixed
 - **`NEXT_PUBLIC_SUPABASE_ANON_KEY` → `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.** The code
-  reads `PUBLISHABLE_KEY`; `il-project` step 11 and `devops-cicd` (both the workflow env
+  reads `PUBLISHABLE_KEY`; `asdlc-project` step 11 and `devops-cicd` (both the workflow env
   block and the GitHub-secrets instructions) told the operator to set `ANON_KEY`. Builds
   still pass — prerendering never exercises it — so this surfaces at runtime, on the first
   login, in front of the client
@@ -366,7 +366,7 @@ Supabase call received `undefined`.
 Triaged the last open v1 PR and ported the durable idea out of it.
 
 ### Fixed
-- **`/il-project` cloned the canonical content from `main`, unpinned, while the plugin
+- **`/asdlc-project` cloned the canonical content from `main`, unpinned, while the plugin
   itself is cached per version.** The two drift: a client on a cached older plugin pulls
   newer scaffold content, and in a workshop two people running the same command minutes
   apart get different scaffolds if `main` moves. Step 3 now clones the tag matching the
@@ -375,13 +375,13 @@ Triaged the last open v1 PR and ported the durable idea out of it.
 - **v2 releases were never tagged** — the newest tag was `v1.8.0`, so there was nothing to
   pin to. Tagged `v2.4.0` … `v2.4.5` at their release commits, and the release flow in
   `CLAUDE.md` now requires tagging as a step, not an afterthought
-- **`/il-doctor` now reports plugin version skew.** A cached older plugin is how a fixed
-  bug keeps biting — `/il-project`'s own steps ship *inside* the plugin, so a client stayed
+- **`/asdlc-doctor` now reports plugin version skew.** A cached older plugin is how a fixed
+  bug keeps biting — `/asdlc-project`'s own steps ship *inside* the plugin, so a client stayed
   on the broken step 6 until they updated, and nothing told them to. Verified against the
   real cache: a client on v2.4.0 is told v2.4.5 is out and given the update command
 - **The Designer chain read a file shape that does not exist.** `designer-design-system`
   and `designer-style-to-photo` both described `docs/brand/style-guide.md` as holding
-  "5 presets"; the file `/il-project` step 8.7 actually creates is a **single brand
+  "5 presets"; the file `/asdlc-project` step 8.7 actually creates is a **single brand
   identity** (Brand identity · Voice · Vocabulary · Colour palette · Typography · Visual
   style · Content formats). `designer-style-to-photo` step 1 would have looked for five
   presets and found none — a break in the content pipeline on any real project
@@ -510,7 +510,7 @@ Installed the protocol into two throwaway repos — a Next-shaped one and a Rail
 
 ## [2.4.3] — 2026-08-26
 
-**Scaffold-to-CI continuity.** Verified that a project `il-project` produces passes the
+**Scaffold-to-CI continuity.** Verified that a project `asdlc-project` produces passes the
 pipeline `devops-cicd` installs, and documented what Next 16 now adds on its own.
 
 ### Verified (no code change needed)
@@ -526,7 +526,7 @@ pipeline `devops-cicd` installs, and documented what Next 16 now adds on its own
 
 ### Added
 - `website/AGENTS.md` and `website/CLAUDE.md` documented in `FOLDER-STRUCTURE.md` and
-  `il-project` step 9. Next 16's create-next-app writes both (`CLAUDE.md` is a one-line
+  `asdlc-project` step 9. Next 16's create-next-app writes both (`CLAUDE.md` is a one-line
   `@AGENTS.md` import; `next dev` rewrites the block inside `AGENTS.md`). They are
   framework-owned, they load only when an agent works inside `website/`, and they must not
   be confused with the repo-root `CLAUDE.md` that carries the agent-delegation block or a
@@ -536,7 +536,7 @@ pipeline `devops-cicd` installs, and documented what Next 16 now adds on its own
 
 ## [2.4.2] — 2026-08-26
 
-**The web template, actually run.** `il-project` step 9 had never been executed end to
+**The web template, actually run.** `asdlc-project` step 9 had never been executed end to
 end in CI or in review. Running it revealed the shipped Next.js starter fails its own
 pipeline, plus a dependency that only resolved by luck. CI now guards the whole class.
 
@@ -573,10 +573,10 @@ pipeline, plus a dependency that only resolved by luck. CI now guards the whole 
 
 ### Added — CI guards for everything this review found
 The existing "no global-install regressions" check grepped only for `cp`, which is why
-`il-project` step 13's `mkdir`/`touch` into `~/.claude` survived three releases. Now:
+`asdlc-project` step 13's `mkdir`/`touch` into `~/.claude` survived three releases. Now:
 - Any write verb (`cp`/`mv`/`mkdir`/`touch`/`tee`/`rm`/`ln`/`install`) or shell
   redirection targeting `~/.claude`, `$HOME/.claude` or `${HOME}/.claude` fails the build,
-  as does any mention of `human-token-tracker` or `il-telemetry` in the shipped payload
+  as does any mention of `human-token-tracker` or `asdlc-telemetry` in the shipped payload
 - Agent and skill counts are asserted (6 / 24) **and cross-checked against the threshold
   hard-coded in `doctor.sh`** — the drift that produced "found 6/8"
 - Every skill must have frontmatter whose `name` matches its directory
@@ -593,17 +593,17 @@ write, restoring `-ge 8`, and removing `unified` each fail CI.
 the scaffold. Three of these were install-breaking.
 
 ### Fixed
-- **`il-project` step 6 never installed the agents.** The scaffold ships `.claude/rules/`
+- **`asdlc-project` step 6 never installed the agents.** The scaffold ships `.claude/rules/`
   and `.claude/skills/` but not `.claude/agents/`, so `cp .../agents/*.md "$TARGET/.claude/agents/"`
   failed with `Not a directory` and every new project came up with zero agents. Step 6 now
   `mkdir -p`s all three destinations and verifies the counts (6 agents / 24 skills) before
   continuing
-- **`il-doctor` failed on every healthy project.** The agent check asserted `-ge 8` against a
+- **`asdlc-doctor` failed on every healthy project.** The agent check asserted `-ge 8` against a
   6-agent roster and told the operator to re-run an install step that was already correct.
   Now checks 6, and also verifies the 24 skills landed
-- **Prerequisite checks matched neither reality nor each other.** `il-project` checked
-  `gh`/`git`/`perl` while mandatory step 9 needs `node`/`npm`/`npx`/`rsync`; `il-doctor`
-  checked a different set again. Both now check the same union, and `il-project` verifies
+- **Prerequisite checks matched neither reality nor each other.** `asdlc-project` checked
+  `gh`/`git`/`perl` while mandatory step 9 needs `node`/`npm`/`npx`/`rsync`; `asdlc-doctor`
+  checked a different set again. Both now check the same union, and `asdlc-project` verifies
   `gh auth status` up front
 - **`web-publisher-publish` pushed to `main`, then asked whether it was on a branch.**
   Phase 5 ran `git push origin main` and Phase 6 then offered a PR flow that could never be
@@ -626,11 +626,11 @@ the scaffold. Three of these were install-breaking.
   `/capture-learning`, and ~15 skill names retired in 2.2.0/2.4.0
 
 ### Removed
-- **Effort-tracking registration (`il-project` step 13).** It wrote to `~/.claude/`, pushed
-  client names and their staff's git emails to `talentedgeai/human-token-tracker`, and
+- **Effort-tracking registration (`asdlc-project` step 13).** It wrote to `~/.claude/`, pushed
+  client names and their staff's git emails to `trac41799/agentic-sdlc-telemetry`, and
   referenced a session-start hook this plugin doesn't ship — contradicting the repo's own
   "nothing global, no telemetry" rule, both manifests, and the skill's own execution
-  contract. Telemetry belongs to the private `edge8-telemetry` plugin. "telemetry" dropped
+  contract. Telemetry belongs to the private `agentic-sdlc-telemetry` plugin. "telemetry" dropped
   from the plugin keywords and the marketplace description
 - **`pm-project-status`'s team-hours machinery.** §6/§7 depended on `scripts/team-hours.py`
   and `docs/assessments/team-hours-methodology.md` — neither ships — and carried
@@ -641,10 +641,10 @@ the scaffold. Three of these were install-breaking.
   (titled "8-Agent Team"), `docs/guide/SCAFFOLD.md` and `docs/install-prompt.md` (both
   documenting the retired global `~/.claude/` install). Nothing linked them; recoverable
   from git history
-- **Two byte-identical duplicates of the intro deck** (`Infinite-Leverage-8-Introduction.html`,
-  `infinite-leverage-introduction.html`). `docs/slides/index.html` is the single copy, and
-  its text now names `/il-project` and `/il-doctor` instead of the retired
-  `/infiniteleverage-init|onboard|patch`, a 6-agent roster, and the one-repo-is-the-
+- **Two byte-identical duplicates of the intro deck** (`Agentic-SDLC-Introduction.html`,
+  `agentic-sdlc-introduction.html`). `docs/slides/index.html` is the single copy, and
+  its text now names `/asdlc-project` and `/asdlc-doctor` instead of the retired
+  `/agentic-sdlc-init|onboard|patch`, a 6-agent roster, and the one-repo-is-the-
   marketplace architecture
 - **A real contributor's usage data shipped in the scaffold.** `templates/project-scaffold/docs/project-status.html`
   carried a hard-coded username, hour count and token total, plus a call to a
@@ -722,7 +722,7 @@ self-contained pipeline.
 ## [2.2.0] — 2026-08-25
 
 **The skill cut.** Audit of all 62 workflow skills (dependency graph + staleness + redundancy
-vs current models) → 35 survive. `/il-project` installs roughly half of what it used to.
+vs current models) → 35 survive. `/asdlc-project` installs roughly half of what it used to.
 
 ### Removed
 - **11 orphans** nothing referenced: create-agent, create-local-routine, create-remote-routine,
@@ -749,9 +749,9 @@ vs current models) → 35 survive. `/il-project` installs roughly half of what i
 ### Changed
 - **Telemetry split.** All effort telemetry (il_telemetry hooks, consent flow) and the
   v1 residue cleanup (migrate_v1.py + manifest + tests) moved to the private
-  `talentedgeai/edge8-telemetry` plugin. This public repo is now purely the product:
+  `trac41799/agentic-sdlc-telemetry` plugin. This public repo is now purely the product:
   2 skills, no hooks, no background behavior, no company internals
-- `il-doctor` slimmed to a product setup check (prerequisites, repo context, scaffolded
+- `asdlc-doctor` slimmed to a product setup check (prerequisites, repo context, scaffolded
   project layout) and updated to use `${CLAUDE_PLUGIN_ROOT}` in all commands
 
 ### Removed
@@ -774,8 +774,8 @@ behind current models.
 - **v2 plugin shipped from this repo** — `.claude-plugin/` marketplace + `plugin/` payload;
   hooks run via `${CLAUDE_PLUGIN_ROOT}` (v1's hooks.json pointed at `~/.claude/hooks/*`, so
   plugin updates never took effect without a manual copy step)
-- **`/il-doctor`** — health check + telemetry consent + v1 residue report (replaces
-  `infiniteleverage-validate` and the patch health-check)
+- **`/asdlc-doctor`** — health check + telemetry consent + v1 residue report (replaces
+  `agentic-sdlc-validate` and the patch health-check)
 - **`migrate_v1.py`** — one-time, hash-verified cleanup of v1's global installs. Removes only
   byte-exact copies of files v1 shipped (manifest generated from the full git history of both
   v1 repos); modified files and symlinks are reported, never deleted. Also removes the v1
@@ -790,7 +790,7 @@ behind current models.
 - **CI** — pytest suite (48 tests incl. migration safety) runs on Python 3.9 and 3.12
 
 ### Changed
-- **`infiniteleverage-project` → `il-project` (3.0.0)** — no more machine-init prerequisite;
+- **`agentic-sdlc-project` → `asdlc-project` (3.0.0)** — no more machine-init prerequisite;
   installs agents + skills into the project's `.claude/` only
 - **All 8 agents rewritten for current models** — 37KB → 17KB; boilerplate deduplicated,
   dated "research practitioners before acting" crutches dropped, contradictions removed;
@@ -804,7 +804,7 @@ behind current models.
   `from __future__ import annotations`
 
 ### Removed
-- `infiniteleverage-init` / `-patch` / `-onboard` and all global `cp -R` machinery — plugin
+- `agentic-sdlc-init` / `-patch` / `-onboard` and all global `cp -R` machinery — plugin
   marketplace handles distribution and updates
 - `setup-permissions.py` — **never again does any installer write `Bash(*)` or change
   `defaultMode`**
@@ -812,7 +812,7 @@ behind current models.
   guardrails are a per-project choice via `devops-git-guardrails`)
 - `session-start` 4-stage hook (version-check curl, usage briefing, nag lines) and
   `usage-context.py` — no more network calls or transcript scans on session start
-- `scaffold-*` skill pack (10), `use-dev-team`/`use-marketing-team`, `infiniteleverage-help`,
+- `scaffold-*` skill pack (10), `use-dev-team`/`use-marketing-team`, `agentic-sdlc-help`,
   `session-ingest`, lark rules, `plugin-staging/`, committed release zips, `rebuild-zips` CI,
   `effort_selfreport.py` experiment
 
@@ -864,12 +864,12 @@ behind current models.
 ## [1.3.0] — 2026-05-20
 
 ### Added
-- `infiniteleverage-help` skill — full skill menu by team
+- `agentic-sdlc-help` skill — full skill menu by team
 - Personal laptop setup skill (in addition to Mac Mini setup)
 
 ### Changed
 - Renamed `create-local-task` → `create-local-routine`
-- Pre-bash and prompt-submit hooks now installed via `infiniteleverage-init` and `infiniteleverage-onboard`
+- Pre-bash and prompt-submit hooks now installed via `agentic-sdlc-init` and `agentic-sdlc-onboard`
 
 ---
 
@@ -893,5 +893,5 @@ behind current models.
 
 - 8 agent shells: product-manager, developer, qa, devops, writer, designer, web-publisher, email-marketer
 - 21 foundational skills
-- 3 bootstrap skills: infiniteleverage-init, infiniteleverage-onboard, infiniteleverage-patch
+- 3 bootstrap skills: agentic-sdlc-init, agentic-sdlc-onboard, agentic-sdlc-patch
 - Global engineering rules, agent routing rules, Lark optional integration rules

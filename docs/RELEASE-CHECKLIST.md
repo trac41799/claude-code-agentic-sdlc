@@ -30,7 +30,7 @@ green.
 On a clean directory, with the plugin installed (not from a checkout):
 
 ```
-/il-project
+/asdlc-project
 ```
 
 Passes when:
@@ -40,7 +40,7 @@ Passes when:
 - [ ] Step 6's gate reports `agents: 6/6 · skills: 24/24` and does not continue if it can't
 - [ ] Step 9e is green on all four: `lint`, `tsc --noEmit`, `build`, `vitest`
 - [ ] Step 10's first commit contains no `node_modules`, `.next`, or `.env*`
-- [ ] `/il-doctor` inside the new project is all-PASS
+- [ ] `/asdlc-doctor` inside the new project is all-PASS
 
 ## Run 2 — the generated project's own CI **[rel]**
 
@@ -56,12 +56,12 @@ The published payload is `plugin/` only. Everything else in this repo is a *sour
 skills clone at run time.
 
 - [ ] the tag `vX.Y.Z` exists and points at the release commit (pinning depends on it)
-- [ ] `/il-doctor` on a deliberately older cached plugin reports the skew and names the
+- [ ] `/asdlc-doctor` on a deliberately older cached plugin reports the skew and names the
       update command
 
 ## Run 4 — refresh an existing project **[rel]**
 
-Re-run step 6 of `/il-project` against a project scaffolded from the previous release.
+Re-run step 6 of `/asdlc-project` against a project scaffolded from the previous release.
 
 - [ ] agents and skills are refreshed to the new counts, nothing else is clobbered
 - [ ] the `AGENT-DELEGATION` block in `CLAUDE.md` is replaced, not duplicated
@@ -96,10 +96,10 @@ One feature, all the way through, on the scaffolded project:
 
 The ones that matter in a room full of people:
 
-- [ ] `/il-project` against an existing directory refuses, and says why
+- [ ] `/asdlc-project` against an existing directory refuses, and says why
 - [ ] with `gh` unauthenticated, step 1 stops and tells the operator to run
       `gh auth login` themselves rather than attempting it
-- [ ] offline, `/il-doctor` degrades to "could not reach the marketplace" instead of failing
+- [ ] offline, `/asdlc-doctor` degrades to "could not reach the marketplace" instead of failing
 
 ---
 

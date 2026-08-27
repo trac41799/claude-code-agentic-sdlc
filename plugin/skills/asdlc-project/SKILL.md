@@ -1,16 +1,16 @@
 ---
-name: il-project
-description: This skill should be used when the operator says "il project", "new project", "scaffold a project", "create infinite leverage project", "init new project", "start new client project", or "bootstrap project folder". Scaffolds a brand-new project directory from the canonical `templates/project-scaffold/` in `talentedgeai/infinite-leverage`, substitutes placeholders, wires the agent team into `.claude/`, seeds `docs/product/` (product.md, epics.md, epic-status.md) from any rich description the operator provides, seeds `docs/brand/` styling from a chosen or random getdesign.md reference, initializes git, and prints next steps. All operations are inline — no bundled scripts.
+name: asdlc-project
+description: This skill should be used when the operator says "asdlc project", "new project", "scaffold a project", "create agentic sdlc project", "init new project", "start new client project", or "bootstrap project folder". Scaffolds a brand-new project directory from the canonical `templates/project-scaffold/` in `trac41799/claude-code-agentic-sdlc`, substitutes placeholders, wires the agent team into `.claude/`, seeds `docs/product/` (product.md, epics.md, epic-status.md) from any rich description the operator provides, seeds `docs/brand/` styling from a chosen or random getdesign.md reference, initializes git, and prints next steps. All operations are inline — no bundled scripts.
 version: 3.2.0
 ---
 
-# Infinite Leverage — New Project Scaffold
+# Agentic SDLC — New Project Scaffold
 
 ## Canonical Source — Read This First
 
 **Every file this skill writes comes from ONE repo:**
 
-> https://github.com/talentedgeai/infinite-leverage
+> https://github.com/trac41799/claude-code-agentic-sdlc
 
 | What | Canonical path |
 |---|---|
@@ -29,7 +29,7 @@ version: 3.2.0
 
 ## When to invoke
 
-The operator wants a fresh project folder that follows the canonical Infinite Leverage layout. Prerequisites: the Infinite Leverage v2 plugin installed (which is how this skill is running), plus `git`, an authenticated `gh`, `perl`, `node`/`npm`/`npx`, and `rsync` — Step 1 checks all of them. Agents are installed into the project itself; nothing is ever written to `~/.claude/`.
+The operator wants a fresh project folder that follows the canonical Agentic SDLC layout. Prerequisites: the Agentic SDLC v2 plugin installed (which is how this skill is running), plus `git`, an authenticated `gh`, `perl`, `node`/`npm`/`npx`, and `rsync` — Step 1 checks all of them. Agents are installed into the project itself; nothing is ever written to `~/.claude/`.
 
 ---
 
@@ -122,7 +122,7 @@ MISSING=""
 for t in git gh perl node npm npx rsync; do
   command -v "$t" >/dev/null 2>&1 || MISSING="$MISSING $t"
 done
-[ -n "$MISSING" ] && { echo "❌ missing required tools:$MISSING"; echo "   run /il-doctor for per-tool install commands"; exit 1; }
+[ -n "$MISSING" ] && { echo "❌ missing required tools:$MISSING"; echo "   run /asdlc-doctor for per-tool install commands"; exit 1; }
 gh auth status >/dev/null 2>&1 || { echo "❌ gh is not authenticated — the operator must run 'gh auth login' themselves"; exit 1; }
 echo "✅ prerequisites OK"
 ```
@@ -153,21 +153,21 @@ running the same command minutes apart get different scaffolds if `main` moves.
 
 ```bash
 TMP=$(mktemp -d)
-REPO=talentedgeai/infinite-leverage
+REPO=trac41799/claude-code-agentic-sdlc
 
 # The running plugin knows its own version.
-IL_VERSION=$(python3 -c "import json,os,sys; print(json.load(open(os.path.join(os.environ['CLAUDE_PLUGIN_ROOT'],'.claude-plugin','plugin.json')))['version'])" 2>/dev/null)
+ASDLC_VERSION=$(python3 -c "import json,os,sys; print(json.load(open(os.path.join(os.environ['CLAUDE_PLUGIN_ROOT'],'.claude-plugin','plugin.json')))['version'])" 2>/dev/null)
 
-if [ -n "$IL_VERSION" ] && git ls-remote --tags "https://github.com/$REPO" "refs/tags/v$IL_VERSION" | grep -q .; then
-  gh repo clone "$REPO" "$TMP/il-template" -- --depth 1 --branch "v$IL_VERSION"
-  echo "✅ scaffold pinned to v$IL_VERSION — matches the installed plugin"
+if [ -n "$ASDLC_VERSION" ] && git ls-remote --tags "https://github.com/$REPO" "refs/tags/v$ASDLC_VERSION" | grep -q .; then
+  gh repo clone "$REPO" "$TMP/asdlc-template" -- --depth 1 --branch "v$ASDLC_VERSION"
+  echo "✅ scaffold pinned to v$ASDLC_VERSION — matches the installed plugin"
 else
-  gh repo clone "$REPO" "$TMP/il-template" -- --depth 1
-  echo "⚠️  no tag v${IL_VERSION:-?} on $REPO — falling back to main."
+  gh repo clone "$REPO" "$TMP/asdlc-template" -- --depth 1
+  echo "⚠️  no tag v${ASDLC_VERSION:-?} on $REPO — falling back to main."
   echo "   The scaffold may be newer than this skill. Report it if the scaffold looks wrong."
 fi
 
-cp -R "$TMP/il-template/templates/project-scaffold/." "$TARGET"
+cp -R "$TMP/asdlc-template/templates/project-scaffold/." "$TARGET"
 ```
 
 ### Step 4 — Substitute placeholders (inline)
@@ -225,10 +225,10 @@ The scaffold ships `.claude/rules/` and `.claude/skills/` but **not** `.claude/a
 
 ```bash
 mkdir -p "$TARGET/.claude/agents" "$TARGET/.claude/skills" "$TARGET/.claude/rules"
-cp "$TMP/il-template/.claude/agents/"*.md "$TARGET/.claude/agents/"
-cp -R "$TMP/il-template/.claude/skills/." "$TARGET/.claude/skills/"
+cp "$TMP/asdlc-template/.claude/agents/"*.md "$TARGET/.claude/agents/"
+cp -R "$TMP/asdlc-template/.claude/skills/." "$TARGET/.claude/skills/"
 rm -rf "$TARGET/.claude/skills/PH-skill-name"   # scaffold placeholder — not a real skill
-cp "$TMP/il-template/.claude/rules/global-engineering.md" "$TARGET/.claude/rules/"
+cp "$TMP/asdlc-template/.claude/rules/global-engineering.md" "$TARGET/.claude/rules/"
 
 # Projects scaffolded on v2.4.x carry 2 agents and 8 skills that v2.6 retired
 # (writer/designer and their content pipeline). A refresh must clear them or
@@ -239,7 +239,7 @@ RETIRED_AGENTS="writer.md designer.md"
 RETIRED_SKILLS="writer-seo-content writer-quality-critique marketing-strategist \
   email-marketer-nurture designer-design-system designer-style-to-photo \
   designer-image-generation designer-ui-ux"
-RET_DIR="$TARGET/.claude/retired-il-$(date +%Y%m%d)"
+RET_DIR="$TARGET/.claude/retired-asdlc-$(date +%Y%m%d)"
 for f in $RETIRED_AGENTS; do
   [ -f "$TARGET/.claude/agents/$f" ] && mkdir -p "$RET_DIR/agents" && mv "$TARGET/.claude/agents/$f" "$RET_DIR/agents/"
 done
@@ -266,7 +266,7 @@ S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | 
 echo "agents: canonical 4 ${MISSING:+MISSING:$MISSING}${MISSING:-present} · skills: $S/16"
 [ -z "$MISSING" ] && [ "$S" -ge 16 ] || {
   echo "❌ install incomplete — expected the 4 canonical agents and at least 16 skills"
-  echo "   check that \$TMP/il-template/.claude/ exists and the mkdir -p above ran"
+  echo "   check that \$TMP/asdlc-template/.claude/ exists and the mkdir -p above ran"
   exit 1
 }
 ```
@@ -282,7 +282,7 @@ TARGET_CLAUDE_MD="$TARGET/CLAUDE.md"
 
 # Canonical block content — single source of truth lives here in the SKILL.md.
 BLOCK=$(cat <<'BLOCK_EOF'
-<!-- BEGIN: AGENT-DELEGATION (managed by infiniteleverage skills — do not delete this block) -->
+<!-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills — do not delete this block) -->
 ## Agent delegation (auto-routing)
 
 When you receive a request, **delegate to the right specialist agent** before doing the work yourself. The 4 agents and their triggers:
@@ -581,7 +581,7 @@ Rules:
 
 ### Step 9 — Scaffold Next.js into `website/` (mandatory)
 
-This always runs — every Infinite Leverage project ships a Next.js app at `website/`.
+This always runs — every Agentic SDLC project ships a Next.js app at `website/`.
 
 **Important:** the canonical scaffold ships a starter kit inside `website/` (chat, notifications, markdown rendering, Supabase migrations, vitest tests) with **no `package.json`** — it is designed to sit on top of a fresh `create-next-app` install. `create-next-app` refuses to install into a non-empty directory, so scaffold Next.js in a temp directory and merge it **underneath** the starter files. The starter uses a root-level `app/` layout, so create-next-app must run with `--no-src-dir`.
 
@@ -733,7 +733,7 @@ gh repo create "$GH_OWNER/$PROJECT_SLUG" \
   --source="$TARGET" \
   --remote=origin \
   --push \
-  --description "$PROJECT_NAME — Infinite Leverage project"
+  --description "$PROJECT_NAME — Agentic SDLC project"
 ```
 
 If creation fails because the repo already exists, ask: "Use the existing repo and push to it, or pick a different slug?" Do NOT silently overwrite.
@@ -756,7 +756,7 @@ To wire up auto-deploys on Vercel:
 - Define the brand **voice/tone** — Step 8.7 seeds only the *visual* side (palette, typography, visual style) of `docs/brand/style-guide.md`. Voice, vocabulary, and content formats stay for `pm-client-interview` unless planning docs already specify them.
 - Skip Next.js scaffolding — that step is mandatory
 - Push to GitHub silently — the GitHub repo creation+push is asked as a tail-end question and skipped if the operator declines. The skill prints the exact command they can run later.
-- Register the repo for effort tracking, or write anything at all under `~/.claude/` — effort telemetry is Edge8-internal and lives entirely in the private `edge8-telemetry` plugin. This skill writes only inside `$TARGET`.
+- Register the repo for effort tracking, or write anything at all under `~/.claude/` — effort telemetry is Edge8-internal and lives entirely in the private `agentic-sdlc-telemetry` plugin. This skill writes only inside `$TARGET`.
 
 ## Why no .sh files
 
@@ -770,5 +770,5 @@ All routing-table content for the AGENT-DELEGATION block lives in **Step 7 of th
 ## References
 
 - `templates/project-scaffold/FOLDER-STRUCTURE.md` — the canonical layout this skill produces
-- `il-doctor/SKILL.md` — plugin health check (prerequisites, repo context, project layout)
+- `asdlc-doctor/SKILL.md` — plugin health check (prerequisites, repo context, project layout)
 - `references/quick-prompts.md` — operator invocation patterns and failure-mode table

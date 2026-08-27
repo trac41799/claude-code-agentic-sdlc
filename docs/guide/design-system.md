@@ -1,7 +1,7 @@
 # IL8 Design System — HTML Reference
 
-Apply these tokens to every HTML file in the Infinite Leverage blueprint project.
-Source: https://infiniteleverage-8.com/
+Apply these tokens to every HTML file in the Agentic SDLC blueprint project.
+Source: https://agentic-sdlc.com/
 
 ---
 

@@ -1,19 +1,19 @@
 {
-  "name": "infiniteleverage",
+  "name": "agentic-sdlc",
   "version": "2.8.0",
-  "description": "Infinite Leverage v2 \u2014 the AI-team product plugin. /il-project scaffolds a client project with a project-scoped 4-agent team; /il-adopt installs that team into an already-established repo; /il-doctor checks the setup; /il-memory-cleanup tidies a multi-account memory mess with the human in the loop. No hooks, no telemetry, no writes outside the project you scaffold.",
+  "description": "Agentic SDLC v2 \u2014 the AI-team product plugin. /asdlc-project scaffolds a client project with a project-scoped 4-agent team; /asdlc-adopt installs that team into an already-established repo; /asdlc-doctor checks the setup; /asdlc-memory-cleanup tidies a multi-account memory mess with the human in the loop. No hooks, no telemetry, no writes outside the project you scaffold.",
   "author": {
     "name": "Edge8",
     "email": "khoa.doan@edge8.ai",
-    "url": "https://github.com/talentedgeai"
+    "url": "https://github.com/trac41799"
   },
-  "repository": "https://github.com/talentedgeai/infinite-leverage",
-  "homepage": "https://github.com/talentedgeai/infinite-leverage",
+  "repository": "https://github.com/trac41799/claude-code-agentic-sdlc",
+  "homepage": "https://github.com/trac41799/claude-code-agentic-sdlc",
   "license": "MIT",
   "keywords": [
     "agents",
     "team",
-    "infinite-leverage",
+    "agentic-sdlc",
     "scaffold"
   ],
   "skills": "./skills/"

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Infinite Leverage — 4-Agent Template · Introduction</title>
+<title>Agentic SDLC — 4-Agent Template · Introduction</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..500,0..100,0..1;1,9..144,300..500,0..100,0..1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -127,7 +127,7 @@
 </head>
 <body>
 <div class="progress" id="bar"></div>
-<div class="brandmark">⚡ Infinite&nbsp;<b>Leverage&nbsp;8</b></div>
+<div class="brandmark">⚡ Agentic&nbsp;<b>SDLC</b></div>
 <div class="counter"><span id="cur">1</span>&nbsp;/&nbsp;<span id="tot">16</span></div>
 
 <div class="deck" id="deck">
@@ -302,8 +302,8 @@
     <h2>One repo. It <span class="em">is</span> the marketplace.</h2>
     <p class="lead">Agents, skills, rules and the project scaffold live in <b>one</b> repo, which also serves the plugin. Client machines are consumers — never hand-edited.</p>
     <div class="grid" style="margin-top:24px;gap:12px">
-      <div class="repo"><span class="git">📦</span><div><b>talentedgeai/infinite-leverage</b><br><small>canonical &amp; public — 4 agents · 16 workflow skills · rules · scaffold · the plugin itself</small></div></div>
-      <div class="repo"><span class="git">🔒</span><div><b>talentedgeai/edge8-telemetry</b><br><small>private, Edge8-internal — effort tracking, kept entirely out of the product</small></div></div>
+      <div class="repo"><span class="git">📦</span><div><b>trac41799/claude-code-agentic-sdlc</b><br><small>canonical &amp; public — 4 agents · 16 workflow skills · rules · scaffold · the plugin itself</small></div></div>
+      <div class="repo"><span class="git">🔒</span><div><b>trac41799/agentic-sdlc-telemetry</b><br><small>private, Edge8-internal — effort tracking, kept entirely out of the product</small></div></div>
     </div>
     <p class="sub">Merge to <code>main</code> → the marketplace serves the new version → installed plugins update themselves. Never edit agents on a client laptop.</p>
   </section>
@@ -313,8 +313,8 @@
     <div class="eyebrow">Getting Started</div>
     <h2>Two skills. That's the whole plugin.</h2>
     <div class="grid g3" style="margin-top:26px">
-      <div class="card"><div class="tag">Start a project</div><h3>/il-project</h3><p>Zero → scaffolded repo: canonical folder layout, a 4-agent team in the project's own <code>.claude/</code>, seeded product &amp; brand docs, Next.js app, first commit.</p></div>
-      <div class="card"><div class="tag">Check the setup</div><h3>/il-doctor</h3><p>Read-only health check: prerequisites, repo context, and whether the agents and skills actually landed in this project.</p></div>
+      <div class="card"><div class="tag">Start a project</div><h3>/asdlc-project</h3><p>Zero → scaffolded repo: canonical folder layout, a 4-agent team in the project's own <code>.claude/</code>, seeded product &amp; brand docs, Next.js app, first commit.</p></div>
+      <div class="card"><div class="tag">Check the setup</div><h3>/asdlc-doctor</h3><p>Read-only health check: prerequisites, repo context, and whether the agents and skills actually landed in this project.</p></div>
       <div class="card"><div class="tag">Stay in sync</div><h3>Automatic</h3><p>Installed plugins update through the marketplace. No patch command, no zips, nothing written to <code>~/.claude/</code>.</p></div>
     </div>
     <p class="sub">Everything else is a workflow skill the four agents reach for — installed per project, never globally.</p>
@@ -339,11 +339,11 @@
     <p class="lead">Paste one prompt into a fresh Claude Code session — it's additive and safe even on a configured machine.</p>
     <div class="codeblock">
 <span class="c"># Register the marketplace once — updates arrive automatically after this</span>
-<span class="k">claude</span> plugin marketplace add <span class="s">talentedgeai/infinite-leverage</span>
+<span class="k">claude</span> plugin marketplace add <span class="s">trac41799/claude-code-agentic-sdlc</span>
 
 <span class="c"># Scaffold a project, then check it</span>
-<span class="k">Run</span> /il-project to set up a new client project.
-<span class="k">Run</span> /il-doctor to confirm the agents and skills installed.
+<span class="k">Run</span> /asdlc-project to set up a new client project.
+<span class="k">Run</span> /asdlc-doctor to confirm the agents and skills installed.
 
 <span class="c"># Then work by intent — agents route automatically</span>
 <span class="s">"write an epic for the onboarding flow"</span>   <span class="c">→ Product Manager</span>
@@ -372,9 +372,9 @@
   <section class="slide center" data-bg="dark">
     <div class="eyebrow">Get Started</div>
     <h1>Your team is<br><span class="em">one prompt away.</span></h1>
-    <p class="lead">Run <code>/il-project</code> to scaffold a project, <code>/il-doctor</code> to confirm it landed. Then point the Product Manager at your business and start asking.</p>
+    <p class="lead">Run <code>/asdlc-project</code> to scaffold a project, <code>/asdlc-doctor</code> to confirm it landed. Then point the Product Manager at your business and start asking.</p>
     <div class="badgeRow" style="justify-content:center">
-      <div class="repo"><span class="git">📦</span><div><b>github.com/talentedgeai/infinite-leverage</b></div></div>
+      <div class="repo"><span class="git">📦</span><div><b>github.com/trac41799/claude-code-agentic-sdlc</b></div></div>
     </div>
     <p class="sub center">Humans orchestrate. Agents act. Work outlives the operator.</p>
   </section>

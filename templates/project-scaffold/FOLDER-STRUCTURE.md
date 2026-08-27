@@ -1,6 +1,6 @@
 # Canonical Project Folder Structure
 
-> **Authoritative spec.** Every Infinite Leverage project follows this layout. The PM agent, developer agent, and `il-project` skill must honor it exactly. Do not invent new top-level folders. New per-project additions go inside the existing slots.
+> **Authoritative spec.** Every Agentic SDLC project follows this layout. The PM agent, developer agent, and `asdlc-project` skill must honor it exactly. Do not invent new top-level folders. New per-project additions go inside the existing slots.
 
 ## Fixed filenames (DO NOT rename)
 
@@ -114,12 +114,12 @@ These files have hard-coded names that skills and agents reference by path:
 ├── website/                                    ← Next.js app: starter kit (chat, notifications,
 │   ├── app/                                     markdown, Supabase migrations, tests) merged with a
 │   ├── components/                              fresh create-next-app install (--no-src-dir) — see
-│   ├── lib/                                     il-project SKILL.md Step 9
+│   ├── lib/                                     asdlc-project SKILL.md Step 9
 │   ├── supabase/
 │   ├── docs/
 │   ├── vitest.config.mts                        [ESM — .mts, not .ts; see Step 9]
 │   ├── vitest.setup.ts
-│   ├── AGENTS.md                                [create-next-app generates this — NOT IL-owned]
+│   ├── AGENTS.md                                [create-next-app generates this — NOT ASDLC-owned]
 │   ├── CLAUDE.md                                [create-next-app: just `@AGENTS.md` — NOT the root CLAUDE.md]
 │   └── README.md
 │

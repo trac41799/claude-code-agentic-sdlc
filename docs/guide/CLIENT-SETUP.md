@@ -6,7 +6,7 @@ to click or paste. Each prompt ends by telling you which one to copy next, by na
 
 | # | Prompt | Where it runs | When |
 |---|---|---|---|
-| 0 | **Clean up** | Claude Code | Only if you've used Infinite Leverage before. Never used it? Skip. |
+| 0 | **Clean up** | Claude Code | Only if you've used Agentic SDLC before. Never used it? Skip. |
 | 1 | **Get ready** | Any Claude — the website, the app, or Cowork | Everyone starts here. Ends with Claude Code installed and this computer signed in to GitHub. |
 | 2 | **Set up your accounts** | Claude Code | Supabase and Vercel, click by click. |
 | 3 | **Install** | Claude Code | Takes a minute. Claude does all of it. |
@@ -30,7 +30,7 @@ The foundation: Chrome, a GitHub account, this computer signed in to GitHub, and
 Code installed. Claude guides; you click and paste.
 
 ```
-Get my computer ready for Infinite Leverage. I'm not technical — you're my
+Get my computer ready for Agentic SDLC. I'm not technical — you're my
 guide. Plain English, one step at a time, and wait for me to say "done"
 before moving to the next step.
 
@@ -158,19 +158,19 @@ me an error.
 
 ## Prompt 3 — Install
 
-The shortest one. Claude installs Infinite Leverage, checks everything is healthy, and
+The shortest one. Claude installs Agentic SDLC, checks everything is healthy, and
 tells you what to paste next. If it spots the old version 1 on the machine, it sends you
 to Prompt 0 first; if the computer isn't signed in to GitHub, back to Prompt 1.
 
 ```
-Please install Infinite Leverage for me.
+Please install Agentic SDLC for me.
 
 I'm not a developer. Plain English only — no jargon, no raw output. Tell me
 what's happening in one sentence as you go, and only ask me something if
 you truly need me.
 
 1. First, a quick silent check: look for leftovers of the old version 1 —
-   things like ~/.claude/.infiniteleverage-version, an il_telemetry folder
+   things like ~/.claude/.agentic-sdlc-version, an il_telemetry folder
    inside ~/.claude/hooks, or files like product-manager.md and
    web-publisher.md inside ~/.claude/agents. If you find any, change
    nothing and tell me: "You have an older version on this computer. Go
@@ -185,11 +185,11 @@ you truly need me.
    Windows use winget) — ask me once with a one-line reason, then handle
    it.
 4. Install the plugin:
-     claude plugin marketplace add talentedgeai/infinite-leverage
-     claude plugin install infiniteleverage@infiniteleverage
+     claude plugin marketplace add trac41799/claude-code-agentic-sdlc
+     claude plugin install agentic-sdlc@agentic-sdlc
    If it says the plugin is already installed, update it instead:
-     claude plugin update infiniteleverage@infiniteleverage
-5. Run /il-doctor. If everything passes, just say "all checks passed."
+     claude plugin update agentic-sdlc@agentic-sdlc
+5. Run /asdlc-doctor. If everything passes, just say "all checks passed."
 6. Then tell me, exactly: "Installed. Next: go back to the setup guide and
    copy the prompt called 4 - Create your project. Paste it right here."
 Then stop and wait.
@@ -208,11 +208,11 @@ or two), paste it, and Claude scaffolds the project, connects your accounts one 
 time, and finishes by telling you the first three things to try.
 
 ```
-Create my first Infinite Leverage project. I'm not a developer — plain
+Create my first Agentic SDLC project. I'm not a developer — plain
 English only, no jargon, no raw output. One question at a time. Never ask
 me to edit a file; you make the changes and tell me what you did.
 
-1. Run /il-project to build my project:
+1. Run /asdlc-project to build my project:
    - Call it: <PROJECT NAME>
    - Folder name: <project-name-with-dashes>
    <Describe your business in a few sentences — what it does, who it's for,
@@ -243,14 +243,14 @@ something worked when it didn't.
 
 ---
 
-## Prompt 0 — Clean up (only if you've used Infinite Leverage before)
+## Prompt 0 — Clean up (only if you've used Agentic SDLC before)
 
 The old version 1 installed itself into a shared folder on your computer. Version 2
 doesn't. This prompt removes the old version's leftovers — and only those. Run it in
 Claude Code.
 
 ```
-I think I have an old version of Infinite Leverage on my computer. Please
+I think I have an old version of Agentic SDLC on my computer. Please
 clean it up for me and get me onto the current version.
 
 I'm not a developer. Talk to me in plain, friendly English — no technical
@@ -273,9 +273,9 @@ WHAT COUNTS AS THE OLD VERSION
   email-marketer.md, product-manager.md, qa.md, web-publisher.md, writer.md
 - ~/.claude/hooks/ containing any of: pre-bash, prompt-submit, session-start,
   usage-context.py, update-project-status-usage.py, or an il_telemetry folder
-- ~/.claude/.infiniteleverage-version
+- ~/.claude/.agentic-sdlc-version
 - ~/.claude/skills/ containing anything whose name starts with
-  infiniteleverage-, pm-, dev-, devops-, qa-, writer-, designer-,
+  agentic-sdlc-, pm-, dev-, devops-, qa-, writer-, designer-,
   web-publisher-, email-marketer-, scaffold-, or speckit- ... or is exactly
   one of: pm, dev, devops, qa, writer, designer, web-publisher,
   email-marketer, marketing-strategist, plan-protocol, github-flow,
@@ -293,25 +293,25 @@ WHAT TO DO — QUIETLY, WITHOUT ASKING ME STEP BY STEP
    to the originals, then remove only the old-version entries listed above.
    Change nothing else in those files. Don't show me the edits — just do it.
 2. Remove the old files: move everything matching the lists above into one
-   folder, ~/.claude/il-v1-archive-<today>. When you talk to me, call this
+   folder, ~/.claude/asdlc-v1-archive-<today>. When you talk to me, call this
    "removed" — the folder is just a safety net, and you'll mention it once
    at the end.
 3. If something matches an old-version name but looks like I changed it
    myself, leave it where it is and note it for the summary. Don't
    interrupt me about it.
 4. Get me onto the current version:
-     claude plugin marketplace add talentedgeai/infinite-leverage
-     claude plugin install infiniteleverage@infiniteleverage
+     claude plugin marketplace add trac41799/claude-code-agentic-sdlc
+     claude plugin install agentic-sdlc@agentic-sdlc
    If it says the plugin is already installed, update it instead:
-     claude plugin update infiniteleverage@infiniteleverage
-5. Run /il-doctor. If everything passes, just tell me "all checks passed."
+     claude plugin update agentic-sdlc@agentic-sdlc
+5. Run /asdlc-doctor. If everything passes, just tell me "all checks passed."
    If something fails, tell me what it means in plain English and what you
    need from me — one thing at a time.
 
 THE ONE RULE THAT NEVER BENDS
 Anything in ~/.claude/ that is not on the lists above is MINE — my own
 settings, my own skills, other tools I use. Leave all of it completely
-alone. If you're not sure whether something is old Infinite Leverage or
+alone. If you're not sure whether something is old Agentic SDLC or
 mine, treat it as mine. That is the one thing worth stopping to ask me
 about. Everything else, just handle.
 
@@ -363,12 +363,12 @@ paste. This table exists so none of it feels like magic.
 | `brew install gh` | Uses Homebrew to install the GitHub tool. |
 | `gh auth login` | Signs this computer in to your GitHub account — it opens your browser to prove it's really you. |
 | `gh auth status` | Asks: is this computer signed in to GitHub? |
-| `claude plugin marketplace add talentedgeai/infinite-leverage` | Tells Claude Code where Infinite Leverage lives. Run once, ever. |
-| `claude plugin install infiniteleverage@infiniteleverage` | Installs Infinite Leverage. |
-| `claude plugin update infiniteleverage@infiniteleverage` | Gets the newest version, if it's already installed. |
-| `/il-doctor` | A health check. Says what's missing or out of date, and how to fix it. |
-| `/il-project` | Builds a new project: the folder, the website, and your four AI teammates. |
-| `/il-adopt` | Adds the four AI teammates to a project you already have. Doesn't touch your code. |
+| `claude plugin marketplace add trac41799/claude-code-agentic-sdlc` | Tells Claude Code where Agentic SDLC lives. Run once, ever. |
+| `claude plugin install agentic-sdlc@agentic-sdlc` | Installs Agentic SDLC. |
+| `claude plugin update agentic-sdlc@agentic-sdlc` | Gets the newest version, if it's already installed. |
+| `/asdlc-doctor` | A health check. Says what's missing or out of date, and how to fix it. |
+| `/asdlc-project` | Builds a new project: the folder, the website, and your four AI teammates. |
+| `/asdlc-adopt` | Adds the four AI teammates to a project you already have. Doesn't touch your code. |
 | `@product-manager …` | Talks to one teammate directly. Works with any of the four names. |
 | `npm run build` | Test-assembles the website to prove nothing is broken. Claude runs it for you. |
 
@@ -377,7 +377,7 @@ paste. This table exists so none of it feels like magic.
 Paste this into Claude Code, any time:
 
 ```
-Something's not working with my Infinite Leverage setup. Run /il-doctor,
+Something's not working with my Agentic SDLC setup. Run /asdlc-doctor,
 tell me what's wrong in plain English, fix what you can yourself, and walk
 me through anything that needs me — one step at a time.
 ```

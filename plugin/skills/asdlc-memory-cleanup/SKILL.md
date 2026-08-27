@@ -1,10 +1,10 @@
 ---
-name: il-memory-cleanup
-description: This skill should be used when the operator says "clean up my memory", "il memory", "memory cleanup", "my CLAUDE.md is a mess", "consolidate my memory", "too many accounts messed up my setup", "fix my memory index", or complains that switching between Claude accounts left their global CLAUDE.md or memory files inconsistent. Reads every memory file in full, narrates duplicates, conflicts, and stale facts back to the operator in plain language, and only then — with explicit per-item approval — deletes, merges, rewrites, or re-indexes. Always backs up before the first write. Never installs anything; only edits the operator's own memory content.
+name: asdlc-memory-cleanup
+description: This skill should be used when the operator says "clean up my memory", "asdlc memory", "memory cleanup", "my CLAUDE.md is a mess", "consolidate my memory", "too many accounts messed up my setup", "fix my memory index", or complains that switching between Claude accounts left their global CLAUDE.md or memory files inconsistent. Reads every memory file in full, narrates duplicates, conflicts, and stale facts back to the operator in plain language, and only then — with explicit per-item approval — deletes, merges, rewrites, or re-indexes. Always backs up before the first write. Never installs anything; only edits the operator's own memory content.
 version: 1.0.0
 ---
 
-# il-memory-cleanup — Human-in-the-Loop Memory Cleanup
+# asdlc-memory-cleanup — Human-in-the-Loop Memory Cleanup
 
 ## The problem this solves
 
@@ -52,7 +52,7 @@ Default to the **current project's** memory directory plus the global `CLAUDE.md
 Offer to sweep other projects' memory directories only if the operator asks or if
 they said the whole machine is a mess. Everything else under `~/.claude/`
 (settings, permissions, plugins, agents) is out of bounds — if the mess extends
-to settings or leftover installs, that is `/il-doctor` territory, not this skill.
+to settings or leftover installs, that is `/asdlc-doctor` territory, not this skill.
 
 ## Phase 0 — Inventory (read-only)
 
@@ -155,4 +155,4 @@ Tell the operator the backup path and the restore command
   which check ran.
 - If the operator's mess turns out to be v1 install residue (global agents, hooks,
   a `Bash(*)` grant) rather than memory content, stop and route them to
-  `/il-doctor` and the recovery prompt in `docs/guide/CLIENT-SETUP.md`.
+  `/asdlc-doctor` and the recovery prompt in `docs/guide/CLIENT-SETUP.md`.

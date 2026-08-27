@@ -1,8 +1,8 @@
-# Quick prompts — `infiniteleverage-project`
+# Quick prompts — `agentic-sdlc-project`
 
 ## Operator invocation
 
-> "Create a new Infinite Leverage project called **Acme Bookstore** at `~/code-projects/acme-bookstore`. First topic: `2026-05-20-welcome-launch`. Owner: Dave Hajdu."
+> "Create a new Agentic SDLC project called **Acme Bookstore** at `~/code-projects/acme-bookstore`. First topic: `2026-05-20-welcome-launch`. Owner: Dave Hajdu."
 
 The skill will collect any missing inputs and confirm before scaffolding.
 
@@ -31,7 +31,7 @@ About to scaffold:
   First date  : 2026-05-20
   First topic : welcome-launch
   Next.js     : YES (will run create-next-app)
-  GitHub repo : YES (talentedgeai/acme-bookstore, private)
+  GitHub repo : YES (trac41799/acme-bookstore, private)
 
 Proceed? (y/N)
 ```

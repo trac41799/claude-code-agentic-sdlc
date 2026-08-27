@@ -31,7 +31,7 @@ jobs:
         run: |
           # The v2 invariant: the shipped payload never WRITES into ~/.claude.
           # The old check only looked for `cp` — it missed the mkdir/touch pair that
-          # shipped in il-project step 13 for three releases. Match any write verb.
+          # shipped in asdlc-project step 13 for three releases. Match any write verb.
           if grep -rnE '(cp|mv|mkdir|touch|tee|rm|ln|install)[^|;&]*(~/\.claude|\$HOME/\.claude|\$\{HOME\}/\.claude)' \
                plugin/ --include="*.md" --include="*.sh" --include="*.py"; then
             echo "::error::plugin payload writes into ~/.claude — forbidden in v2"; exit 1
@@ -43,7 +43,7 @@ jobs:
             echo "::error::plugin payload grants Bash(*) — forbidden"; exit 1
           fi
           if grep -rniE 'human-token-tracker|il-telemetry' plugin/ .claude/; then
-            echo "::error::telemetry belongs in the private edge8-telemetry plugin"; exit 1
+            echo "::error::telemetry belongs in the private agentic-sdlc-telemetry plugin"; exit 1
           fi
           echo "no global-install or telemetry regressions"
 
@@ -55,8 +55,8 @@ jobs:
           skills = sorted(glob.glob(".claude/skills/*/SKILL.md"))
           assert len(agents) == 4, f"expected 4 agents, found {len(agents)}"
           assert len(skills) == 16, f"expected 16 skills, found {len(skills)}"
-          # il-doctor hard-codes these counts; drift there is how "found 6/8" shipped
-          doc = pathlib.Path("plugin/skills/il-doctor/scripts/doctor.sh").read_text()
+          # asdlc-doctor hard-codes these counts; drift there is how "found 6/8" shipped
+          doc = pathlib.Path("plugin/skills/asdlc-doctor/scripts/doctor.sh").read_text()
           a = re.search(r'AGENTS"?\s*-ge\s*(\d+)', doc)
           assert a and int(a.group(1)) == len(agents), \
               f"doctor.sh asserts {a and a.group(1)} agents, repo has {len(agents)}"
@@ -212,7 +212,7 @@ jobs:
           print("RLS enabled on every table; policies scoped and initplan-safe")
           PY
 
-      - name: Web template dependencies are all declared by il-project step 9c
+      - name: Web template dependencies are all declared by asdlc-project step 9c
         run: |
           python3 - <<'PY'
           import glob, os, re, sys, pathlib
@@ -229,7 +229,7 @@ jobs:
                   if s.startswith(('.', '@/', '~/', 'node:')): continue
                   p = s.split('/')
                   pkgs.add('/'.join(p[:2]) if s.startswith('@') else p[0])
-          skill = pathlib.Path("plugin/skills/il-project/SKILL.md").read_text()
+          skill = pathlib.Path("plugin/skills/asdlc-project/SKILL.md").read_text()
           blk = re.search(r'# 9c\..*?```', skill, re.S).group(0)
           declared = set(re.findall(r'@?[\w][\w@/.-]+', blk))
           from_cna = {"next", "react", "react-dom", "typescript", "eslint", "tailwindcss"}

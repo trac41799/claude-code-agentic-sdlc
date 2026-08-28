@@ -756,7 +756,7 @@ To wire up auto-deploys on Vercel:
 - Define the brand **voice/tone** — Step 8.7 seeds only the *visual* side (palette, typography, visual style) of `docs/brand/style-guide.md`. Voice, vocabulary, and content formats stay for `pm-client-interview` unless planning docs already specify them.
 - Skip Next.js scaffolding — that step is mandatory
 - Push to GitHub silently — the GitHub repo creation+push is asked as a tail-end question and skipped if the operator declines. The skill prints the exact command they can run later.
-- Register the repo for effort tracking, or write anything at all under `~/.claude/` — effort telemetry is Edge8-internal and lives entirely in the private `agentic-sdlc-telemetry` plugin. This skill writes only inside `$TARGET`.
+- Register the repo for effort tracking, or write anything at all under `~/.claude/` — effort telemetry is Edge8-internal and lives entirely in a private Edge8 telemetry plugin. This skill writes only inside `$TARGET`.
 
 ## Why no .sh files
 

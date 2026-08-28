@@ -1,9 +1,9 @@
 # Agentic SDLC (v2)
 
 The Agentic SDLC system in one repo: a bare-minimum Claude Code plugin, the
-6 agent definitions, their workflow skills, and the canonical project scaffold.
+4 agent definitions, their workflow skills, and the canonical project scaffold.
 
-**v2 principle: nothing installs globally.** The plugin ships 2 skills — no
+**v2 principle: nothing installs globally.** The plugin ships 4 skills — no
 hooks, no telemetry, no background behavior; agents and workflow skills are
 installed **into each client project** by `/asdlc-project`. (Edge8-internal
 telemetry and the v1 cleanup live in the separate private `agentic-sdlc-telemetry`
@@ -67,11 +67,11 @@ The v1 setup skills are retired and replaced:
 
 | v1 (retired) | v2 |
 |---|---|
-| `/agentic-sdlc-init` | Install the plugin + run `/asdlc-project` — there is no machine setup anymore |
-| `/agentic-sdlc-onboard` | Same — any laptop just installs the plugin |
-| `/agentic-sdlc-patch` | Marketplace plugin updates; projects refresh via `/asdlc-adopt` |
-| `/agentic-sdlc-validate` | `/asdlc-doctor` (product checks) + `/agentic-sdlc-telemetry` (Edge8-internal tracking) |
-| `/agentic-sdlc-project` | `/asdlc-project` |
+| `/infiniteleverage-init` | Install the plugin + run `/asdlc-project` — there is no machine setup anymore |
+| `/infiniteleverage-onboard` | Same — any laptop just installs the plugin |
+| `/infiniteleverage-patch` | Marketplace plugin updates; projects refresh via `/asdlc-adopt` |
+| `/infiniteleverage-validate` | `/asdlc-doctor` (product checks) + `/infiniteleverage-telemetry` (Edge8-internal tracking) |
+| `/infiniteleverage-project` | `/asdlc-project` |
 
 Machines still carrying the v1 copies keep working until they migrate; the
 private `agentic-sdlc-telemetry` plugin cleans them up on its first run.
@@ -96,7 +96,7 @@ hand-maintained list is how the v1 docs drifted.
 
 Existing projects refresh their agents/skills by running `/asdlc-adopt` in the
 repo — or wait for the next scaffolded project to pick up the latest
-automatically. There are no zips and no `/agentic-sdlc-patch` anymore.
+automatically. There are no zips and no `/infiniteleverage-patch` anymore.
 
 ## Migrating from v1
 

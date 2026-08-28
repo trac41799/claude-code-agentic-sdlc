@@ -17,7 +17,7 @@ Current stages: 1 init-check · **2 version-check (nudge-only)** · 3 CLAUDE.md 
 
 ```
 Stage 2 (rewritten):
-  local_v  = ~/.claude/.agentic-sdlc-version  (skip entirely if absent)
+  local_v  = ~/.claude/.infiniteleverage-version  (skip entirely if absent)
   remote_v = curl raw .../main/VERSION  (3s timeout; network fail → silent pass)
   if remote_v is semver AND remote_v != local_v:
      tmp = mktemp -d
@@ -28,11 +28,11 @@ Stage 2 (rewritten):
         for s in tmp/.claude/skills/*/: if ~/.claude/skills/<name> exists → refresh it
         # HOOKS — reuse the CANONICAL installer (handles il_telemetry + session-telemetry-* +
         #         pre-bash + prompt-submit + settings wiring + the obsolete-hook PRUNE)
-        bash tmp/setup-skills/agentic-sdlc-patch/scripts/install-hooks.sh tmp
-        echo remote_v > ~/.claude/.agentic-sdlc-version
+        bash tmp/setup-skills/infiniteleverage-patch/scripts/install-hooks.sh tmp
+        echo remote_v > ~/.claude/.infiniteleverage-version
         echo "[Agentic SDLC] Auto-updated {local_v} → {remote_v} (agents, skills, hooks)."
      else:
-        echo "[Agentic SDLC] Template v{remote_v} available (you have v{local_v}). Run /agentic-sdlc-patch."   # fallback
+        echo "[Agentic SDLC] Template v{remote_v} available (you have v{local_v}). Run /infiniteleverage-patch."   # fallback
      rm -rf tmp
   # fail-safe everywhere: any error → silent or fallback; NEVER block the session
 ```

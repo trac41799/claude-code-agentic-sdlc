@@ -170,7 +170,7 @@ what's happening in one sentence as you go, and only ask me something if
 you truly need me.
 
 1. First, a quick silent check: look for leftovers of the old version 1 —
-   things like ~/.claude/.agentic-sdlc-version, an il_telemetry folder
+   things like ~/.claude/.infiniteleverage-version, an il_telemetry folder
    inside ~/.claude/hooks, or files like product-manager.md and
    web-publisher.md inside ~/.claude/agents. If you find any, change
    nothing and tell me: "You have an older version on this computer. Go
@@ -273,9 +273,9 @@ WHAT COUNTS AS THE OLD VERSION
   email-marketer.md, product-manager.md, qa.md, web-publisher.md, writer.md
 - ~/.claude/hooks/ containing any of: pre-bash, prompt-submit, session-start,
   usage-context.py, update-project-status-usage.py, or an il_telemetry folder
-- ~/.claude/.agentic-sdlc-version
+- ~/.claude/.infiniteleverage-version
 - ~/.claude/skills/ containing anything whose name starts with
-  agentic-sdlc-, pm-, dev-, devops-, qa-, writer-, designer-,
+  infiniteleverage-, pm-, dev-, devops-, qa-, writer-, designer-,
   web-publisher-, email-marketer-, scaffold-, or speckit- ... or is exactly
   one of: pm, dev, devops, qa, writer, designer, web-publisher,
   email-marketer, marketing-strategist, plan-protocol, github-flow,

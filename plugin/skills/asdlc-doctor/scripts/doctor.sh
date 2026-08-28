@@ -114,10 +114,10 @@ fi
 # ── D. Companion plugin (Edge8-internal) ─────────────────────────────────────
 echo ""
 echo "[ D · Companion ]"
-if ls "$HOME/.claude/plugins/cache/agentic-sdlc/agentic-sdlc-telemetry" >/dev/null 2>&1; then
-  info "agentic-sdlc-telemetry plugin installed — use /agentic-sdlc-telemetry for tracking status"
+if ls "$HOME"/.claude/plugins/cache/*/*telemetry* >/dev/null 2>&1; then
+  info "companion telemetry plugin installed — see that plugin for tracking status"
 else
-  info "agentic-sdlc-telemetry not installed (Edge8-internal; outside users don't need it)"
+  info "no companion telemetry plugin (Edge8-internal; outside users don't need it)"
 fi
 
 echo ""

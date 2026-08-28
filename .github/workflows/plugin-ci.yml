@@ -42,8 +42,8 @@ jobs:
           if grep -rn '"Bash(\*)"' plugin/ --include="*.py" --include="*.md"; then
             echo "::error::plugin payload grants Bash(*) — forbidden"; exit 1
           fi
-          if grep -rniE 'human-token-tracker|il-telemetry' plugin/ .claude/; then
-            echo "::error::telemetry belongs in the private agentic-sdlc-telemetry plugin"; exit 1
+          if grep -rniE 'human-token-tracker|il-telemetry|sdlc-telemetry' plugin/ .claude/; then
+            echo "::error::telemetry code belongs in the private telemetry plugin, not this repo"; exit 1
           fi
           echo "no global-install or telemetry regressions"
 

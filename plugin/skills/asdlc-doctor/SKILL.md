@@ -24,7 +24,7 @@ It prints PASS/FAIL lines for:
   agents/skills lingering (writer/designer and their content pipeline — re-running
   `/asdlc-project` step 6 moves them to `.claude/retired-asdlc-<date>/`), `CLAUDE.md`
   delegation block present
-- **Companion plugin** — whether `agentic-sdlc-telemetry` is installed (Edge8-internal; not needed by outside users)
+- **Companion plugin** — whether a companion telemetry plugin is installed (Edge8-internal; not needed by outside users)
 
 ## Interpreting results
 
@@ -40,6 +40,6 @@ It prints PASS/FAIL lines for:
 
 - This skill is read-only — it never writes files or settings.
 - Telemetry consent, effort tracking, and v1-residue cleanup belong to the
-  `/agentic-sdlc-telemetry` skill (private Edge8 plugin) — if the user asks about
+  the companion telemetry skill (private Edge8 plugin) — if the user asks about
   tracking and that plugin isn't installed, say it's Edge8-internal and not
   part of this product.

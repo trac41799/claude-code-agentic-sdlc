@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: superpowers:subagent-driven-development. Treat each Workstream below as an independently shippable PR.
 
-**Goal:** Make first-time setup the smooth, high-energy part of the retreat (it is currently the one rough edge). Fold `agentic-sdlc-onboard` into `agentic-sdlc-init`, harden OS detection, reorder phases so the shortest path to a first working project comes before the full agent-team scaffold, defer credential steps that block momentum, and add an experimental cloud (Codespaces) track for old/unsupported machines.
+**Goal:** Make first-time setup the smooth, high-energy part of the retreat (it is currently the one rough edge). Fold `infiniteleverage-onboard` into `infiniteleverage-init`, harden OS detection, reorder phases so the shortest path to a first working project comes before the full agent-team scaffold, defer credential steps that block momentum, and add an experimental cloud (Codespaces) track for old/unsupported machines.
 
 **Why (source — "Agentic SDLC" Lark group, Jun 20–21 retreat debrief):**
 - Quan: *"if we can figure out a way to smooth out tech stack setup we'll just be cruising on high energy the whole time."*
@@ -41,14 +41,14 @@ Init opens with one branch question and routes to one of two modes. Everything s
 ## Workstream 1 — Merge onboard → init (retire onboard)
 
 **Files:**
-- Rewrite `setup-skills/agentic-sdlc-init/SKILL.md` to open with the Mode A/B branch question, then route. Keep Mode A as today's two-phase bootstrap; add Mode B section sourced from current onboard SKILL.md (quick-win clone, no infra creation, no schedules, effort-tracking registration block, `first-actions.md`).
-- Move onboard-only references into init: `first-actions.md` → `agentic-sdlc-init/references/`. Merge the two `phase1-manual.md` / `phase2-prompts.md` pairs (see W2/W3 — they get split by concern anyway).
-- Delete `setup-skills/agentic-sdlc-onboard/` after content is absorbed.
+- Rewrite `setup-skills/infiniteleverage-init/SKILL.md` to open with the Mode A/B branch question, then route. Keep Mode A as today's two-phase bootstrap; add Mode B section sourced from current onboard SKILL.md (quick-win clone, no infra creation, no schedules, effort-tracking registration block, `first-actions.md`).
+- Move onboard-only references into init: `first-actions.md` → `infiniteleverage-init/references/`. Merge the two `phase1-manual.md` / `phase2-prompts.md` pairs (see W2/W3 — they get split by concern anyway).
+- Delete `setup-skills/infiniteleverage-onboard/` after content is absorbed.
 - Update `CLAUDE.md` (template root) line listing "Bootstrap skills (init, onboard, patch)" → "(init, patch, project)".
 - Update `scripts/rebuild-zips.sh` to stop building an onboard zip; ensure init zip carries the merged references.
-- Grep the repo for `agentic-sdlc-onboard` references (plugin hooks, help skill, project skill, docs) and repoint to init Mode B. **Known callers to fix:** init SKILL.md "Next" line ("run `agentic-sdlc-onboard`"), patch health-check skills list, any `/agentic-sdlc-onboard` mentions in `agentic-sdlc-help`.
+- Grep the repo for `infiniteleverage-onboard` references (plugin hooks, help skill, project skill, docs) and repoint to init Mode B. **Known callers to fix:** init SKILL.md "Next" line ("run `infiniteleverage-onboard`"), patch health-check skills list, any `/infiniteleverage-onboard` mentions in `infiniteleverage-help`.
 
-**Acceptance:** Searching the repo for `agentic-sdlc-onboard` returns only historical/changelog mentions. Init Mode B reproduces every step the old onboard did. `rebuild-zips.sh` runs clean and the init zip contains `first-actions.md`.
+**Acceptance:** Searching the repo for `infiniteleverage-onboard` returns only historical/changelog mentions. Init Mode B reproduces every step the old onboard did. `rebuild-zips.sh` runs clean and the init zip contains `first-actions.md`.
 
 ---
 
@@ -57,13 +57,13 @@ Init opens with one branch question and routes to one of two modes. Everything s
 **Problem:** detection isn't robust; Windows path is a separate doc; the team wants only Win/macOS + a version floor, not per-machine handling.
 
 **Files:**
-- New `agentic-sdlc-init/references/os-detection.md` — the single OS guide both modes and the patch health-check reference:
+- New `infiniteleverage-init/references/os-detection.md` — the single OS guide both modes and the patch health-check reference:
   - Detect macOS vs Windows (and confirm WSL2 Ubuntu shell on Windows — bash hooks require it).
   - **Package manager per OS:** macOS → Homebrew; Windows(WSL2) → `apt`; document `winget` only for the host-side Windows app installs (Claude Desktop). Mention `winget` per Trac's note but route real tooling through the Unix shell.
   - **Minimum version floor table** (Khoa/Loc): Node ≥ (pin), git ≥ (pin), macOS ≥ (pin), Ubuntu/WSL ≥ (pin). Anything below the floor → point to Track B (Codespaces, W5) instead of fighting the machine. "Accept some special cases" — don't enumerate every old OS.
   - One detection snippet that prints a plain-English "your machine is supported / borderline / use the cloud track" verdict.
-- Fold `agentic-sdlc-init/references/windows-setup.md` into `os-detection.md` (or keep it as the deep-dive WSL2 install and link from os-detection). Remove the standalone "On Windows?" section from SKILL.md in favor of a single pointer to `os-detection.md`.
-- `agentic-sdlc-patch/scripts/health-check.sh` — make OS-aware: don't assume `brew`; check the package manager that matches the detected OS; reuse the version-floor table.
+- Fold `infiniteleverage-init/references/windows-setup.md` into `os-detection.md` (or keep it as the deep-dive WSL2 install and link from os-detection). Remove the standalone "On Windows?" section from SKILL.md in favor of a single pointer to `os-detection.md`.
+- `infiniteleverage-patch/scripts/health-check.sh` — make OS-aware: don't assume `brew`; check the package manager that matches the detected OS; reuse the version-floor table.
 
 **Acceptance:** A Windows-WSL2 user and a macOS user both run the same Smart-Start detection and get a correct supported/borderline verdict. health-check.sh passes on both OSes without brew-on-Windows false negatives.
 
@@ -85,7 +85,7 @@ Init opens with one branch question and routes to one of two modes. Everything s
 - **2b — Agent team & schedules:** all 8 agents, dashboard, CronCreate/RemoteTrigger routines, HANDOFF.md.
 
 **Interactive credential collection (replaces static ENV instructions):**
-- New `agentic-sdlc-init/scripts/collect-credentials.(sh|py)` — prompts for each key **one at a time, only when first needed**, validates non-empty/format, writes `~/.claude/.env` and project `.env.local` without clobbering existing keys (reuse the merge discipline already in `setup-permissions.py`). Gemini/Resend prompts live in 2b/feature-time, not Phase 1.
+- New `infiniteleverage-init/scripts/collect-credentials.(sh|py)` — prompts for each key **one at a time, only when first needed**, validates non-empty/format, writes `~/.claude/.env` and project `.env.local` without clobbering existing keys (reuse the merge discipline already in `setup-permissions.py`). Gemini/Resend prompts live in 2b/feature-time, not Phase 1.
 - Update `references/env-template.md` to mark Gemini/Resend as **deferred / optional-at-start** and document the just-in-time collection order.
 
 **Acceptance:** A first-time user reaches a live deployed page (Mode A) or `localhost:3000` (Mode B) **before** any agent scaffolding and **without** having touched Gemini or Resend. No step asks for a credential the current step doesn't use.
@@ -104,7 +104,7 @@ Init opens with one branch question and routes to one of two modes. Everything s
 
 ## Workstream 5 — Track B: Codespaces cloud path (additive, experimental)
 
-**Files:** New `agentic-sdlc-init/references/cloud-track-codespaces.md`, linked from the OS-detection "borderline / unsupported" verdict and from SKILL.md as an explicit alternative.
+**Files:** New `infiniteleverage-init/references/cloud-track-codespaces.md`, linked from the OS-detection "borderline / unsupported" verdict and from SKILL.md as an explicit alternative.
 - Document Yon's flow: open `codespaces.new/<org>/asdlc-workspace?quickstart=1` → sign in with GitHub (new or existing) → open the Claude side panel (orange icon, top-right) → auth Claude Code (paid sub required; **free Claude won't work on CLI**) → run init inside the cloud IDE → create the GitHub repo in the cloud, download to the machine after the retreat.
 - Mark **EXPERIMENTAL — verify before relying on it at a retreat.** Capture the open question: which org hosts the `asdlc-workspace` devcontainer, and what's pre-baked into it (CLIs, skills).
 - Note constraints: requires a paid Claude Code subscription; the IDE takes minutes to load; repo lives in the cloud until downloaded.
@@ -127,11 +127,11 @@ Init opens with one branch question and routes to one of two modes. Everything s
 ## Workstream 7 — Patch skill alignment
 
 The merge and reordering change what patch must keep in sync.
-- `health-check.sh`: OS-aware (W2); update skills list (drop `agentic-sdlc-onboard`, it's gone); add a check that the merged init references exist; keep telemetry/hook checks intact (see `.claude/rules/hooks-regression-check.md`).
+- `health-check.sh`: OS-aware (W2); update skills list (drop `infiniteleverage-onboard`, it's gone); add a check that the merged init references exist; keep telemetry/hook checks intact (see `.claude/rules/hooks-regression-check.md`).
 - Phase-2 sync table: ensure renamed/moved references (os-detection, cloud-track, collect-credentials) propagate.
 - Confirm the SessionStart auto-update path still covers the restructured skill files.
 
-**Acceptance:** Running `/agentic-sdlc-patch` on a current machine reports the new structure correctly and applies the renamed/moved files without false ❌s.
+**Acceptance:** Running `/infiniteleverage-patch` on a current machine reports the new structure correctly and applies the renamed/moved files without false ❌s.
 
 ---
 

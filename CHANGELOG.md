@@ -6,6 +6,21 @@ Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Re
 
 ---
 
+## [Unreleased]
+
+**Rebrand: "Infinite Leverage" → "Agentic SDLC."** Canonical repo moved to
+`trac41799/claude-code-agentic-sdlc`; the plugin/marketplace name is now `agentic-sdlc`
+(install with `claude plugin install agentic-sdlc@agentic-sdlc`); the four plugin
+skills are `/asdlc-project`, `/asdlc-adopt`, `/asdlc-doctor`, `/asdlc-memory-cleanup`.
+Literal historical/v1 artifact names (`.infiniteleverage-version`, the
+`infiniteleverage-*` commands, `il_telemetry`, 2.7.1's `retired-il-<date>/`) are kept
+verbatim wherever text must match what actually shipped or what is actually on disk.
+The CI telemetry guard now also rejects any `sdlc-telemetry` mention, and the shipped
+payload no longer names the private telemetry plugin (doctor.sh detects it by cache
+glob instead).
+
+---
+
 ## [2.8.0] — 2026-08-27
 
 **Billing stripped from the web template.** Follow-up to 2.7.2 (which removed Stripe
@@ -56,7 +71,7 @@ a legacy project (6 on disk) failed the gate even after a successful copy.
 ### Fixed
 - **`asdlc-project` step 6 now retires the v2.4-era set on refresh** — 2 agents
   (writer.md, designer.md) and 8 skills (the content pipeline) — by **moving** them to
-  `.claude/retired-asdlc-<date>/`, never deleting, in case a client edited one. On a fresh
+  `.claude/retired-il-<date>/` (renamed to `retired-asdlc-<date>/` in 2.8.0), never deleting, in case a client edited one. On a fresh
   scaffold the block is a no-op. Verified end to end against a real v2.4.5 tree:
   retired files land in the dated folder, a custom agent and a custom skill placed
   beside them survive untouched, and the step is idempotent
@@ -308,7 +323,7 @@ assumes the reader runs commands or wants to.
   look-only first pass; explicit "anything not on these lists is yours — leave it alone";
   settings edited surgically with dated backups, never replaced; files archived into a
   dated folder by rename, never deleted; locally-modified files reported, not moved.
-  Edge8-internal machines are pointed at `/agentic-sdlc-telemetry` instead, which does this
+  Edge8-internal machines are pointed at `/infiniteleverage-telemetry` instead, which does this
   hash-verified
 
 ---
@@ -576,7 +591,7 @@ The existing "no global-install regressions" check grepped only for `cp`, which 
 `asdlc-project` step 13's `mkdir`/`touch` into `~/.claude` survived three releases. Now:
 - Any write verb (`cp`/`mv`/`mkdir`/`touch`/`tee`/`rm`/`ln`/`install`) or shell
   redirection targeting `~/.claude`, `$HOME/.claude` or `${HOME}/.claude` fails the build,
-  as does any mention of `human-token-tracker` or `asdlc-telemetry` in the shipped payload
+  as does any mention of `human-token-tracker` or `il-telemetry` in the shipped payload
 - Agent and skill counts are asserted (6 / 24) **and cross-checked against the threshold
   hard-coded in `doctor.sh`** — the drift that produced "found 6/8"
 - Every skill must have frontmatter whose `name` matches its directory
@@ -627,7 +642,7 @@ the scaffold. Three of these were install-breaking.
 
 ### Removed
 - **Effort-tracking registration (`asdlc-project` step 13).** It wrote to `~/.claude/`, pushed
-  client names and their staff's git emails to `trac41799/agentic-sdlc-telemetry`, and
+  client names and their staff's git emails to `trac41799/human-token-tracker`, and
   referenced a session-start hook this plugin doesn't ship — contradicting the repo's own
   "nothing global, no telemetry" rule, both manifests, and the skill's own execution
   contract. Telemetry belongs to the private `agentic-sdlc-telemetry` plugin. "telemetry" dropped
@@ -641,10 +656,10 @@ the scaffold. Three of these were install-breaking.
   (titled "8-Agent Team"), `docs/guide/SCAFFOLD.md` and `docs/install-prompt.md` (both
   documenting the retired global `~/.claude/` install). Nothing linked them; recoverable
   from git history
-- **Two byte-identical duplicates of the intro deck** (`Agentic-SDLC-Introduction.html`,
+- **Two byte-identical duplicates of the intro deck** (`Infinite-Leverage-8-Introduction.html`,
   `agentic-sdlc-introduction.html`). `docs/slides/index.html` is the single copy, and
   its text now names `/asdlc-project` and `/asdlc-doctor` instead of the retired
-  `/agentic-sdlc-init|onboard|patch`, a 6-agent roster, and the one-repo-is-the-
+  `/infiniteleverage-init|onboard|patch`, a 6-agent roster, and the one-repo-is-the-
   marketplace architecture
 - **A real contributor's usage data shipped in the scaffold.** `templates/project-scaffold/docs/project-status.html`
   carried a hard-coded username, hour count and token total, plus a call to a
@@ -775,7 +790,7 @@ behind current models.
   hooks run via `${CLAUDE_PLUGIN_ROOT}` (v1's hooks.json pointed at `~/.claude/hooks/*`, so
   plugin updates never took effect without a manual copy step)
 - **`/asdlc-doctor`** — health check + telemetry consent + v1 residue report (replaces
-  `agentic-sdlc-validate` and the patch health-check)
+  `infiniteleverage-validate` and the patch health-check)
 - **`migrate_v1.py`** — one-time, hash-verified cleanup of v1's global installs. Removes only
   byte-exact copies of files v1 shipped (manifest generated from the full git history of both
   v1 repos); modified files and symlinks are reported, never deleted. Also removes the v1
@@ -790,7 +805,7 @@ behind current models.
 - **CI** — pytest suite (48 tests incl. migration safety) runs on Python 3.9 and 3.12
 
 ### Changed
-- **`agentic-sdlc-project` → `asdlc-project` (3.0.0)** — no more machine-init prerequisite;
+- **`infiniteleverage-project` → `il-project` (3.0.0)** — no more machine-init prerequisite;
   installs agents + skills into the project's `.claude/` only
 - **All 8 agents rewritten for current models** — 37KB → 17KB; boilerplate deduplicated,
   dated "research practitioners before acting" crutches dropped, contradictions removed;
@@ -804,7 +819,7 @@ behind current models.
   `from __future__ import annotations`
 
 ### Removed
-- `agentic-sdlc-init` / `-patch` / `-onboard` and all global `cp -R` machinery — plugin
+- `infiniteleverage-init` / `-patch` / `-onboard` and all global `cp -R` machinery — plugin
   marketplace handles distribution and updates
 - `setup-permissions.py` — **never again does any installer write `Bash(*)` or change
   `defaultMode`**
@@ -812,7 +827,7 @@ behind current models.
   guardrails are a per-project choice via `devops-git-guardrails`)
 - `session-start` 4-stage hook (version-check curl, usage briefing, nag lines) and
   `usage-context.py` — no more network calls or transcript scans on session start
-- `scaffold-*` skill pack (10), `use-dev-team`/`use-marketing-team`, `agentic-sdlc-help`,
+- `scaffold-*` skill pack (10), `use-dev-team`/`use-marketing-team`, `infiniteleverage-help`,
   `session-ingest`, lark rules, `plugin-staging/`, committed release zips, `rebuild-zips` CI,
   `effort_selfreport.py` experiment
 
@@ -864,12 +879,12 @@ behind current models.
 ## [1.3.0] — 2026-05-20
 
 ### Added
-- `agentic-sdlc-help` skill — full skill menu by team
+- `infiniteleverage-help` skill — full skill menu by team
 - Personal laptop setup skill (in addition to Mac Mini setup)
 
 ### Changed
 - Renamed `create-local-task` → `create-local-routine`
-- Pre-bash and prompt-submit hooks now installed via `agentic-sdlc-init` and `agentic-sdlc-onboard`
+- Pre-bash and prompt-submit hooks now installed via `infiniteleverage-init` and `infiniteleverage-onboard`
 
 ---
 
@@ -893,5 +908,5 @@ behind current models.
 
 - 8 agent shells: product-manager, developer, qa, devops, writer, designer, web-publisher, email-marketer
 - 21 foundational skills
-- 3 bootstrap skills: agentic-sdlc-init, agentic-sdlc-onboard, agentic-sdlc-patch
+- 3 bootstrap skills: infiniteleverage-init, infiniteleverage-onboard, infiniteleverage-patch
 - Global engineering rules, agent routing rules, Lark optional integration rules

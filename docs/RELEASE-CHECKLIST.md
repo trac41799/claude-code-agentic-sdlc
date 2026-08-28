@@ -37,7 +37,7 @@ Passes when:
 
 - [ ] Step 1 blocks on any missing prerequisite rather than failing later
 - [ ] Step 3 prints `scaffold pinned to vX.Y.Z` — **not** the fallback warning
-- [ ] Step 6's gate reports `agents: 6/6 · skills: 24/24` and does not continue if it can't
+- [ ] Step 6's gate reports `agents: canonical 4 present · skills: 16/16` and does not continue if it can't
 - [ ] Step 9e is green on all four: `lint`, `tsc --noEmit`, `build`, `vitest`
 - [ ] Step 10's first commit contains no `node_modules`, `.next`, or `.env*`
 - [ ] `/asdlc-doctor` inside the new project is all-PASS

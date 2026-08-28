@@ -1,4 +1,4 @@
-# Quick prompts — `agentic-sdlc-project`
+# Quick prompts — `asdlc-project`
 
 ## Operator invocation
 

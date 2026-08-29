@@ -1,152 +1,152 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1900" height="690" viewBox="0 0 1900 690">
   <defs>
     <style>
-      .lane-title { font: bold 17px Arial, Helvetica, sans-serif; }
-      .lane-sub   { font: 12px Arial, Helvetica, sans-serif; }
-      .card       { font: 13px Arial, Helvetica, sans-serif; }
-      .card-b     { font: bold 13px Arial, Helvetica, sans-serif; }
-      .diamond    { font: bold 13px Arial, Helvetica, sans-serif; }
-      .start      { font: bold 14px Arial, Helvetica, sans-serif; }
-      .edge-label { font: bold 12px Arial, Helvetica, sans-serif; }
+      .lane-title { font: bold 21px Arial, Helvetica, sans-serif; }
+      .lane-sub   { font: 15px Arial, Helvetica, sans-serif; }
+      .card       { font: 17px Arial, Helvetica, sans-serif; }
+      .card-b     { font: bold 18px Arial, Helvetica, sans-serif; }
+      .diamond    { font: bold 16px Arial, Helvetica, sans-serif; }
+      .diamond-n  { font: bold 13px Arial, Helvetica, sans-serif; }
+      .start      { font: bold 17px Arial, Helvetica, sans-serif; }
+      .edge-label { font: bold 14.5px Arial, Helvetica, sans-serif; }
     </style>
   </defs>
 
   <!-- ============ LANES ============ -->
   <rect x="20" y="30" width="1860" height="150" rx="14" fill="#EFF3FB" stroke="#1E2761" stroke-width="1.5"/>
   <text x="44" y="64" class="lane-title" fill="#1E2761">OPERATOR</text>
-  <text x="44" y="84" class="lane-sub" fill="#5A6B9E">decides &#183; approves &#183; reviews &#183; merges</text>
+  <text x="44" y="88" class="lane-sub" fill="#5A6B9E">decides &#183; approves &#183; reviews &#183; merges</text>
 
   <rect x="20" y="200" width="1860" height="150" rx="14" fill="#FBF3E2" stroke="#B98A00" stroke-width="1.5"/>
   <text x="44" y="234" class="lane-title" fill="#7A5C00">PRODUCT MANAGER</text>
-  <text x="44" y="254" class="lane-sub" fill="#A8893B">context &#8594; decisions &#8594; spec &#8594; issues</text>
+  <text x="44" y="258" class="lane-sub" fill="#A8893B">context &#8594; decisions &#8594; spec &#8594; issues</text>
 
   <rect x="20" y="370" width="1860" height="300" rx="14" fill="#EAF5EC" stroke="#2E7D32" stroke-width="1.5"/>
   <text x="44" y="404" class="lane-title" fill="#1B5E20">DEVELOPER &#183; QA &#183; DEVOPS</text>
-  <text x="44" y="424" class="lane-sub" fill="#4E8A55">plan &#8594; test-first &#8594; verify &#8594; PR</text>
+  <text x="44" y="428" class="lane-sub" fill="#4E8A55">plan &#8594; test-first &#8594; verify &#8594; PR</text>
 
   <!-- ============ OPERATOR LANE ============ -->
-  <ellipse cx="150" cy="120" rx="95" ry="38" fill="#2E7D32" stroke="#1B5E20" stroke-width="2"/>
-  <text x="150" y="115" text-anchor="middle" class="start" fill="#FFFFFF">Human first</text>
-  <text x="150" y="134" text-anchor="middle" class="start" fill="#FFFFFF">command</text>
+  <ellipse cx="150" cy="134" rx="95" ry="38" fill="#2E7D32" stroke="#1B5E20" stroke-width="2"/>
+  <text x="150" y="128" text-anchor="middle" class="start" fill="#FFFFFF">Human first</text>
+  <text x="150" y="149" text-anchor="middle" class="start" fill="#FFFFFF">command</text>
 
-  <polygon points="360,120 415,85 470,120 415,155" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
-  <text x="415" y="115" text-anchor="middle" class="diamond" fill="#4A3A00">Empty</text>
-  <text x="415" y="133" text-anchor="middle" class="diamond" fill="#4A3A00">repo?</text>
+  <polygon points="360,120 415,83 470,120 415,157" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
+  <text x="415" y="114" text-anchor="middle" class="diamond" fill="#4A3A00">Empty</text>
+  <text x="415" y="134" text-anchor="middle" class="diamond" fill="#4A3A00">repo?</text>
 
-  <rect x="570" y="62" width="250" height="56" rx="10" fill="#FFFFFF" stroke="#1E2761" stroke-width="2"/>
+  <rect x="570" y="60" width="250" height="60" rx="10" fill="#FFFFFF" stroke="#1E2761" stroke-width="2"/>
   <text x="582" y="86" class="card-b" fill="#1E2761">/asdlc-project</text>
-  <text x="582" y="106" class="card" fill="#334155">scaffold + install 4-agent team</text>
+  <text x="582" y="108" class="card" fill="#334155">scaffold + install team</text>
 
-  <rect x="570" y="140" width="250" height="56" rx="10" fill="#FFFFFF" stroke="#1E2761" stroke-width="2"/>
-  <text x="582" y="164" class="card-b" fill="#1E2761">/asdlc-adopt</text>
-  <text x="582" y="184" class="card" fill="#334155">install team into existing repo</text>
+  <rect x="570" y="140" width="250" height="60" rx="10" fill="#FFFFFF" stroke="#1E2761" stroke-width="2"/>
+  <text x="582" y="166" class="card-b" fill="#1E2761">/asdlc-adopt</text>
+  <text x="582" y="188" class="card" fill="#334155">install team into repo</text>
 
-  <polygon points="1150,120 1205,85 1260,120 1205,155" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
-  <text x="1205" y="108" text-anchor="middle" class="diamond" fill="#4A3A00">Spec</text>
-  <text x="1205" y="126" text-anchor="middle" class="diamond" fill="#4A3A00">approved?</text>
-  <text x="1205" y="144" text-anchor="middle" class="diamond" fill="#4A3A00">(by you)</text>
+  <polygon points="1225,120 1280,83 1335,120 1280,157" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
+  <text x="1280" y="112" text-anchor="middle" class="diamond" fill="#4A3A00">Spec</text>
+  <text x="1280" y="132" text-anchor="middle" class="diamond" fill="#4A3A00">approved?</text>
+  <text x="1312" y="174" text-anchor="middle" class="diamond-n" fill="#7A5C00">(by you)</text>
 
-  <polygon points="1630,120 1685,85 1740,120 1685,155" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
-  <text x="1685" y="108" text-anchor="middle" class="diamond" fill="#4A3A00">Review</text>
-  <text x="1685" y="126" text-anchor="middle" class="diamond" fill="#4A3A00">PR &amp;</text>
-  <text x="1685" y="144" text-anchor="middle" class="diamond" fill="#4A3A00">merge?</text>
+  <polygon points="1630,120 1685,83 1740,120 1685,157" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
+  <text x="1685" y="112" text-anchor="middle" class="diamond" fill="#4A3A00">Review PR</text>
+  <text x="1685" y="132" text-anchor="middle" class="diamond" fill="#4A3A00">&amp; merge?</text>
+  <text x="1685" y="172" text-anchor="middle" class="diamond-n" fill="#7A5C00">(you decide)</text>
 
   <!-- ============ PM LANE ============ -->
-  <rect x="60" y="262" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
+  <rect x="60" y="260" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
   <text x="72" y="286" class="card-b" fill="#7A5C00">pm-client-interview</text>
-  <text x="72" y="306" class="card" fill="#4A4A4A">capture business context</text>
+  <text x="72" y="308" class="card" fill="#4A4A4A">capture business context</text>
 
-  <rect x="350" y="262" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
-  <text x="362" y="286" class="card-b" fill="#7A5C00">pm-constitution-sync</text>
-  <text x="362" y="306" class="card" fill="#4A4A4A">record decisions &amp; rules</text>
+  <rect x="365" y="260" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
+  <text x="377" y="286" class="card-b" fill="#7A5C00">pm-constitution-sync</text>
+  <text x="377" y="308" class="card" fill="#4A4A4A">record decisions &amp; rules</text>
 
-  <rect x="640" y="262" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
-  <text x="652" y="286" class="card-b" fill="#7A5C00">pm-epic-writing</text>
-  <text x="652" y="306" class="card" fill="#4A4A4A">decision-complete spec</text>
+  <rect x="670" y="260" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
+  <text x="682" y="286" class="card-b" fill="#7A5C00">pm-epic-writing</text>
+  <text x="682" y="308" class="card" fill="#4A4A4A">decision-complete spec</text>
 
-  <rect x="930" y="262" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
-  <text x="942" y="286" class="card-b" fill="#7A5C00">pm-grill-with-docs</text>
-  <text x="942" y="306" class="card" fill="#4A4A4A">adversarial check vs docs</text>
+  <rect x="990" y="260" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
+  <text x="1002" y="286" class="card-b" fill="#7A5C00">pm-grill-with-docs</text>
+  <text x="1002" y="308" class="card" fill="#4A4A4A">adversarial check vs docs</text>
 
-  <rect x="1340" y="262" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
-  <text x="1352" y="286" class="card-b" fill="#7A5C00">pm-to-issues</text>
-  <text x="1352" y="306" class="card" fill="#4A4A4A">backlog of issues</text>
+  <rect x="1380" y="260" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#B98A00" stroke-width="2"/>
+  <text x="1392" y="286" class="card-b" fill="#7A5C00">pm-to-issues</text>
+  <text x="1392" y="308" class="card" fill="#4A4A4A">backlog of issues</text>
 
   <!-- ============ BUILD LANE ============ -->
-  <rect x="60" y="470" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="60" y="468" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
   <text x="72" y="494" class="card-b" fill="#1B5E20">/asdlc-doctor</text>
-  <text x="72" y="514" class="card" fill="#4A4A4A">verify prerequisites &amp; layout</text>
+  <text x="72" y="516" class="card" fill="#4A4A4A">verify required tools</text>
 
-  <rect x="350" y="470" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="350" y="468" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
   <text x="362" y="494" class="card-b" fill="#1B5E20">dev-feature-plan</text>
-  <text x="362" y="514" class="card" fill="#4A4A4A">impl-plan.md + tasks.md</text>
+  <text x="362" y="516" class="card" fill="#4A4A4A">impl-plan.md + tasks.md</text>
 
-  <polygon points="760,470 815,435 870,470 815,505" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
-  <text x="815" y="465" text-anchor="middle" class="diamond" fill="#4A3A00">Plan</text>
+  <polygon points="760,468 815,433 870,468 815,503" fill="#F4B400" stroke="#B98A00" stroke-width="2"/>
+  <text x="815" y="463" text-anchor="middle" class="diamond" fill="#4A3A00">Plan</text>
   <text x="815" y="483" text-anchor="middle" class="diamond" fill="#4A3A00">approved?</text>
 
-  <rect x="930" y="470" width="280" height="56" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="930" y="468" width="280" height="60" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
   <text x="942" y="490" class="card-b" fill="#1B5E20">dev-tdd &#8212; per task</text>
-  <text x="942" y="510" class="card" fill="#4A4A4A">RED &#8594; GREEN &#8594; REFACTOR</text>
+  <text x="942" y="512" class="card" fill="#4A4A4A">RED &#8594; GREEN &#8594; REFACTOR</text>
 
-  <rect x="1270" y="470" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="1270" y="468" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
   <text x="1282" y="494" class="card-b" fill="#1B5E20">qa-triage</text>
-  <text x="1282" y="514" class="card" fill="#4A4A4A">verify + regression check</text>
+  <text x="1282" y="516" class="card" fill="#4A4A4A">verify + regression</text>
 
-  <rect x="1560" y="470" width="230" height="56" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="1560" y="468" width="230" height="60" rx="10" fill="#FFFFFF" stroke="#2E7D32" stroke-width="2"/>
   <text x="1572" y="494" class="card-b" fill="#1B5E20">Open pull request</text>
-  <text x="1572" y="514" class="card" fill="#4A4A4A">blast-radius guard + CI gates</text>
+  <text x="1572" y="516" class="card" fill="#4A4A4A">guard + CI gates</text>
 
-  <ellipse cx="1790" cy="620" rx="70" ry="34" fill="#2E7D32" stroke="#1B5E20" stroke-width="2"/>
-  <text x="1790" y="615" text-anchor="middle" class="start" fill="#FFFFFF">Done</text>
-  <text x="1790" y="634" text-anchor="middle" class="start" fill="#FFFFFF">epic updated</text>
+  <ellipse cx="1790" cy="622" rx="70" ry="36" fill="#2E7D32" stroke="#1B5E20" stroke-width="2"/>
+  <text x="1790" y="616" text-anchor="middle" class="start" fill="#FFFFFF">Done</text>
+  <text x="1790" y="638" text-anchor="middle" class="start" fill="#FFFFFF">epic updated</text>
 
   <!-- ============ EDGES ============ -->
-  <g stroke="#64748B" stroke-width="2" fill="none">
+  <g stroke="#64748B" stroke-width="2.5" fill="none">
     <path d="M 245 120 H 360"/>
     <path d="M 470 120 H 520 V 90 H 570"/>
-    <path d="M 470 120 H 520 V 168 H 570"/>
-    <path d="M 695 118 V 420 H 210 V 470"/>
-    <path d="M 695 196 V 440 H 250 V 470"/>
+    <path d="M 470 120 H 520 V 170 H 570"/>
+    <path d="M 820 90 H 945 V 418 H 210 V 468"/>
+    <path d="M 820 170 H 965 V 438 H 250 V 468"/>
     <path d="M 290 498 V 290"/>
-    <path d="M 290 278 H 350"/>
-    <path d="M 580 278 H 640"/>
-    <path d="M 870 278 H 930"/>
-    <path d="M 1160 290 V 200 H 1205 V 155"/>
-    <path d="M 1205 155 V 220 H 1340 V 290"/>
-    <path d="M 1150 120 H 900 V 252 H 870 V 290"/>
-    <path d="M 1455 318 V 380 H 465 V 470"/>
-    <path d="M 580 498 H 720 V 470 H 760"/>
-    <path d="M 760 470 V 535 H 580 V 498"/>
-    <path d="M 870 470 V 484 H 930"/>
+    <path d="M 290 290 H 365"/>
+    <path d="M 595 290 H 670"/>
+    <path d="M 900 290 H 990"/>
+    <path d="M 1220 290 V 200 H 1280 V 157"/>
+    <path d="M 1280 157 V 220 H 1380 V 290"/>
+    <path d="M 1225 120 H 990 V 252 H 900 V 290"/>
+    <path d="M 1495 318 V 380 H 465 V 468"/>
+    <path d="M 580 498 H 720 V 468 H 760"/>
+    <path d="M 760 468 V 535 H 580 V 498"/>
+    <path d="M 870 468 V 482 H 930"/>
     <path d="M 1210 498 H 1270"/>
     <path d="M 1500 498 H 1560"/>
-    <path d="M 1750 526 V 360 H 1740 V 155"/>
-    <path d="M 1740 120 V 582 H 1790"/>
-    <path d="M 1630 120 V 200 H 1460 V 470"/>
+    <path d="M 1790 498 H 1798 V 210 H 1740 V 157"/>
+    <path d="M 1740 120 H 1830 V 586 H 1790"/>
+    <path d="M 1630 120 V 190 H 1465 V 468"/>
   </g>
 
   <g class="edge-label" fill="#475569" stroke="none">
-    <text x="270" y="110">request</text>
-    <text x="488" y="112">yes</text>
-    <text x="490" y="160">no</text>
-    <text x="220" y="435" text-anchor="middle">team installed</text>
-    <text x="300" y="392">team live</text>
-    <text x="300" y="280">context</text>
-    <text x="605" y="280">decisions</text>
-    <text x="888" y="280">spec draft</text>
-    <text x="1170" y="262">challenge</text>
-    <text x="1230" y="235">no &#8594; revise</text>
-    <text x="1217" y="205">yes</text>
-    <text x="905" y="230">revise</text>
-    <text x="1470" y="370">operator picks</text>
-    <text x="600" y="488">plan draft</text>
-    <text x="600" y="545">no &#8594; revise</text>
-    <text x="886" y="462">yes</text>
-    <text x="1225" y="488">green</text>
-    <text x="1515" y="488">verified</text>
-    <text x="1795" y="430">review</text>
-    <text x="1750" y="580">merged</text>
+    <text x="268" y="110">request</text>
+    <text x="486" y="112">yes</text>
+    <text x="488" y="162">no</text>
+    <text x="95" y="444">team installed</text>
+    <text x="370" y="428">team live</text>
+    <text x="310" y="282">context</text>
+    <text x="600" y="282">decisions</text>
+    <text x="905" y="282">spec draft</text>
+    <text x="1218" y="252">challenge</text>
+    <text x="1290" y="206">yes</text>
+    <text x="1000" y="240">no &#8594; revise</text>
+    <text x="948" y="400">operator picks</text>
+    <text x="598" y="488">plan draft</text>
+    <text x="598" y="548">no &#8594; revise</text>
+    <text x="884" y="462">yes</text>
+    <text x="1224" y="488">green</text>
+    <text x="1514" y="488">verified</text>
+    <text x="1750" y="432">review</text>
+    <text x="1754" y="110">merged</text>
     <text x="1470" y="440">changes</text>
   </g>
 </svg>

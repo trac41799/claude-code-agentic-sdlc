@@ -153,9 +153,9 @@ Verify — hard gate, same as `/asdlc-project`:
 # returning nothing, so `ls dir/*.md` would error out rather than count zero.
 A=$(find "$TARGET/.claude/agents" -maxdepth 1 -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
 S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
-echo "agents: $A/4 · skills: $S/16"
-[ "$A" -eq 4 ] && [ "$S" -ge 16 ] || {
-  echo "❌ install incomplete — expected 4 agents and at least 16 skills"
+echo "agents: $A/4 · skills: $S/17"
+[ "$A" -eq 4 ] && [ "$S" -ge 17 ] || {
+  echo "❌ install incomplete — expected 4 agents and at least 17 skills"
   echo "   check that \$TMP/asdlc-canonical/.claude/ exists and the mkdir -p above ran"
   exit 1
 }

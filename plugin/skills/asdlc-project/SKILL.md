@@ -263,9 +263,9 @@ done
 # find, not a glob: under zsh a non-matching glob aborts the command instead of
 # returning nothing.
 S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
-echo "agents: canonical 4 ${MISSING:+MISSING:$MISSING}${MISSING:-present} · skills: $S/16"
-[ -z "$MISSING" ] && [ "$S" -ge 16 ] || {
-  echo "❌ install incomplete — expected the 4 canonical agents and at least 16 skills"
+echo "agents: canonical 4 ${MISSING:+MISSING:$MISSING}${MISSING:-present} · skills: $S/17"
+[ -z "$MISSING" ] && [ "$S" -ge 17 ] || {
+  echo "❌ install incomplete — expected the 4 canonical agents and at least 17 skills"
   echo "   check that \$TMP/asdlc-template/.claude/ exists and the mkdir -p above ran"
   exit 1
 }

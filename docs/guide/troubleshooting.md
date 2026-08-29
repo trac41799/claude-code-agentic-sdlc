@@ -20,7 +20,7 @@ Skills are **per project** — they live in this project's `.claude/skills/`, ne
 `~/.claude/`. Check what's installed:
 
 ```bash
-ls .claude/skills/     # expect 16 skill folders
+ls .claude/skills/     # expect 17 skill folders
 ls .claude/agents/     # expect 4 agent definitions
 ```
 

@@ -104,6 +104,11 @@ Edge8-internal: handled by the private `agentic-sdlc-telemetry` plugin (its firs
 session run cleans v1's global installs, hash-verified). Outside users never
 had v1 and need nothing.
 
+## Benchmarks
+
+Measured evidence (same model, frozen tasks, metered, non-merge branches): 12 runs across
+incremental and greenfield work. Summary and reproduction pointers: [docs/benchmarks/BENCHMARK-SUMMARY.md](docs/benchmarks/BENCHMARK-SUMMARY.md).
+
 ## Tests
 
 CI validates the plugin manifests, version lockstep, and the no-global-install

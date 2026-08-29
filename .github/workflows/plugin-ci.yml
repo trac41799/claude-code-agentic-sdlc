@@ -54,7 +54,7 @@ jobs:
           agents = sorted(glob.glob(".claude/agents/*.md"))
           skills = sorted(glob.glob(".claude/skills/*/SKILL.md"))
           assert len(agents) == 4, f"expected 4 agents, found {len(agents)}"
-          assert len(skills) == 16, f"expected 16 skills, found {len(skills)}"
+          assert len(skills) == 17, f"expected 17 skills, found {len(skills)}"
           # asdlc-doctor hard-codes these counts; drift there is how "found 6/8" shipped
           doc = pathlib.Path("plugin/skills/asdlc-doctor/scripts/doctor.sh").read_text()
           a = re.search(r'AGENTS"?\s*-ge\s*(\d+)', doc)

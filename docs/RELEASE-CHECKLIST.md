@@ -17,7 +17,7 @@ green.
 |---|---|
 | Manifests parse; versions in lockstep | a broken manifest disables the plugin silently |
 | No writes to `~/.claude/`, no telemetry in the payload | **nothing installs globally** — the reason v2 exists |
-| 4 agents / 16 skills, cross-checked against `doctor.sh` | the counts the tooling asserts match reality |
+| 4 agents / 17 skills, cross-checked against `doctor.sh` | the counts the tooling asserts match reality |
 | Skill frontmatter `name` matches its directory | a mismatched skill is silently unroutable |
 | Plan-protocol engine suite (32 tests) | the enforcement engine still enforces |
 | Plan-protocol ships no domain vocabulary | the engine stays stack-neutral |
@@ -37,7 +37,7 @@ Passes when:
 
 - [ ] Step 1 blocks on any missing prerequisite rather than failing later
 - [ ] Step 3 prints `scaffold pinned to vX.Y.Z` — **not** the fallback warning
-- [ ] Step 6's gate reports `agents: canonical 4 present · skills: 16/16` and does not continue if it can't
+- [ ] Step 6's gate reports `agents: canonical 4 present · skills: 17/17` and does not continue if it can't
 - [ ] Step 9e is green on all four: `lint`, `tsc --noEmit`, `build`, `vitest`
 - [ ] Step 10's first commit contains no `node_modules`, `.next`, or `.env*`
 - [ ] `/asdlc-doctor` inside the new project is all-PASS

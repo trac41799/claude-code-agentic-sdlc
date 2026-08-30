@@ -76,7 +76,7 @@ function notes(s, t) { s.addNotes(t); }
     if (i < 5) s.addText("\u2192", { x: x + 1.75, y: 5.15, w: 0.3, h: 0.4, fontFace: B, fontSize: 16, bold: true, color: AMBERD, align: "center", margin: 0 });
     x += 1.98;
   });
-  s.addText("SDLC is an information pipeline. Fix the pipeline, not the prompt.", { x: 0.75, y: 6.15, w: 11.85, h: 0.5, fontFace: H, fontSize: 21, italic: true, bold: true, color: GREEND });
+  s.addText("A standard SDLC, agent-executed: from idea to clean POC.", { x: 0.75, y: 6.15, w: 11.85, h: 0.5, fontFace: H, fontSize: 21, italic: true, bold: true, color: GREEND });
   tag(s, 0.75, 6.7, "RATIONALE");
   notes(s, "My starting model: linear pipeline. The framework is its correction.");
 }
@@ -88,9 +88,9 @@ function notes(s, t) { s.addNotes(t); }
   eyebrow(s, "Demand");
   title(s, "What the market asked for");
   const rows = [
-    ["Who", "Non-technical founders, one engineer of support"],
-    ["What", "A working POC in days, with a quality floor"],
-    ["How", "One machine, one install, one team"],
+    ["Who", "Technical AND non-technical founders, one engineer of support"],
+    ["What", "Idea \u2192 working POC in days \u2014 clean codebase + docs"],
+    ["How", "Greenfield-first \\u00B7 maps to standard SDLC phases"],
     ["Guarded by", "The agent proposes \u2014 the human decides"],
   ];
   let y = 2.35;
@@ -200,6 +200,16 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Small roster; the method is the chain: spec gate -> plan gate -> TDD -> QA -> PR.");
 }
 
+// ============ 8 · SDLC CYCLE ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "The model");
+  title(s, "One SDLC cycle, two entry points", "Greenfield \u00B7 brownfield \u00B7 slash commands mark every stage.");
+  s.addImage({ path: __dirname + "/sdlc-cycle.png", x: 0.7, y: 2.15, w: 11.9, h: 4.32 });
+  s.addText("Six stages, standard SDLC \u2014 the framework maps a skill to each stage and a command to each entry.", { x: 0.7, y: 6.6, w: 11.9, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  notes(s, "Greenfield: /asdlc-project. Brownfield: /asdlc-adopt. Doctor verifies at any stage. Each stage = one skill lane.");
+}
 // ============ 7 · THE FLOW (DIAGRAM) ============
 {
   const s = pptx.addSlide();
@@ -237,6 +247,29 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Install verified live via fcc-claude earlier. Cases: named, and confounds labeled.");
 }
 
+// ============ 10 · HOW WE BENCHMARK ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Methodology first");
+  title(s, "How we benchmark", "Context before numbers \u2014 same model, frozen tasks, metered, non-merge.");
+  const rows = [
+    ["Arms", "B bare \u00B7 A\u2032 framework passive \u00B7 A framework activated (routing + lanes)"],
+    ["Fairness", "Same commit \u00B7 same model pin \u00B7 identical frozen task text \u00B7 same tooling flags"],
+    ["Metering", "Session JSON: turns, tokens in/out, cost \u00B7 wall clock \u00B7 outcome gates (pytest / node --test)"],
+    ["Safety", "Offline acceptance (no live DB, no deploys) \u00B7 exp branches, never merged to main"],
+    ["Scoring", "Acceptance + hidden rubric checks (crash-safety, idempotency, concurrency) + traceability (spec\u2192plan\u2192tasks artifacts)"],
+  ];
+  let y = 2.35;
+  rows.forEach(([m, d]) => {
+    card(s, 0.75, y, 11.85, 0.72, CARD, BORDER);
+    s.addText(m, { x: 1.0, y: y + 0.12, w: 1.9, h: 0.5, fontFace: B, fontSize: 14, bold: true, color: NAVY });
+    s.addText(d, { x: 3.05, y: y + 0.12, w: 9.4, h: 0.5, fontFace: B, fontSize: SMALLP, color: TXT });
+    y += 0.84;
+  });
+  s.addText("Everything on this deck's results slide came from the bench kit in the repo \u2014 rerun any cell with one command (docs/benchmarks/BENCHMARK-SUMMARY.md).", { x: 0.75, y: 6.6, w: 11.85, h: 0.5, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  notes(s, "Methodology slide exists so the results are read with their confounds in frame, not as bare numbers.");
+}
 // ============ 9 · BENCHMARK (MEASURED MATRIX) ============
 {
   const s = pptx.addSlide();

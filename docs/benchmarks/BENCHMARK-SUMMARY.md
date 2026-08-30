@@ -43,7 +43,17 @@ differentiator on approved risky change.
    on risky tasks). SWE-bench measures model capability on isolated bugs, a dimension the framework
    does not claim to change; its cost (docker, days of runs) is not justified by marginal information.
 
-## Reproduce
+## Reproduce (one-command kit)
+
+`bench/` ships with this repo: `bench/brownfield.py` (any repo, project-agnostic,
+A/B on a scratch clone) and `bench/greenfield.py` (fresh folders). Usage and
+frozen task templates: [bench/README.md](../../bench/README.md).
+
+Commands:
+- Brownfield: `python bench/brownfield.py --repo <your-repo> --task bench/tasks/brownfield-add-tests.md --gate "<test cmd>" --out bench-out/x`
+- Greenfield: `python bench/greenfield.py --base /tmp/gf --name r1 --task bench/tasks/greenfield-e2e-pipeline.md --gate "pytest tests/ -q" --out bench-out/x`
+
+## Reproduce (reference runs)
 
 - Froam clones: `D:\TRANSFER DATA\Coding\OpenCode\froam-bench\{be,fe,be-bare,fe-bare,greenfield\*}`
 - Docs: `docs/benchmarks/{ASDLC-PILOT,ASDLC-BENCHMARK-SUITE,SPEC-EFFECTIVENESS,R2-DB-RLS,R2-DB-RLS-ADDENDUM,R4-FRAGILE-REFACTOR,R3-VERTICAL,GREENFIELD}.md`

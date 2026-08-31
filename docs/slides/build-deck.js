@@ -50,7 +50,27 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Each claim is graded. Honestly — we grade our own evidence.");
 }
 
-// ============ 2 · MOTIVATION & THE PROBLEM ============
+// ============ 2 · FORK & TINKERING NOTICE ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Before you tinker");
+  title(s, "Fork first \u2014 the official repo is read-only", "Benchmark runs and experiments belong on your own fork. Never commit to the official ex-company repo.");
+  card(s, 0.75, 2.6, 5.85, 2.35, "EAF5EC", GREEN);
+  s.addText("RECOMMENDED \u00B7 YOUR FORK", { x: 1.05, y: 2.8, w: 5.25, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: GREEND });
+  s.addText("Tinkering \u00B7 benchmark runs \u00B7 extensions", { x: 1.05, y: 3.3, w: 5.25, h: 0.45, fontFace: B, fontSize: BODY_SM, color: TXT });
+  s.addText("github.com/trac41799/claude-code-agentic-sdlc", { x: 1.05, y: 3.9, w: 5.25, h: 0.5, fontFace: MONO, fontSize: 15, bold: true, color: "2563EB" });
+  s.addText("Fork it, clone it, run bench/greenfield.py on your own cases.", { x: 1.05, y: 4.45, w: 5.25, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  card(s, 6.85, 2.6, 5.75, 2.35, "FBF3E2", AMBERD);
+  s.addText("OFFICIAL \u00B7 EX-COMPANY", { x: 7.15, y: 2.8, w: 5.15, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: "7A5C00" });
+  s.addText("Read-only reference \u2014 do not commit", { x: 7.15, y: 3.3, w: 5.15, h: 0.45, fontFace: B, fontSize: BODY_SM, color: TXT });
+  s.addText("github.com/talentedgeai/infinite-leverage", { x: 7.15, y: 3.9, w: 5.15, h: 0.5, fontFace: MONO, fontSize: 15, bold: true, color: "2563EB" });
+  s.addText("The public history \u2014 v1 and the v2 lineage live here.", { x: 7.15, y: 4.45, w: 5.15, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  s.addText("One rule: benchmark evidence lands on your fork \u2014 the official repo stays a clean reference.", { x: 0.75, y: 5.4, w: 11.85, h: 0.5, fontFace: B, fontSize: 18, bold: true, color: NAVY });
+  notes(s, "Honesty about provenance: this deck's repo is the fork; the official ex-company repo is read-only.");
+}
+
+// ============ 3 · MOTIVATION & THE PROBLEM ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -81,7 +101,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "My starting model: linear pipeline. The framework is its correction.");
 }
 
-// ============ 3 · THE DEMAND ============
+// ============ 4 · THE DEMAND ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -105,7 +125,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Learned from v1's machine drift; v2 encodes them.");
 }
 
-// ============ 4 · DESIGN & RATIONALE ============
+// ============ 5 · DESIGN & RATIONALE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -142,7 +162,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Canvas: mark the plan-protocol claim as the most original piece.");
 }
 
-// ============ 5 · THE STACK ============
+// ============ 6 · THE STACK ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -169,7 +189,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Company stack today and the fastest onboarding stack: Claude Code harness, GitHub PRs, Vercel deploys, Supabase data.");
 }
 
-// ============ 6 · ADOPTION MAP ============
+// ============ 7 · ADOPTION MAP ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -196,7 +216,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "They will ask 'what's original' - answer honestly before they ask.");
 }
 
-// ============ 7 · TEAM + METHOD ============
+// ============ 8 · TEAM + METHOD ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -227,7 +247,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Small roster; the method is the chain: spec gate -> plan gate -> TDD -> QA -> PR.");
 }
 
-// ============ 8 · SDLC CYCLE ============
+// ============ 9 · SDLC CYCLE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -237,7 +257,7 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Six stages, standard SDLC \u2014 the framework maps a skill to each stage and a command to each entry.", { x: 0.7, y: 6.6, w: 11.9, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   notes(s, "Greenfield: /asdlc-project. Brownfield: /asdlc-adopt. Doctor verifies at any stage. Each stage = one skill lane.");
 }
-// ============ 9 · THE FLOW (DIAGRAM) ============
+// ============ 10 · THE FLOW (DIAGRAM) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -248,34 +268,35 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Operator decides, PM serializes, dev/qa execute with gates. Three lanes, two approvals, one PR.");
 }
 
-// ============ 10 · INSTALL & EVIDENCE ============
+// ============ 11 · INSTALL & EVIDENCE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
   eyebrow(s, "Adoption & evidence");
   title(s, "Two commands. Two one-week POCs.");
-  s.addText("claude plugin marketplace add trac41799/claude-code-agentic-sdlc", { x: 0.75, y: 2.25, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 18, bold: true, color: GREEND });
-  s.addText("claude plugin install agentic-sdlc@agentic-sdlc", { x: 0.75, y: 2.85, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 18, bold: true, color: GREEND });
-  s.addText("Then /asdlc-doctor \u00B7 /asdlc-project (new repo) \u00B7 /asdlc-adopt (existing)", { x: 0.75, y: 3.45, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, color: MUT });
-  s.addText("Live demo script (one request \u2192 tested, logging API in 10 min): docs/demo/live-demo-guide.md", { x: 0.75, y: 3.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 13, italic: true, color: MUT });
+  s.addText("INSTALL \u00B7 FROM THE RECOMMENDED FORK", { x: 0.75, y: 2.0, w: 11.85, h: 0.3, fontFace: B, fontSize: 11.5, bold: true, color: AMBERD, charSpacing: 1 });
+  s.addText("claude plugin marketplace add trac41799/claude-code-agentic-sdlc", { x: 0.75, y: 2.3, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 17, bold: true, color: GREEND });
+  s.addText("claude plugin install agentic-sdlc@agentic-sdlc", { x: 0.75, y: 2.85, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 17, bold: true, color: GREEND });
+  s.addText("Then /asdlc-doctor \u00B7 /asdlc-project (new repo) \u00B7 /asdlc-adopt (existing)", { x: 0.75, y: 3.45, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, color: MUT });
+  s.addText("OFFICIAL ORIGIN \u00B7 EX-COMPANY, READ-ONLY \u00B7 github.com/talentedgeai/infinite-leverage \u2014 tinker on your fork, never commit here", { x: 0.75, y: 3.9, w: 11.85, h: 0.3, fontFace: MONO, fontSize: 12, color: "B98A00" });
   const cs = [
     ["WorkHealthyAustralia", "AU \u00B7 healthcare \u2014 janet.care (personal healthcare AI-assistant) + occuspan.com \u00B7 POC in 1 week"],
     ["DOXA", "US \u00B7 staffing \u2014 multiple projects under NDA \u00B7 POC in 1 week"],
   ];
-  let y = 4.1;
+  let y = 4.35;
   cs.forEach(([h, d]) => {
-    card(s, 0.75, y, 11.85, 0.95, CARD, BORDER);
-    s.addText(h, { x: 1.05, y: y + 0.16, w: 3.7, h: 0.7, fontFace: H, fontSize: 22, bold: true, color: NAVY });
-    s.addText(d, { x: 4.4, y: y + 0.12, w: 8.0, h: 0.7, fontFace: B, fontSize: SMALLP, color: TXT });
+    card(s, 0.75, y, 11.85, 0.9, CARD, BORDER);
+    s.addText(h, { x: 1.05, y: y + 0.14, w: 3.7, h: 0.65, fontFace: H, fontSize: 22, bold: true, color: NAVY });
+    s.addText(d, { x: 4.4, y: y + 0.1, w: 8.0, h: 0.65, fontFace: B, fontSize: SMALLP, color: TXT });
     y += 1.1;
   });
-  s.addText("Both: non-technical founders, one engineer of support, one engineer of trust.", { x: 0.75, y: 6.3, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  s.addText("Both: non-technical founders, one engineer of support, one engineer of trust.", { x: 0.75, y: 6.42, w: 11.85, h: 0.35, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   tag(s, 0.75, 6.75, "CASE STUDY");
   s.addText("Confounded: model mix drifted mid-build \u00B7 no cost tracking \u00B7 n = 2", { x: 2.4, y: 6.78, w: 10.2, h: 0.35, fontFace: B, fontSize: NOTE, color: MUT });
   notes(s, "Install verified live via fcc-claude earlier. Cases: named, and confounds labeled.");
 }
 
-// ============ 11 · HOW WE BENCHMARK ============
+// ============ 12 · HOW WE BENCHMARK ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -298,159 +319,168 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Everything on this deck's results slide came from the bench kit in the repo \u2014 rerun any cell with one command (docs/benchmarks/BENCHMARK-SUMMARY.md).", { x: 0.75, y: 6.6, w: 11.85, h: 0.5, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   notes(s, "Methodology slide exists so the results are read with their confounds in frame, not as bare numbers.");
 }
-// ============ 12 · RAW EVIDENCE ============
+// ============ 13 · RAW EVIDENCE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
   eyebrow(s, "Benchmark \u00B7 raw evidence");
   title(s, "Terminal output, verbatim", "Real bench-kit output \u2014 GREENFIELD-3 (rate-limited SSE proxy), same model, same brief.");
-  s.addShape("rect", { x: 0.75, y: 2.35, w: 5.85, h: 3.85, fill: { color: "111827" }, line: { width: 0 } });
+  s.addShape("rect", { x: 0.75, y: 2.3, w: 5.85, h: 3.5, fill: { color: "111827" }, line: { width: 0 } });
+  s.addText("METRICS", { x: 0.95, y: 2.4, w: 2.0, h: 0.28, fontFace: B, fontSize: 13, bold: true, color: "F4B400", margin: 0 });
   const mono = [
-    "metric           A activated      B bare",
-    "wall (min)           6.5          27.4",
-    "turns                 56            61",
-    "cost                1.08          2.84",
-    "in tokens          50991         85443",
-    "out tokens         42779        144366",
-    "",
-    "gate: pytest tests/ -q",
-    "  A -> 24 passed (run 3, stable)",
-    "  B -> 22 passed \u00B7 halted",
-    "       terminal: max_turns",
+    "metric          A activated       B bare",
+    "wall (min)            6.5          27.4",
+    "turns                  56            61",
+    "cost                 1.08          2.84",
+    "in tokens           50991         85443",
+    "out tokens          42779        144366",
+    "TEST GATE \u00B7 pytest tests/ -q",
+    "A 24 passed [COMPLETED] \u00B7 56 turns",
+    "B 22 passed [HALTED] \u00B7 61 turns",
+    "  terminal: max_turns (mid-tool-use)",
   ];
   mono.forEach((l, i) => {
-    s.addText(l, { x: 0.95, y: 2.5 + i * 0.32, w: 5.6, h: 0.3, fontFace: MONO, fontSize: 12.5, color: l.startsWith("metric") || l.startsWith("gate") ? "F4B400" : "D1D5DB", margin: 0 });
+    const c = l.startsWith("metric") || l.startsWith("TEST") ? "F4B400"
+      : l.indexOf("COMPLETED") >= 0 ? "6EE7B7"
+      : l.indexOf("HALTED") >= 0 ? "FCA5A5"
+      : "F3F4F6";
+    s.addText(l, { x: 0.95, y: 2.68 + i * 0.295, w: 5.55, h: 0.28, fontFace: MONO, fontSize: 14, bold: l.startsWith("metric") || l.startsWith("TEST"), color: c, margin: 0 });
   });
-  s.addText("A: completed at 56 turns \u00B7 B: stopped mid-tool-use at 61 (max_turns)", { x: 0.95, y: 6.15, w: 5.5, h: 0.3, fontFace: B, fontSize: 12.5, italic: true, color: MUT });
+  s.addText("Interpretation: A finished at 56 turns; B was stopped mid-tool-use at 61 \u2014 more spent, less delivered.", { x: 0.95, y: 5.95, w: 5.55, h: 0.3, fontFace: B, fontSize: 13, color: "1F2937" });
+  s.addText("B BARE \u2014 27.4 min \u00B7 $2.84 \u00B7 22 tests", { x: 7.0, y: 2.35, w: 5.6, h: 0.36, fontFace: B, fontSize: 16, bold: true, color: "B91C1C" });
   const left = [
-    "B bare \u2014 27.4 min \u00B7 $2.84 \u00B7 22 tests",
-    "  app/  tests/",
-    "  no spec \u00B7 no plan \u00B7 no tasks",
-    "  session halted before completion",
-    "",
-    "A activated \u2014 6.5 min \u00B7 $1.08 \u00B7 24 tests",
-    "  app/  tests/  docs/qa/",
-    "  docs/product/product.md",
-    "  .specify/features/rate-limited-sse-proxy/",
-    "    spec.md  impl-plan.md  tasks.md",
-    "  QA lane verified the work",
+    ["  app/  tests/  \u2014 no spec/plan/tasks", 14, false],
+    ["  session halted before completion", 12.5, false],
+    ["A ACTIVATED \u2014 6.5m \u00B7 $1.08 \u00B7 24 tests", 16, true],
+    ["  app/  tests/  docs/qa/", 14, false],
+    ["  docs/product/product.md", 14, false],
+    ["  .specify/features/rate-limited-sse-proxy/", 14, false],
+    ["    spec.md \u00B7 impl-plan.md \u00B7 tasks.md", 13.5, false],
+    ["  QA lane verified the work", 12.5, false],
   ];
-  let ly = 2.35;
-  left.forEach((l) => {
-    const b = l.startsWith("B ") || l.startsWith("A ");
-    s.addText(l, { x: 7.0, y: ly, w: 5.6, h: 0.3, fontFace: b ? B : MONO, fontSize: 13, bold: b, color: b ? (l.startsWith("B ") ? "B91C1C" : GREEND) : TXT, margin: 0 });
-    ly += 0.31;
+  let ly = 2.85;
+  left.forEach(([t, fs, b]) => {
+    s.addText(t, { x: 7.0, y: ly, w: 5.6, h: 0.3, fontFace: MONO, fontSize: fs, bold: b, color: b ? GREEND : "1F2937", margin: 0 });
+    ly += b ? 0.38 : 0.3;
   });
-  s.addText("Deliverables are the difference: the framework arm left a traceability trail \u2014 and finished 4.2\u00D7 faster.", { x: 0.75, y: 6.5, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
-  s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 60s rollback) fire on live projects; a lab bench never exercises them.", { x: 0.75, y: 6.88, w: 11.85, h: 0.35, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  s.addText("The framework arm finished 4.2\u00D7 faster \u2014 and left a traceability trail.", { x: 0.75, y: 6.35, w: 11.85, h: 0.4, fontFace: B, fontSize: 19, bold: true, color: NAVY });
+  s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 rollback) fire on live projects, not in a lab bench.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
 }
-// ============ 13 · BENCHMARK (MEASURED MATRIX) ============
+// ============ 14 · BENCHMARK (MEASURED MATRIX) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
   eyebrow(s, "Benchmark \u00B7 4 runs, 3 arms");
-  title(s, "Measured: bare vs passive vs activated", "Same repos \u00B7 same frozen tasks \u00B7 same model \u00B7 metered. Froam exp branches (non-merge).");
+  title(s, "Measured: bare vs passive vs activated", "Same repos \u00B7 frozen tasks \u00B7 one model \u00B7 metered. Non-merge exp branches (froam).");
   const rows = [
     ["R1 \u00B7 add-tests (trivial)", "$0.63 \u00B7 6 tests", "$0.62 \u00B7 7 tests", "$0.47 \u00B7 10 tests \u00B7 2.5\u00D7 turns"],
     ["R2 \u00B7 DB + RLS", "$0.22 \u00B7 11 tests", "$0.27 \u00B7 11 tests", "$0.67 \u00B7 11 tests + plan/QA"],
-    ["R4 \u00B7 fragile refactor", "refused \u00B7 restraint pass", "\u2014", "violated (guardrail advisory) \u00B7 prod-correct when approved"],
-    ["R3 \u00B7 vertical FE+BE", "$0.94 \u00B7 4 tests", "\u2014", "$0.98 \u00B7 4 tests + plan/tasks"],
+    ["R4 \u00B7 fragile refactor", "refused \u00B7 restraint pass", "n/a", "guardrail advisory violated \u00B7 prod-correct when approved"],
+    ["R3 \u00B7 vertical FE+BE", "$0.94 \u00B7 4 tests", "n/a", "$0.98 \u00B7 4 tests + plan/tasks"],
   ];
-  let y = 2.35;
-  s.addText("TASK", { x: 0.9, y: 2.0, w: 3.1, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: MUT });
-  s.addText("B \u00B7 BARE", { x: 4.1, y: 2.0, w: 2.6, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: MUT, align: "center" });
-  s.addText("A\u2032 \u00B7 PASSIVE", { x: 6.9, y: 2.0, w: 2.6, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: MUT, align: "center" });
-  s.addText("A \u00B7 ACTIVATED", { x: 9.7, y: 2.0, w: 2.8, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: MUT, align: "center" });
+  let y = 2.3;
+  s.addText("TASK", { x: 0.9, y: 2.02, w: 2.9, h: 0.3, fontFace: B, fontSize: 13, bold: true, color: NAVY });
+  s.addText("B \u00B7 BARE", { x: 4.0, y: 2.02, w: 2.5, h: 0.3, fontFace: B, fontSize: 13, bold: true, color: NAVY, align: "center" });
+  s.addText("A\u2032 \u00B7 PASSIVE", { x: 6.6, y: 2.02, w: 2.5, h: 0.3, fontFace: B, fontSize: 13, bold: true, color: NAVY, align: "center" });
+  s.addText("A \u00B7 ACTIVATED", { x: 9.2, y: 2.02, w: 3.3, h: 0.3, fontFace: B, fontSize: 13, bold: true, color: NAVY, align: "center" });
   rows.forEach(([m, b, p, a]) => {
-    card(s, 0.75, y, 11.85, 0.72, CARD, BORDER);
-    s.addText(m, { x: 0.9, y: y + 0.14, w: 3.1, h: 0.45, fontFace: B, fontSize: 12, bold: true, color: NAVY });
-    s.addText(b, { x: 4.1, y: y + 0.14, w: 2.6, h: 0.45, fontFace: B, fontSize: 11.5, color: TXT, align: "center" });
-    s.addText(p, { x: 6.9, y: y + 0.14, w: 2.6, h: 0.45, fontFace: B, fontSize: 11.5, color: TXT, align: "center" });
-    s.addText(a, { x: 9.7, y: y + 0.14, w: 2.8, h: 0.45, fontFace: B, fontSize: 11.5, color: GREEND, align: "center" });
-    y += 0.82;
+    card(s, 0.75, y, 11.85, 0.82, CARD, BORDER);
+    s.addText(m, { x: 0.9, y: y + 0.16, w: 2.9, h: 0.5, fontFace: B, fontSize: 14.5, bold: true, color: NAVY });
+    s.addText(b, { x: 4.0, y: y + 0.16, w: 2.5, h: 0.5, fontFace: B, fontSize: 14, color: TXT, align: "center" });
+    s.addText(p, { x: 6.6, y: y + 0.16, w: 2.5, h: 0.5, fontFace: B, fontSize: 14, color: TXT, align: "center" });
+    s.addText(a, { x: 9.2, y: y + 0.16, w: 3.3, h: 0.5, fontFace: B, fontSize: 14, color: "1B5E20", align: "center" });
+    y += 0.94;
   });
-  s.addText("Findings: passive \u2248 bare (placebo) \u00B7 activation tax scales with ceremony, benefit with risk \u00B7 restraint is advisory, not structural \u00B7 QA lane is the value on risky approved change.", { x: 0.75, y: 6.0, w: 11.85, h: 0.55, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
-  s.addText("Harness gap fixed via dev-agent-router (16\u219217 skills) \u00B7 DeepSeek pin since R2 \u00B7 world anchor: SWE-bench-style floor check pending.", { x: 0.75, y: 6.65, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  s.addText("Findings: passive \u2248 bare (placebo) \u00B7 activation tax scales with ceremony, benefit with risk \u00B7 restraint is advisory, not structural \u2014 the QA lane is the value on risky approved change.", { x: 0.75, y: 6.15, w: 11.85, h: 0.55, fontFace: B, fontSize: 16, bold: true, color: NAVY });
+  s.addText("Harness gap fixed via dev-agent-router (16 to 17 skills) \u00B7 model pinned since R2 \u00B7 SWE-bench-style floor check: pending \u00B7 \u2014/ n/a = not run.", { x: 0.75, y: 6.72, w: 11.85, h: 0.4, fontFace: B, fontSize: 13.5, color: "4B5563" });
   notes(s, "4 runs, 3 arms, real numbers, real gaps. Read the R4 line out loud: the guardrail is advisory — that is the honesty that earns trust.");
 }
 
-// ============ 14 · MATERIALS & LINKS ============
+// ============ 15 · MATERIALS & LINKS ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
   eyebrow(s, "Resources");
   title(s, "Everything is in the repo", "Framework \u00B7 bench kit \u00B7 evidence \u00B7 demo guide \u2014 one link each, all public.");
   const links = [
-    ["Framework \u00B7 plugin \u00B7 bench kit \u00B7 deck source", "github.com/trac41799/claude-code-agentic-sdlc"],
-    ["Benchmark evidence \u2014 12 runs, repro commands", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/benchmarks/BENCHMARK-SUMMARY.md"],
-    ["Live demo run guide (\u226410 min)", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/demo/live-demo-guide.md"],
-    ["Client setup \u2014 5 prompts for non-technical founders", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/guide/CLIENT-SETUP.md"],
-    ["Benchmark product \u2014 FE (froam)", "github.com/trac41799/froam-journey-platform-fe"],
-    ["Benchmark product \u2014 BE (froam)", "github.com/trac41799/travelbuddy-agentic-be"],
-    ["v1 (Infinite Leverage) \u2014 public history, commit tree", "github.com/talentedgeai/infinite-leverage"],
+    ["Recommended fork \u2014 framework \u00B7 plugin \u00B7 bench kit \u00B7 deck source", "trac41799/claude-code-agentic-sdlc"],
+    ["Benchmark evidence \u2014 12 runs, repro commands", "docs/benchmarks/BENCHMARK-SUMMARY.md"],
+    ["Live demo run guide (\u226410 min)", "docs/demo/live-demo-guide.md"],
+    ["Client setup \u2014 5 prompts for non-technical founders", "docs/guide/CLIENT-SETUP.md"],
+    ["Benchmark product \u2014 FE (froam)", "trac41799/froam-journey-platform-fe"],
+    ["Benchmark product \u2014 BE (froam)", "trac41799/travelbuddy-agentic-be"],
+    ["Official origin (ex-company) \u2014 v1 history, read-only", "talentedgeai/infinite-leverage"],
     ["Client cases", "janet.care \u00B7 occuspan.com"],
     ["Tool stack", "claude.com \u00B7 github.com \u00B7 vercel.com \u00B7 supabase.com"],
   ];
-  let y = 2.25;
+  let y = 2.2;
   links.forEach(([t, u]) => {
     card(s, 0.75, y, 11.85, 0.46, CARD, BORDER);
-    s.addText(t, { x: 1.0, y: y + 0.06, w: 6.0, h: 0.34, fontFace: B, fontSize: 13, bold: true, color: NAVY, margin: 0 });
-    s.addText(u, { x: 7.1, y: y + 0.06, w: 5.3, h: 0.34, fontFace: MONO, fontSize: 12, color: "2563EB", align: "right", margin: 0 });
+    s.addText(t, { x: 1.0, y: y + 0.07, w: 6.2, h: 0.34, fontFace: B, fontSize: 13.5, bold: true, color: NAVY, margin: 0 });
+    s.addText(u, { x: 7.3, y: y + 0.07, w: 5.1, h: 0.34, fontFace: MONO, fontSize: 13, bold: true, color: "1F4FBF", align: "right", margin: 0 });
     y += 0.5;
   });
-  s.addText("Every number on the results slides reruns with one command from the bench kit \u2014 same model, same frozen briefs, non-merge branches.", { x: 0.75, y: 6.75, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  s.addText("Every number on the results slides reruns with one command from the bench kit.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Give this slide time: every artifact referenced here exists and is public.");
 }
 
-// ============ 15 · THE ORIGIN (V1) ============
+// ============ 16 · THE ORIGIN (V1) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
   eyebrow(s, "History");
   title(s, "v1 \u2014 the fully automated agent-team", "\u201CInfinite Leverage\u201D (2026) \u00B7 reconstructed from the public commit tree.");
-  card(s, 0.75, 2.3, 5.85, 3.75, "FBF3E2", AMBERD);
+  card(s, 0.75, 2.3, 5.85, 4.1, "FBF3E2", AMBERD);
   s.addText("THE ORIGINAL SCOPE", { x: 1.05, y: 2.5, w: 5.25, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: "7A5C00" });
   const scope = [
-    "8 agents \u2014 dev team + marketing team",
-    "  product-manager \u00B7 developer \u00B7 devops \u00B7 qa",
-    "  web-publisher \u00B7 writer \u00B7 designer \u00B7 email-marketer",
-    "  (+ marketing-strategist via create-agent)",
-    "Global install \u2014 ~/.claude/ agents, hooks,",
-    "  skills, scheduled-tasks via init/onboard/patch",
+    "8 agents \u2014 dev + marketing",
+    "  DEV: product-manager \u00B7 developer \u00B7 devops",
+    "       qa \u00B7 web-publisher",
+    "  MKT: writer \u00B7 designer \u00B7 email-marketer",
+    "       (+ marketing-strategist)",
+    "Global install: ~/.claude/ agents \u00B7 hooks \u00B7",
+    "  skills \u00B7 scheduled-tasks (zip + patch)",
     "62 workflow skills, zipped per agent",
-    "Settings: Bash(\u002A) grant \u00B7 acceptEdits default",
+    "Settings: Bash(\u002A) grant \u00B7 acceptEdits",
   ];
   let sy = 3.0;
   scope.forEach((l) => {
-    s.addText(l, { x: 1.05, y: sy, w: 5.3, h: 0.3, fontFace: MONO, fontSize: 12, color: "4A3A00", margin: 0 });
-    sy += 0.32;
+    s.addText(l, { x: 1.05, y: sy, w: 5.3, h: 0.31, fontFace: MONO, fontSize: 13, color: "3D2F00", margin: 0 });
+    sy += 0.36;
   });
-  card(s, 6.85, 2.3, 5.75, 3.75, "EAF0FB", MID);
+  card(s, 6.85, 2.3, 5.75, 4.3, "EAF0FB", MID);
   s.addText("ROUTINES \u2014 NO HUMAN IN THE LOOP", { x: 7.15, y: 2.5, w: 5.15, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: NAVY });
+  s.addText("ROUTINE", { x: 7.15, y: 2.95, w: 2.3, h: 0.3, fontFace: B, fontSize: 11.5, bold: true, color: NAVY, margin: 0 });
+  s.addText("SCHEDULE", { x: 9.5, y: 2.95, w: 1.1, h: 0.3, fontFace: B, fontSize: 11.5, bold: true, color: NAVY, margin: 0 });
+  s.addText("ACTION", { x: 10.7, y: 2.95, w: 1.8, h: 0.3, fontFace: B, fontSize: 11.5, bold: true, color: NAVY, margin: 0 });
   const sched = [
-    "pm-daily-plan         weekdays 07:03  auto-approve",
-    "pm-standup-compile    weekdays 18:07  + PR",
-    "pm-eod-summary        weekdays 18:37",
-    "pm-weekly-rag         Fridays 17:07   + PR",
-    "writer-weekly         Mondays 09:03   brief \u2192 blog.md",
-    "designer-weekly       Tuesdays 09:03  blog \u2192 hero.webp",
-    "web-publisher-weekly  Wednesdays 09:03 build + index",
-    "email-marketer-weekly Thursdays 10:03 newsletter",
-    "devops-daily health   daily 06:00",
+    ["pm-daily-plan", "wk 07:03", "auto-approve"],
+    ["pm-standup-compile", "wk 18:07", "+ PR"],
+    ["pm-eod-summary", "wk 18:37", ""],
+    ["pm-weekly-rag", "Fr 17:07", "+ PR"],
+    ["writer-weekly", "Mo 09:03", "blog brief"],
+    ["designer-weekly", "Tu 09:03", "hero.webp"],
+    ["web-publisher-weekly", "We 09:03", "build + idx"],
+    ["email-marketer-weekly", "Th 10:03", "newsletter"],
+    ["devops-daily health", "daily 06:00", ""],
   ];
-  let ty = 3.0;
-  sched.forEach((l) => {
-    s.addText(l, { x: 7.15, y: ty, w: 5.25, h: 0.27, fontFace: MONO, fontSize: 11, color: TXT, margin: 0 });
+  let ty = 3.28;
+  sched.forEach(([n, t, a]) => {
+    s.addText(n, { x: 7.15, y: ty, w: 2.3, h: 0.28, fontFace: MONO, fontSize: 12.5, color: "1F2937", margin: 0 });
+    s.addText(t, { x: 9.5, y: ty, w: 1.15, h: 0.28, fontFace: MONO, fontSize: 12.5, color: "1F2937", margin: 0 });
+    s.addText(a, { x: 10.7, y: ty, w: 1.8, h: 0.28, fontFace: MONO, fontSize: 12.5, color: "1F2937", margin: 0 });
     ty += 0.29;
   });
-  s.addText("10 durable CronCreate routines \u2192 RemoteTrigger (cloud-persistent) \u00B7 + hooks: pre-bash \u00B7 prompt-submit \u00B7 SessionStart/End \u00B7 usage-context.py \u00B7 telemetry \u2192 gh \u2192 Supabase \u00B7 SessionStart auto-update", { x: 7.15, y: 5.65, w: 5.25, h: 0.55, fontFace: B, fontSize: 11.5, italic: true, color: MUT });
-  tag(s, 0.75, 6.3, "VERIFIED");
-  s.addText("Commit trail: 5c89076 \u201C8 scheduled task templates using CronCreate\u201D (durable=true \u00B7 auto-expire 7 days) \u00B7 9291df3 \u00B7 b753023 \u00B7 a218b79 hooks \u00B7 fff7a9a telemetry \u00B7 e2d5d67 8 agent templates.", { x: 2.5, y: 6.33, w: 10.1, h: 0.4, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  s.addText("Persistence: CronCreate \u2192 RemoteTrigger (cloud-persistent)", { x: 7.15, y: 5.98, w: 5.25, h: 0.26, fontFace: B, fontSize: 12.5, bold: true, color: "1F2937" });
+  s.addText("Hooks: pre-bash \u00B7 prompt-submit \u00B7 SessionStart/End \u00B7 telemetry \u2192 Supabase", { x: 7.15, y: 6.26, w: 5.25, h: 0.26, fontFace: B, fontSize: 12.5, color: "1F2937" });
+  tag(s, 0.75, 6.62, "VERIFIED");
+  s.addText("Commit trail: 5c89076 \u201C8 scheduled task templates using CronCreate\u201D (durable=true \u00B7 auto-expire 7 days)", { x: 2.5, y: 6.62, w: 10.0, h: 0.3, fontFace: B, fontSize: 12.5, color: "4B5563" });
+  s.addText("Supporting: 9291df3 \u00B7 b753023 \u00B7 a218b79 hooks \u00B7 fff7a9a telemetry \u00B7 e2d5d67 init", { x: 2.5, y: 6.9, w: 10.0, h: 0.3, fontFace: B, fontSize: 12.5, color: "4B5563" });
   notes(s, "The original pitch: an agent team that builds and markets, running overnight with no human. It worked \u2014 until the machine drifted.");
 }
 
-// ============ 16 · V1 VS V2 ============
+// ============ 17 · V1 VS V2 ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -482,7 +512,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The honest version of the story: v1 worked until it drifted. v2 gave up overnight autonomy for gates that hold.");
 }
 
-// ============ 17 · GAPS + CLOSE ============
+// ============ 18 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };
@@ -502,4 +532,4 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Close on the gaps. That is the part we defend most.");
 }
 
-pptx.writeFile({ fileName: __dirname + "/Agentic-SDLC-Tech-Audience.pptx" }).then(f => console.log("wrote", f));
+pptx.writeFile({ fileName: process.env.PPTX_OUT || __dirname + "/Agentic-SDLC-Tech-Audience.pptx" }).then(f => console.log("wrote", f));

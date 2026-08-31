@@ -512,7 +512,50 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The honest version of the story: v1 worked until it drifted. v2 gave up overnight autonomy for gates that hold.");
 }
 
-// ============ 18 · GAPS + CLOSE ============
+// ============ 18 · GAPS — WHAT WE KNOW WE LACK ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Honest yardsticks");
+  title(s, "What we know we lack", "Measured gaps first \u2014 then what we deliberately left out \u00B7 full analysis: GAP-ANALYSIS.md.");
+  card(s, 0.75, 2.3, 5.85, 3.75, "FBF3E2", AMBERD);
+  s.addText("MEASURED GAPS", { x: 1.05, y: 2.5, w: 5.25, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: "7A5C00" });
+  const gaps = [
+    ["COST \u00B7 HIGH", "No trusted metering \u2014 cost basis unknown, cache reads inflate A+wave 5\u20138\u00D7; no per-task budget; a wrong-model probe ($0.17/turn) slipped through."],
+    ["GUARDRAILS \u00B7 HIGH", "Advisory, not mechanical \u2014 R4 pushed a fragile-file change through an operator approval; no CI check enforces plan-vs-PR files."],
+    ["BENCH \u00B7 MED", "Every cell is N=1 \u2014 variance unmeasured; the 4.2\u00D7 headline is one run."],
+    ["DEVOPS \u00B7 MED", "CI/Vercel/rollback lanes never fire offline \u2014 live-tested only, no regression cell."],
+    ["HUMAN-HOUR \u00B7 MED", "Method exists (hooks + PR windows) \u2014 public evidence still pending."],
+  ];
+  let gy = 2.92;
+  gaps.forEach(([h, t]) => {
+    s.addText(h, { x: 1.05, y: gy, w: 1.35, h: 0.26, fontFace: B, fontSize: 11, bold: true, color: "B91C1C", margin: 0 });
+    s.addText(t, { x: 2.45, y: gy, w: 3.65, h: 0.58, fontFace: B, fontSize: 11, color: TXT, margin: 0 });
+    gy += 0.62;
+  });
+  card(s, 6.85, 2.3, 5.75, 3.75, "EAF5EC", GREEN);
+  s.addText("DELIBERATELY NOT INCLUDED", { x: 7.15, y: 2.5, w: 5.15, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: GREEND });
+  const out = [
+    "No hooks / auto-runtime / silent telemetry \u2014 v1 lesson",
+    "No auto-approve \u2014 every gate is a human decision",
+    "No marketing agent lanes \u2014 removed v2.6.0 (unmeasured)",
+    "No permissions grants \u2014 Bash(*) killed v1",
+    "No SWE-bench floor \u2014 documented trade-off",
+    "No global memory \u2014 repo artifacts ARE the memory",
+    "No wave loop in canonical \u2014 negative in headless proxy",
+  ];
+  let oy = 3.0;
+  out.forEach((t) => {
+    s.addText("\u2022 " + t, { x: 7.15, y: oy, w: 5.15, h: 0.34, fontFace: B, fontSize: 12, color: TXT, margin: 0 });
+    oy += 0.38;
+  });
+  s.addText("FOCUS LIST \u00B7 next: trusted cost loop (pin check + baseline + budgets) \u00B7 CI plan-vs-PR + fragile-file enforcement \u00B7 headline cells N\u22653 \u00B7 devops staging smoke \u00B7 second-model matrix.", { x: 0.75, y: 6.3, w: 11.85, h: 0.5, fontFace: B, fontSize: 14, bold: true, color: NAVY });
+  tag(s, 0.75, 6.85, "VERIFIED");
+  s.addText("Gap list is provable; exclusions are design choices, not defects \u2014 both are in GAP-ANALYSIS.md.", { x: 2.5, y: 6.88, w: 9.9, h: 0.35, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  notes(s, "Say the cost gap out loud BEFORE they ask — the wrong-model probe is the proof we don't hide. Exclusions: read the v1 lesson slide before they suggest 'just enable hooks'.");
+}
+
+// ============ 19 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };
@@ -527,7 +570,7 @@ function notes(s, t) { s.addNotes(t); }
   ];
   s.addText(gaps.map(g => ({ text: g, options: { bullet: true, breakLine: true, paraSpaceAfter: 12 } })),
     { x: 0.8, y: 2.65, w: 11.7, h: 2.7, fontFace: B, fontSize: BODY_SM, color: ICE });
-  s.addText("Next: token budget baseline \u00B7 SWE-bench-style floor check \u00B7 telemetry on live traffic.", { x: 0.8, y: 5.55, w: 11.7, h: 0.5, fontFace: B, fontSize: BODY_SM, bold: true, color: AMBER });
+  s.addText("Next: trusted cost loop \u00B7 CI plan-vs-PR enforcement \u00B7 N\u22653 headline cells \u00B7 devops staging smoke \u00B7 second-model matrix.", { x: 0.8, y: 5.55, w: 11.7, h: 0.5, fontFace: B, fontSize: BODY_SM, bold: true, color: AMBER });
   s.addText("Not a solved discipline \u2014 a repeatable, honest one.", { x: 0.8, y: 6.35, w: 11.7, h: 0.5, fontFace: H, fontSize: 23, italic: true, bold: true, color: WHITE });
   notes(s, "Close on the gaps. That is the part we defend most.");
 }

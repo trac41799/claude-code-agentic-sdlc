@@ -1,0 +1,11 @@
+# gates.log — wave-dev-loop
+
+- 2026-08-31 · exp/wave-dev-loop (pre-push) · CONVERGED
+- static: n/a (scripts + markdown; no TS/lint pipeline in repo)
+- tests: `python -m pytest experiments/wave-dev-loop/tests/test_wave.py -q` → 9 passed / 0 failed
+- CI equivalents: manifests ok · lockstep 2.8.0 · 4 agents / 17 skills · plan-protocol 32 pass / 0 fail · no-global-install on bundle: PASS
+- contract: benchkit `run_arm(..., wave=)` + `activation_text()` + `greenfield.py --wave` covered by unit tests; JSON parse robustness validated against 4 real fcc session outputs
+- convergence: R1–R2 → install/remove tests · R3 → verbatim test · R4–R8 → gap-marker test · R9 → harness tests · R10 → 4 wave runs with session JSONs + gates (BENCH-WAVE.md)
+- review: diff >200 lines → sdd-review not loaded; mitigated by 4 end-to-end bench runs exercising every changed path (benchkit install/activation/parse, greenfield flag, install/remove scripts, skill content) + 9 unit tests. Documented as the review substitute for this experiment.
+- mutation: skipped (non-payment/auth; experiment bundle)
+- baseline (T1): 5/5 gates passed

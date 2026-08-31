@@ -20,11 +20,26 @@ ACTIVATION = (
     "dev-tdd (RED evidence), qa-triage. Process artifacts are expected outputs."
 )
 
+WAVE_ACTIVATION = (
+    " For tasks that can be decomposed into independent work items, use the "
+    "dev-multi-agent skill: plan waves from tasks.md with disjoint file scopes, "
+    "dispatch agents per wave, verify scopes + git status after each wave, run "
+    "the suite after each wave, and write .specify/features/{slug}/wave-report.md "
+    "when all waves complete."
+)
+
+
+def activation_text(activation: bool, wave: bool = False) -> str:
+    t = ACTIVATION if activation else ""
+    if wave:
+        t += WAVE_ACTIVATION
+    return t
+
 
 def run_arm(workdir: str, task_prompt: str, out_json: str, activation: bool,
-            extra_dirs=None):
+            wave: bool = False, extra_dirs=None):
     """Run one arm headless; returns (metrics_dict, exit_ok)."""
-    cmd = [CLI, "-p", task_prompt + (ACTIVATION if activation else ""),
+    cmd = [CLI, "-p", task_prompt + activation_text(activation, wave),
            "--output-format", "json", "--model", MODEL,
            "--allowedTools", TOOLS, "--max-turns", str(MAX_TURNS)]
     for d in (extra_dirs or []):
@@ -34,7 +49,9 @@ def run_arm(workdir: str, task_prompt: str, out_json: str, activation: bool,
         proc = subprocess.run(cmd, cwd=workdir, stdout=f, stderr=subprocess.STDOUT)
     wall = (time.time() - t0) / 60
     try:
-        j = json.loads(pathlib.Path(out_json).read_text(encoding="utf-8"))
+        raw = pathlib.Path(out_json).read_text(encoding="utf-8", errors="replace")
+        start = raw.find('{"is_error"')  # fcc may prefix warnings + a log line
+        j, _ = json.JSONDecoder().raw_decode(raw[start:]) if start >= 0 else ({}, 0)
         m = {
             "wall_min": round(wall, 1),
             "turns": j.get("num_turns"),
@@ -60,7 +77,7 @@ def run_gate(workdir: str, gate_cmd: str) -> str:
         return f"gate error: {e}"
 
 
-def install_framework(repo: str, framework_root: str):
+def install_framework(repo: str, framework_root: str, wave: bool = False):
     """Install the project-scoped team (what /asdlc-adopt installs) into repo."""
     fw = pathlib.Path(framework_root)
     dest = pathlib.Path(repo)
@@ -68,6 +85,10 @@ def install_framework(repo: str, framework_root: str):
     shutil.copytree(fw / ".claude" / "agents", dest / ".claude" / "agents", dirs_exist_ok=True)
     shutil.copytree(fw / ".claude" / "skills", dest / ".claude" / "skills", dirs_exist_ok=True)
     shutil.copytree(fw / ".claude" / "rules", dest / ".claude" / "rules", dirs_exist_ok=True)
+    if wave:
+        bundle = fw / "experiments" / "wave-dev-loop" / "skills"
+        for s in ("dev-multi-agent", "asdlc-wave-on", "asdlc-wave-off"):
+            shutil.copytree(bundle / s, dest / ".claude" / "skills" / s, dirs_exist_ok=True)
     block = (f"-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills -- do not delete this block) --\n"
              "## Agent delegation\n- product-manager: specs/epics/status\n- developer: code/impl\n"
              "- qa: testing/verification\n- devops: CI/CD\nRoute via dev-agent-router.\n-- END --")

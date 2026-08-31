@@ -9,14 +9,14 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import benchkit
 
 
-def fresh_repo(root: pathlib.Path, framework_root: str | None):
+def fresh_repo(root: pathlib.Path, framework_root: str | None, wave: bool = False):
     root.mkdir(parents=True, exist_ok=True)
     (root / "README.md").write_text("# bench repo\n", encoding="utf-8")
     subprocess.run(["git", "init", "-q"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.email", "bench@local"], cwd=root, check=True)
     subprocess.run(["git", "config", "user.name", "Bench"], cwd=root, check=True)
     if framework_root:
-        benchkit.install_framework(root, framework_root)
+        benchkit.install_framework(root, framework_root, wave=wave)
     subprocess.run(["git", "add", "-A"], cwd=root, check=True)
     subprocess.run(["git", "commit", "-qm", "init"], cwd=root, check=True)
 
@@ -29,6 +29,8 @@ def main():
     ap.add_argument("--gate", required=True, help="acceptance gate (shell)")
     ap.add_argument("--framework", default=str(pathlib.Path(__file__).parent.parent),
                     help="framework repo root (default: this repo)")
+    ap.add_argument("--wave", action="store_true",
+                    help="install the wave-dev-loop bundle and instruct wave dispatch")
     ap.add_argument("--out", default="bench-out")
     args = ap.parse_args()
 
@@ -38,7 +40,7 @@ def main():
     for d in (a_dir, b_dir):
         if d.exists():
             shutil.rmtree(d)
-    fresh_repo(a_dir, args.framework)
+    fresh_repo(a_dir, args.framework, wave=args.wave)
     fresh_repo(b_dir, None)
 
     task = pathlib.Path(args.task).read_text(encoding="utf-8")
@@ -49,7 +51,8 @@ def main():
     print(mb); print("gate:", benchkit.run_gate(str(b_dir), args.gate))
 
     print("== A (framework, fresh folder) ==")
-    ma, _ = benchkit.run_arm(str(a_dir), task, out / f"{args.name}-a.json", activation=True)
+    ma, _ = benchkit.run_arm(str(a_dir), task, out / f"{args.name}-a.json",
+                             activation=True, wave=args.wave)
     print(ma); print("gate:", benchkit.run_gate(str(a_dir), args.gate))
 
     benchkit.table(ma, mb)

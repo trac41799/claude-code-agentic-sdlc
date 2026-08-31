@@ -10,6 +10,9 @@
       .start      { font: bold 17px Arial, Helvetica, sans-serif; }
       .edge-label { font: bold 14.5px Arial, Helvetica, sans-serif; }
     </style>
+    <marker id="arr" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M 0 0 L 10 4 L 0 8 Z" fill="#64748B"/>
+    </marker>
   </defs>
 
   <!-- ============ LANES ============ -->
@@ -103,7 +106,7 @@
   <text x="1790" y="638" text-anchor="middle" class="start" fill="#FFFFFF">epic updated</text>
 
   <!-- ============ EDGES ============ -->
-  <g stroke="#64748B" stroke-width="2.5" fill="none">
+  <g stroke="#64748B" stroke-width="2.5" fill="none" marker-end="url(#arr)">
     <path d="M 245 120 H 360"/>
     <path d="M 470 120 H 520 V 90 H 570"/>
     <path d="M 470 120 H 520 V 170 H 570"/>
@@ -115,8 +118,8 @@
     <path d="M 900 290 H 990"/>
     <path d="M 1220 290 V 200 H 1280 V 157"/>
     <path d="M 1280 157 V 220 H 1380 V 290"/>
-    <path d="M 1225 120 H 990 V 252 H 900 V 290"/>
-    <path d="M 1495 318 V 380 H 465 V 468"/>
+    <path d="M 1225 120 V 244 H 1105 V 260"/>
+    <path d="M 1495 320 V 380 H 465 V 468"/>
     <path d="M 580 498 H 720 V 468 H 760"/>
     <path d="M 760 468 V 535 H 580 V 498"/>
     <path d="M 870 468 V 482 H 930"/>

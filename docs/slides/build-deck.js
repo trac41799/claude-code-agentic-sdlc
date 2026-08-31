@@ -142,7 +142,34 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Canvas: mark the plan-protocol claim as the most original piece.");
 }
 
-// ============ 5 · ADOPTION MAP ============
+// ============ 5 · THE STACK ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "The stack");
+  title(s, "Four tools the team lives in", "The harness \u00B7 the change \u00B7 the delivery \u00B7 the data \u2014 also the fastest client onboarding stack.");
+  const tools = [
+    ["Claude Code", "HARNESS", "Agents \u00B7 skills \u00B7 slash commands. Every gate (spec \u00B7 plan \u00B7 PR) is an operator decision in the loop.", "The runtime the 4-agent team executes in"],
+    ["GitHub", "CHANGE & CI", "All change via PR, never self-merged. CI enforces manifests, version lockstep, skill counts, no-global-install.", "The audit trail and the merge gate"],
+    ["Vercel", "DELIVERY", "Preview per PR \u00B7 prod from main. The Deploy lane of the cycle \u2014 what clients see as \u201cit went live\u201D.", "Zero-config deploys; preview URLs on every PR"],
+    ["Supabase", "DATA & AUTH", "Postgres + Auth + Storage in the scaffold, free tier. No infra decisions for a new client.", "The database and identity in the project scaffold"],
+  ];
+  let y = 2.3;
+  tools.forEach(([n, role, d, why], i) => {
+    const x = 0.75 + (i % 2) * 6.1;
+    card(s, x, y, 5.75, 1.85, CARD, BORDER);
+    s.addText(n, { x: x + 0.25, y: y + 0.12, w: 2.6, h: 0.5, fontFace: H, fontSize: 26, bold: true, color: NAVY });
+    pill(s, x + 2.9, y + 0.2, role, MID);
+    s.addText(d, { x: x + 0.25, y: y + 0.7, w: 5.3, h: 0.8, fontFace: B, fontSize: 15, color: TXT });
+    s.addText(why, { x: x + 0.25, y: y + 1.45, w: 5.3, h: 0.32, fontFace: B, fontSize: 12.5, italic: true, color: MUT });
+    if (i % 2 === 1) y += 2.0;
+  });
+  s.addText("Scaffold = Next.js on Vercel + Supabase \u2014 the same stack a new client adopts in days, with no infra decisions.", { x: 0.75, y: 6.4, w: 9.4, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  tag(s, 10.6, 6.4, "VERIFIED");
+  notes(s, "Company stack today and the fastest onboarding stack: Claude Code harness, GitHub PRs, Vercel deploys, Supabase data.");
+}
+
+// ============ 6 · ADOPTION MAP ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -169,7 +196,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "They will ask 'what's original' - answer honestly before they ask.");
 }
 
-// ============ 6 · TEAM + METHOD ============
+// ============ 7 · TEAM + METHOD ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -210,7 +237,7 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Six stages, standard SDLC \u2014 the framework maps a skill to each stage and a command to each entry.", { x: 0.7, y: 6.6, w: 11.9, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   notes(s, "Greenfield: /asdlc-project. Brownfield: /asdlc-adopt. Doctor verifies at any stage. Each stage = one skill lane.");
 }
-// ============ 7 · THE FLOW (DIAGRAM) ============
+// ============ 9 · THE FLOW (DIAGRAM) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -221,7 +248,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Operator decides, PM serializes, dev/qa execute with gates. Three lanes, two approvals, one PR.");
 }
 
-// ============ 8 · INSTALL & EVIDENCE ============
+// ============ 10 · INSTALL & EVIDENCE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -230,6 +257,7 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("claude plugin marketplace add trac41799/claude-code-agentic-sdlc", { x: 0.75, y: 2.25, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 18, bold: true, color: GREEND });
   s.addText("claude plugin install agentic-sdlc@agentic-sdlc", { x: 0.75, y: 2.85, w: 11.85, h: 0.5, fontFace: MONO, fontSize: 18, bold: true, color: GREEND });
   s.addText("Then /asdlc-doctor \u00B7 /asdlc-project (new repo) \u00B7 /asdlc-adopt (existing)", { x: 0.75, y: 3.45, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, color: MUT });
+  s.addText("Live demo script (one request \u2192 tested, logging API in 10 min): docs/demo/live-demo-guide.md", { x: 0.75, y: 3.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 13, italic: true, color: MUT });
   const cs = [
     ["WorkHealthyAustralia", "AU \u00B7 healthcare \u2014 janet.care (personal healthcare AI-assistant) + occuspan.com \u00B7 POC in 1 week"],
     ["DOXA", "US \u00B7 staffing \u2014 multiple projects under NDA \u00B7 POC in 1 week"],
@@ -247,7 +275,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Install verified live via fcc-claude earlier. Cases: named, and confounds labeled.");
 }
 
-// ============ 10 · HOW WE BENCHMARK ============
+// ============ 11 · HOW WE BENCHMARK ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -270,7 +298,53 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Everything on this deck's results slide came from the bench kit in the repo \u2014 rerun any cell with one command (docs/benchmarks/BENCHMARK-SUMMARY.md).", { x: 0.75, y: 6.6, w: 11.85, h: 0.5, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   notes(s, "Methodology slide exists so the results are read with their confounds in frame, not as bare numbers.");
 }
-// ============ 9 · BENCHMARK (MEASURED MATRIX) ============
+// ============ 12 · RAW EVIDENCE ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Benchmark \u00B7 raw evidence");
+  title(s, "Terminal output, verbatim", "Real bench-kit output \u2014 GREENFIELD-3 (rate-limited SSE proxy), same model, same brief.");
+  s.addShape("rect", { x: 0.75, y: 2.35, w: 5.85, h: 3.85, fill: { color: "111827" }, line: { width: 0 } });
+  const mono = [
+    "metric           A activated      B bare",
+    "wall (min)           6.5          27.4",
+    "turns                 56            61",
+    "cost                1.08          2.84",
+    "in tokens          50991         85443",
+    "out tokens         42779        144366",
+    "",
+    "gate: pytest tests/ -q",
+    "  A -> 24 passed (run 3, stable)",
+    "  B -> 22 passed \u00B7 halted",
+    "       terminal: max_turns",
+  ];
+  mono.forEach((l, i) => {
+    s.addText(l, { x: 0.95, y: 2.5 + i * 0.32, w: 5.6, h: 0.3, fontFace: MONO, fontSize: 12.5, color: l.startsWith("metric") || l.startsWith("gate") ? "F4B400" : "D1D5DB", margin: 0 });
+  });
+  s.addText("A: completed at 56 turns \u00B7 B: stopped mid-tool-use at 61 (max_turns)", { x: 0.95, y: 6.15, w: 5.5, h: 0.3, fontFace: B, fontSize: 12.5, italic: true, color: MUT });
+  const left = [
+    "B bare \u2014 27.4 min \u00B7 $2.84 \u00B7 22 tests",
+    "  app/  tests/",
+    "  no spec \u00B7 no plan \u00B7 no tasks",
+    "  session halted before completion",
+    "",
+    "A activated \u2014 6.5 min \u00B7 $1.08 \u00B7 24 tests",
+    "  app/  tests/  docs/qa/",
+    "  docs/product/product.md",
+    "  .specify/features/rate-limited-sse-proxy/",
+    "    spec.md  impl-plan.md  tasks.md",
+    "  QA lane verified the work",
+  ];
+  let ly = 2.35;
+  left.forEach((l) => {
+    const b = l.startsWith("B ") || l.startsWith("A ");
+    s.addText(l, { x: 7.0, y: ly, w: 5.6, h: 0.3, fontFace: b ? B : MONO, fontSize: 13, bold: b, color: b ? (l.startsWith("B ") ? "B91C1C" : GREEND) : TXT, margin: 0 });
+    ly += 0.31;
+  });
+  s.addText("Deliverables are the difference: the framework arm left a traceability trail \u2014 and finished 4.2\u00D7 faster.", { x: 0.75, y: 6.6, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
+  notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
+}
+// ============ 13 · BENCHMARK (MEASURED MATRIX) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -300,7 +374,34 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "4 runs, 3 arms, real numbers, real gaps. Read the R4 line out loud: the guardrail is advisory — that is the honesty that earns trust.");
 }
 
-// ============ 10 · GAPS + CLOSE ============
+// ============ 14 · MATERIALS & LINKS ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Resources");
+  title(s, "Everything is in the repo", "Framework \u00B7 bench kit \u00B7 evidence \u00B7 demo guide \u2014 one link each, all public.");
+  const links = [
+    ["Framework \u00B7 plugin \u00B7 bench kit \u00B7 deck source", "github.com/trac41799/claude-code-agentic-sdlc"],
+    ["Benchmark evidence \u2014 12 runs, repro commands", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/benchmarks/BENCHMARK-SUMMARY.md"],
+    ["Live demo run guide (\u226410 min)", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/demo/live-demo-guide.md"],
+    ["Client setup \u2014 5 prompts for non-technical founders", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/guide/CLIENT-SETUP.md"],
+    ["Benchmark product \u2014 FE (froam)", "github.com/trac41799/froam-journey-platform-fe"],
+    ["Benchmark product \u2014 BE (froam)", "github.com/trac41799/travelbuddy-agentic-be"],
+    ["Client cases", "janet.care \u00B7 occuspan.com"],
+    ["Tool stack", "claude.com \u00B7 github.com \u00B7 vercel.com \u00B7 supabase.com"],
+  ];
+  let y = 2.35;
+  links.forEach(([t, u]) => {
+    card(s, 0.75, y, 11.85, 0.5, CARD, BORDER);
+    s.addText(t, { x: 1.0, y: y + 0.08, w: 6.0, h: 0.35, fontFace: B, fontSize: 14, bold: true, color: NAVY, margin: 0 });
+    s.addText(u, { x: 7.1, y: y + 0.08, w: 5.3, h: 0.35, fontFace: MONO, fontSize: 13, color: "2563EB", align: "right", margin: 0 });
+    y += 0.56;
+  });
+  s.addText("Every number on the results slides reruns with one command from the bench kit \u2014 same model, same frozen briefs, non-merge branches.", { x: 0.75, y: 6.7, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  notes(s, "Give this slide time: every artifact referenced here exists and is public.");
+}
+
+// ============ 15 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };
@@ -308,14 +409,14 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("WHAT WE KNOW", { x: 0.8, y: 0.85, w: 11.7, h: 0.4, fontFace: B, fontSize: 14, bold: true, color: AMBER, charSpacing: 3 });
   s.addText("Built from experience. Graded by evidence.", { x: 0.8, y: 1.3, w: 11.7, h: 0.85, fontFace: H, fontSize: 42, bold: true, color: WHITE });
   const gaps = [
-    "Benchmark: 1 run, trivial task \u2014 gaps shown, value not yet proven",
-    "Tokens: managed by baseline next \u2014 cheap to meter, no budget yet",
-    "Method: SDD + TDD + 4-agent team \u2014 tested on two POCs, lab-confound labeled",
+    "Benchmark: 12 metered runs \u2014 value proven where difficulty lives; gaps labeled, not hidden",
+    "Tokens: no budget yet \u2014 cheap to meter, baseline next",
+    "Method: SDD + TDD + 4-agent team \u2014 12 measured runs + two POCs; lab confounds labeled",
     "Human-hour ratio: measured via hooks + PR windows \u2014 target LOW",
   ];
   s.addText(gaps.map(g => ({ text: g, options: { bullet: true, breakLine: true, paraSpaceAfter: 12 } })),
     { x: 0.8, y: 2.65, w: 11.7, h: 2.7, fontFace: B, fontSize: BODY_SM, color: ICE });
-  s.addText("Next: vertical \u00B7 DB \u00B7 refactor scenarios on the traveling-friend repos, then the token baseline.", { x: 0.8, y: 5.55, w: 11.7, h: 0.5, fontFace: B, fontSize: BODY_SM, bold: true, color: AMBER });
+  s.addText("Next: token budget baseline \u00B7 SWE-bench-style floor check \u00B7 telemetry on live traffic.", { x: 0.8, y: 5.55, w: 11.7, h: 0.5, fontFace: B, fontSize: BODY_SM, bold: true, color: AMBER });
   s.addText("Not a solved discipline \u2014 a repeatable, honest one.", { x: 0.8, y: 6.35, w: 11.7, h: 0.5, fontFace: H, fontSize: 23, italic: true, bold: true, color: WHITE });
   notes(s, "Close on the gaps. That is the part we defend most.");
 }

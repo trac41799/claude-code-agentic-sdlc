@@ -39,7 +39,7 @@ function notes(s, t) { s.addNotes(t); }
   const s = pptx.addSlide();
   s.background = { color: NAVY };
   s.addShape("ellipse", { x: 10.2, y: -2.2, w: 5.6, h: 5.6, fill: { color: "27346E" }, line: { width: 0 } });
-  s.addText("CLAUDE CODE HARNESS  \u00B7  PLUGIN  \u00B7  v2.8.0", { x: 0.8, y: 0.9, w: 11, h: 0.4, fontFace: B, fontSize: 15, bold: true, color: AMBER, charSpacing: 3 });
+  s.addText("CLAUDE CODE HARNESS  \u00B7  PLUGIN  \u00B7  v2.9.0", { x: 0.8, y: 0.9, w: 11, h: 0.4, fontFace: B, fontSize: 15, bold: true, color: AMBER, charSpacing: 3 });
   s.addText("Agentic SDLC", { x: 0.8, y: 1.5, w: 11.7, h: 1.6, fontFace: H, fontSize: 70, bold: true, color: WHITE });
   s.addText("An AI-SDLC framework built from delivery experience", { x: 0.8, y: 3.15, w: 11.7, h: 0.65, fontFace: B, fontSize: 26, color: ICE });
   s.addText("4 agents  \u00B7  17 skills  \u00B7  spec-first  \u00B7  test-first  \u00B7  evidence-gated", { x: 0.8, y: 3.95, w: 11.7, h: 0.5, fontFace: B, fontSize: 17, color: "9FB0DC" });
@@ -184,8 +184,9 @@ function notes(s, t) { s.addNotes(t); }
     s.addText(why, { x: x + 0.25, y: y + 1.45, w: 5.3, h: 0.32, fontFace: B, fontSize: 12.5, italic: true, color: MUT });
     if (i % 2 === 1) y += 2.0;
   });
-  s.addText("Scaffold = Next.js on Vercel + Supabase \u2014 the same stack a new client adopts in days, with no infra decisions.", { x: 0.75, y: 6.4, w: 9.4, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
-  tag(s, 10.6, 6.4, "VERIFIED");
+  s.addText("CLI-first: gh \u00B7 vercel \u00B7 supabase \u00B7 claude are all CLIs \u2014 they chain in a shell with no convention layer, so a harness swap leaves the contract intact.", { x: 0.75, y: 6.35, w: 9.85, h: 0.4, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
+  s.addText("Only Supabase also runs as an MCP server: the CLI automates, the MCP gives the agent a live surface \u2014 each serves its own moat.", { x: 0.75, y: 6.72, w: 11.85, h: 0.35, fontFace: B, fontSize: 13, color: TXT });
+  tag(s, 10.9, 6.35, "VERIFIED");
   notes(s, "Company stack today and the fastest onboarding stack: Claude Code harness, GitHub PRs, Vercel deploys, Supabase data.");
 }
 
@@ -367,7 +368,22 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 rollback) fire on live projects, not in a lab bench.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
 }
-// ============ 14 · BENCHMARK (MEASURED MATRIX) ============
+// ============ 14 · EVIDENCE — FOLDER STRUCTURE ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Benchmark \u00B7 raw evidence");
+  title(s, "Folder structure, verbatim", "Same frozen task (BE SSE proxy), two arms \u2014 what the bare run leaves vs what the framework run leaves.");
+  s.addText("B \u00B7 BARE \u2014 greenfield/be-b", { x: 0.65, y: 2.05, w: 5.9, h: 0.35, fontFace: B, fontSize: 16, bold: true, color: "B91C1C" });
+  s.addText("A \u00B7 ACTIVATED \u2014 greenfield/be-a", { x: 6.85, y: 2.05, w: 5.9, h: 0.35, fontFace: B, fontSize: 16, bold: true, color: GREEND });
+  s.addImage({ path: __dirname + "/evidence-be-b.png", x: 0.65, y: 2.45, w: 5.6, h: 4.03 });
+  s.addImage({ path: __dirname + "/evidence-be-a.png", x: 6.85, y: 2.45, w: 5.6, h: 4.03 });
+  s.addText("The bare arm leaves app/ + tests/ only. The framework arm leaves the same code PLUS .claude/ (agents + skills + rules), .specify/ (spec \u00B7 plan \u00B7 tasks), docs/product, docs/qa \u2014 the traceability trail, committed in the repo.", { x: 0.65, y: 6.5, w: 11.85, h: 0.6, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
+  s.addText("Full trees + install payload + scaffold: evidence/tree/ \u00B7 all 12 projects runnable \u00B7 python evidence/validate.py \u2014 12/12 claims reproduce.", { x: 0.65, y: 6.95, w: 11.85, h: 0.4, fontFace: B, fontSize: 13, italic: true, color: MUT });
+  notes(s, "Screenshots are generated views of the real evidence/tree/ captures (pyc masked, skills sub-tree elided to a count note). Point at evidence/.");
+}
+
+// ============ 15 · BENCHMARK (MEASURED MATRIX) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -397,7 +413,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "4 runs, 3 arms, real numbers, real gaps. Read the R4 line out loud: the guardrail is advisory — that is the honesty that earns trust.");
 }
 
-// ============ 15 · MATERIALS & LINKS ============
+// ============ 16 · MATERIALS & LINKS ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -426,7 +442,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Give this slide time: every artifact referenced here exists and is public.");
 }
 
-// ============ 16 · THE ORIGIN (V1) ============
+// ============ 17 · THE ORIGIN (V1) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -481,7 +497,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The original pitch: an agent team that builds and markets, running overnight with no human. It worked \u2014 until the machine drifted.");
 }
 
-// ============ 17 · V1 VS V2 ============
+// ============ 18 · V1 VS V2 ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -513,7 +529,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The honest version of the story: v1 worked until it drifted. v2 gave up overnight autonomy for gates that hold.");
 }
 
-// ============ 18 · GAPS — WHAT WE KNOW WE LACK ============
+// ============ 19 · GAPS — WHAT WE KNOW WE LACK ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -556,7 +572,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Say the cost gap out loud BEFORE they ask — the wrong-model probe is the proof we don't hide. Exclusions: read the v1 lesson slide before they suggest 'just enable hooks'.");
 }
 
-// ============ 19 · GAPS + CLOSE ============
+// ============ 20 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };

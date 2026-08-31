@@ -6,6 +6,11 @@ Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Re
 
 ---
 
+## [2.9.0] - 2026-08-31
+
+**Added**
+- `/asdlc-tools` — machine tooling command. Checks machine status first, then installs only what is missing: `gh` CLI, Vercel CLI, Supabase CLI (platform-aware: brew / winget / npm), and configures the Supabase MCP server in the Claude Code user config (operator-directed via `SUPABASE_ACCESS_TOKEN` — never committed). Idempotent; no permissions grants; the only global write is the operator's own `~/.claude.json` mcpServers entry, at their explicit direction.
+
 ## [Unreleased]
 
 **Rebrand: "Infinite Leverage" → "Agentic SDLC."** Canonical repo moved to

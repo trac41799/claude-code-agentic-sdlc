@@ -37,6 +37,7 @@ claude plugin update agentic-sdlc@agentic-sdlc
 | `/asdlc-project` | Scaffolds a new client project from `templates/project-scaffold/`, installs the 4 agents + skills **into the project's `.claude/`**, seeds `docs/product/` and `docs/brand/`, initializes git |
 | `/asdlc-adopt` | Installs the same 4 agents + skills + rules into an **already-established repo** — injects the delegation block into its `CLAUDE.md`, seeds only missing doc anchors, touches nothing the operator wrote, commits nothing |
 | `/asdlc-doctor` | Setup check: prerequisites, repo context, scaffolded-project layout |
+| `/asdlc-tools` | Machine tooling: status-check, then install `gh`/Vercel/Supabase CLIs and configure the Supabase MCP server — only what is missing, operator-directed |
 | `/asdlc-memory-cleanup` | Human-in-the-loop cleanup of a multi-account memory mess: reads every memory file, narrates duplicates/conflicts/stale facts, then deletes/merges/re-indexes only what the operator approves — after a backup |
 
 ## Repo structure

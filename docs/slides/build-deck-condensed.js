@@ -199,9 +199,10 @@ function notes(s, t) { s.addNotes(t); }
     s.addText(a, { x: 9.2, y: y + 0.14, w: 3.3, h: 0.45, fontFace: B, fontSize: 13, color: "1B5E20", align: "center" });
     y += 0.82;
   });
-  card(s, 0.75, 5.85, 11.85, 1.15, "EAF5EC", GREEN);
-  s.addText("HARD CASE \u00B7 GREENFIELD-3 (rate-limited SSE proxy): B 27.4 min \u00B7 $2.84 \u00B7 22 tests \u2014 A 6.5 min \u00B7 $1.08 \u00B7 24 tests + spec/plan/tasks/QA. 4.2\u00D7 faster.", { x: 1.0, y: 6.0, w: 11.35, h: 0.4, fontFace: B, fontSize: BODY_SM, bold: true, color: GREEND });
-  s.addText("Honest poles: passive \u2248 bare (placebo) \u00B7 N=1 per cell \u00B7 cost basis provider-unknown (GAP-ANALYSIS.md) \u00B7 devops lanes unmeasured offline.", { x: 1.0, y: 6.5, w: 11.35, h: 0.4, fontFace: B, fontSize: 13.5, color: TXT });
+  card(s, 0.75, 5.85, 11.85, 1.35, "EAF5EC", GREEN);
+  s.addText("HARD CASE \u00B7 GREENFIELD-3 (rate-limited SSE proxy): B 27.4 min \u00B7 $2.84 \u00B7 22 tests \u2014 A 6.5 min \u00B7 $1.08 \u00B7 24 tests + spec/plan/tasks/QA. 4.2\u00D7 faster.", { x: 1.0, y: 5.98, w: 11.35, h: 0.38, fontFace: B, fontSize: BODY_SM, bold: true, color: GREEND });
+  s.addText("Honest poles: passive \u2248 bare (placebo) \u00B7 N=1 per cell \u00B7 cost basis provider-unknown (GAP-ANALYSIS.md) \u00B7 devops lanes unmeasured offline.", { x: 1.0, y: 6.42, w: 11.35, h: 0.35, fontFace: B, fontSize: 13, color: TXT });
+  s.addText("4 frozen cases \u00B7 E2E pipeline \u00B7 FE virtualized feed \u00B7 BE SSE proxy (hard) \u00B7 DB+ETL 1M rows \u2014 repro: bench/greenfield.py --task bench/tasks/... \u00B7 details: deck slide 13 + docs/benchmarks/BENCHMARK-SUMMARY.md", { x: 1.0, y: 6.75, w: 11.35, h: 0.35, fontFace: B, fontSize: 12.5, color: MUT });
   notes(s, "Value concentrates where difficulty lives: plan-first discipline beats churn on hard engineering; simple tasks are parity-to-small-tax.");
 }
 

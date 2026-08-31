@@ -368,7 +368,40 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 rollback) fire on live projects, not in a lab bench.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
 }
-// ============ 14 · EVIDENCE — FOLDER STRUCTURE ============
+// ============ 13 · BENCHMARK CASES & REPRODUCTION ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Benchmark \u00B7 what & how");
+  title(s, "The four frozen cases, and how to run them", "Same briefs \u00B7 same model pin \u00B7 both arms \u2014 a difficulty gradient on purpose.");
+  s.addText("CASE", { x: 0.9, y: 2.0, w: 2.7, h: 0.28, fontFace: B, fontSize: 12.5, bold: true, color: NAVY });
+  s.addText("WHAT IT TESTS \u00B7 WHY IT EXISTS", { x: 3.7, y: 2.0, w: 4.7, h: 0.28, fontFace: B, fontSize: 12.5, bold: true, color: NAVY });
+  s.addText("GATE", { x: 8.5, y: 2.0, w: 1.9, h: 0.28, fontFace: B, fontSize: 12.5, bold: true, color: NAVY, align: "center" });
+  s.addText("RESULT (B / A)", { x: 10.5, y: 2.0, w: 1.9, h: 0.28, fontFace: B, fontSize: 12.5, bold: true, color: NAVY, align: "center" });
+  const cases = [
+    ["G-1 \u00B7 E2E pipeline", "Research request \u2192 queue \u2192 background worker \u2192 live status + final result. Full FE+BE+DB integration \u2014 the realistic product shape.", "pytest tests/ -q", "13 / 17 tests"],
+    ["G-2 \u00B7 FE virtualized feed", "Infinite feed, optimistic likes, windowed rendering; engine.js must stay zero-dependency. Narrow but deep front-end.", "node --test tests/", "24 / 22 tests"],
+    ["G-3 \u00B7 BE SSE proxy (HARD)", "Token buckets, backpressure, heartbeats, clean shutdown. The difficulty case \u2014 where churn shows up.", "pytest tests/ -q", "22 / 24 tests \u00B7 bare halted"],
+    ["G-4 \u00B7 DB+ETL 1M rows", "Event ingestion + idempotent nightly rollup at scale (SQLite only), perf + re-run asserts.", "pytest + etl/perf_test.py", "8 / 6 tests \u00B7 perf \u2713"],
+  ];
+  let y = 2.3;
+  cases.forEach(([c, w, g, r]) => {
+    card(s, 0.75, y, 11.85, 0.78, CARD, BORDER);
+    s.addText(c, { x: 0.9, y: y + 0.1, w: 2.7, h: 0.55, fontFace: B, fontSize: 13, bold: true, color: NAVY, margin: 0 });
+    s.addText(w, { x: 3.7, y: y + 0.1, w: 4.7, h: 0.55, fontFace: B, fontSize: 12.5, color: TXT, margin: 0 });
+    s.addText(g, { x: 8.5, y: y + 0.1, w: 1.9, h: 0.55, fontFace: MONO, fontSize: 12, color: TXT, align: "center", margin: 0 });
+    s.addText(r, { x: 10.5, y: y + 0.1, w: 1.9, h: 0.55, fontFace: B, fontSize: 12, color: GREEND, align: "center", margin: 0 });
+    y += 0.84;
+  });
+  card(s, 0.75, 5.75, 11.85, 1.5, "111827", null);
+  s.addText("RUN FROM SCRATCH", { x: 1.0, y: 5.9, w: 3.0, h: 0.3, fontFace: B, fontSize: 13, bold: true, color: "F4B400", margin: 0 });
+  s.addText("python bench/greenfield.py --base /tmp/gf --name r1 --task bench/tasks/greenfield-e2e-pipeline.md --gate \"pytest tests/ -q\" --out bench-out/x", { x: 1.0, y: 6.2, w: 11.35, h: 0.3, fontFace: MONO, fontSize: 11.5, color: "D1D5DB", margin: 0 });
+  s.addText("python evidence/validate.py   # prebuilt evidence \u2192 12/12 claims reproduce   \u00B7   bench/brownfield.py --repo <your-repo> --task bench/tasks/brownfield-add-tests.md --gate \"<test cmd>\"   \u00B7   frozen briefs: bench/tasks/", { x: 1.0, y: 6.55, w: 11.35, h: 0.3, fontFace: MONO, fontSize: 11, color: "D1D5DB", margin: 0 });
+  s.addText("Same briefs, same model pin, metered, non-merge exp branches \u00B7 \u224830\u201340 min per case (both arms).", { x: 1.0, y: 6.85, w: 11.35, h: 0.3, fontFace: B, fontSize: 12.5, color: "9FB0DC", margin: 0 });
+  notes(s, "The four cases are the difficulty gradient: integration, deep FE, hard BE concurrency, data at scale. Point at bench/tasks/ as the frozen texts.");
+}
+
+// ============ 15 · EVIDENCE — FOLDER STRUCTURE ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -383,7 +416,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Screenshots are generated views of the real evidence/tree/ captures (pyc masked, skills sub-tree elided to a count note). Point at evidence/.");
 }
 
-// ============ 15 · BENCHMARK (MEASURED MATRIX) ============
+// ============ 16 · BENCHMARK (MEASURED MATRIX) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -413,7 +446,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "4 runs, 3 arms, real numbers, real gaps. Read the R4 line out loud: the guardrail is advisory — that is the honesty that earns trust.");
 }
 
-// ============ 16 · MATERIALS & LINKS ============
+// ============ 17 · MATERIALS & LINKS ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -442,7 +475,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Give this slide time: every artifact referenced here exists and is public.");
 }
 
-// ============ 17 · THE ORIGIN (V1) ============
+// ============ 18 · THE ORIGIN (V1) ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -497,7 +530,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The original pitch: an agent team that builds and markets, running overnight with no human. It worked \u2014 until the machine drifted.");
 }
 
-// ============ 18 · V1 VS V2 ============
+// ============ 19 · V1 VS V2 ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -529,7 +562,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "The honest version of the story: v1 worked until it drifted. v2 gave up overnight autonomy for gates that hold.");
 }
 
-// ============ 19 · GAPS — WHAT WE KNOW WE LACK ============
+// ============ 20 · GAPS — WHAT WE KNOW WE LACK ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -572,7 +605,7 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Say the cost gap out loud BEFORE they ask — the wrong-model probe is the proof we don't hide. Exclusions: read the v1 lesson slide before they suggest 'just enable hooks'.");
 }
 
-// ============ 20 · GAPS + CLOSE ============
+// ============ 21 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };

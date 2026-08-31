@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Local database + generated data
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm

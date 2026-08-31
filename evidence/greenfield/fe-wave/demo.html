@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Virtualized Feed Engine — 10,000-item demo</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+      background: #f1f5f9;
+    }
+
+    header {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    header h1 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    header .sub { color: #94a3b8; font-size: 12px; }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding: 8px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat { display: flex; gap: 6px; align-items: baseline; }
+    .stat .k { color: #64748b; }
+    .stat .v { font-weight: 700; color: #0f172a; }
+    .stat .v.accent { color: #e11d48; }
+
+    #viewport {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      background: #ffffff;
+    }
+    #spacer { position: relative; width: 100%; }
+
+    .row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      border-bottom: 1px solid #f1f5f9;
+      background: #ffffff;
+    }
+    .row:hover { background: #f8fafc; }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      flex: none;
+    }
+    .row-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .row-user { font-weight: 600; font-size: 13px; }
+    .row-time { font-size: 11px; color: #94a3b8; }
+
+    .like-btn {
+      flex: none;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #475569;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    }
+    .like-btn:hover { border-color: #f43f5e; color: #f43f5e; background: #fff1f2; }
+    .like-btn.liked {
+      background: #f43f5e;
+      border-color: #f43f5e;
+      color: #ffffff;
+    }
+    .like-btn.liked:hover { background: #e11d48; border-color: #e11d48; color: #fff; }
+    .like-btn.pending, .like-btn:disabled { opacity: 0.65; cursor: wait; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Virtualized Feed Engine</h1>
+    <span class="sub">10,000 rows · dependency-free · only the visible window is in the DOM</span>
+  </header>
+
+  <div class="stats" id="stats">
+    <span class="stat"><span class="k">Total</span><span class="v" id="stat-total">—</span></span>
+    <span class="stat"><span class="k">Window</span><span class="v" id="stat-window">—</span></span>
+    <span class="stat"><span class="k">DOM rows</span><span class="v" id="stat-rendered">—</span></span>
+    <span class="stat"><span class="k">scrollTop</span><span class="v" id="stat-scroll">0</span></span>
+    <span class="stat"><span class="k">Liked (held)</span><span class="v accent" id="stat-liked">0</span></span>
+    <span class="stat"><span class="k">Pending</span><span class="v" id="stat-pending">0</span></span>
+  </div>
+
+  <div id="viewport">
+    <div id="spacer"></div>
+  </div>
+
+  <script src="engine.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      // --- Tunables -------------------------------------------------------
+      var ROW_HEIGHT = 56;        // fixed px height of every row
+      var OVERSCAN = 5;           // extra rows rendered above/below the viewport
+      var ITEM_COUNT = 10000;
+      var SUCCESS_RATE = 0.7;     // simulated network success probability
+      var MIN_DELAY = 400;        // simulated latency, ms
+      var MAX_DELAY = 700;
+
+      // --- Data -----------------------------------------------------------
+      function makeItems(count) {
+        var now = Date.now();
+        var arr = [];
+        for (var i = 0; i < count; i++) {
+          arr.push({
+            id: i,
+            user: 'User ' + String(i).padStart(5, '0'),
+            time: now - (i + 1) * 73000   // 73s apart -> ~8.5 days span
+          });
+        }
+        return arr;
+      }
+
+      var items = makeItems(ITEM_COUNT);
+
+      // --- Engine-backed state --------------------------------------------
+      // likes holds the *liked* ids (optimistically added, rolled back on
+      // simulated failure). All button state is derived from this set.
+      var likes = new window.FeedEngine.OptimisticLikeSet();
+
+      // pending only tracks which simulated requests are in flight (UI state +
+      // double-submit guard). It is NOT a like-set reimplementation.
+      var pending = new Map(); // id -> true
+
+      // --- DOM refs --------------------------------------------------------
+      var viewport = document.getElementById('viewport');
+      var spacer = document.getElementById('spacer');
+      var statTotal = document.getElementById('stat-total');
+      var statWindow = document.getElementById('stat-window');
+      var statRendered = document.getElementById('stat-rendered');
+      var statScroll = document.getElementById('stat-scroll');
+      var statLiked = document.getElementById('stat-liked');
+      var statPending = document.getElementById('stat-pending');
+
+      var lastStart = -1;
+      var lastEnd = -1;
+
+      // The spacer's height drives the whole scrollbar: items.length * rowHeight.
+      spacer.style.height = (items.length * ROW_HEIGHT) + 'px';
+
+      // --- Helpers ---------------------------------------------------------
+      var AVATAR_COLORS = [
+        '#f59e0b', '#ef4444', '#8b5cf6', '#10b981',
+        '#3b82f6', '#ec4899', '#14b8a6', '#f97316'
+      ];
+      function avatarColor(id) {
+        return AVATAR_COLORS[id % AVATAR_COLORS.length];
+      }
+
+      function timeAgo(epochMs) {
+        var diffMin = Math.max(0, Math.round((Date.now() - epochMs) / 60000));
+        if (diffMin < 60) return diffMin + 'm ago';
+        var hours = Math.floor(diffMin / 60);
+        if (hours < 24) return hours + 'h ago';
+        return Math.floor(hours / 24) + 'd ago';
+      }
+
+      // Derive a button's full visual state from likes.contains(id) + pending.
+      function applyLikeState(btn, id) {
+        var liked = likes.contains(id);
+        var isPending = pending.has(id);
+        btn.classList.toggle('liked', liked);
+        btn.classList.toggle('pending', isPending);
+        btn.disabled = isPending;              // block double-submit while in flight
+        btn.textContent = liked ? (isPending ? 'Liking…' : 'Liked ✓') : 'Like';
+        btn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+      }
+
+      // Refresh the button for one id if that row is currently in the DOM.
+      // If the row scrolled out of view, this is a no-op — state lives in the
+      // set and the next render (which derives from the set) shows the truth.
+      function updateRowLikeUI(id) {
+        var row = viewport.querySelector('.row[data-id="' + id + '"]');
+        if (!row) return;
+        var btn = row.querySelector('.like-btn');
+        if (btn) applyLikeState(btn, id);
+      }
+
+      function buildRow(item, index) {
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.dataset.id = String(item.id);
+        row.style.top = (index * ROW_HEIGHT) + 'px';
+
+        var avatar = document.createElement('span');
+        avatar.className = 'avatar';
+        avatar.style.background = avatarColor(item.id);
+        avatar.textContent = String(item.id % 10);
+
+        var body = document.createElement('span');
+        body.className = 'row-body';
+
+        var user = document.createElement('span');
+        user.className = 'row-user';
+        user.textContent = item.user;
+
+        var time = document.createElement('span');
+        time.className = 'row-time';
+        time.textContent = 'Posted an update · ' + timeAgo(item.time);
+
+        body.appendChild(user);
+        body.appendChild(time);
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'like-btn';
+        btn.dataset.id = String(item.id);
+        btn.addEventListener('click', function () { onLikeClick(item.id); });
+        applyLikeState(btn, item.id);
+
+        row.appendChild(avatar);
+        row.appendChild(body);
+        row.appendChild(btn);
+
+        return row;
+      }
+
+      function updateStats() {
+        statTotal.textContent = items.length;
+        statWindow.textContent = lastStart + '..' + lastEnd;
+        statRendered.textContent = spacer.querySelectorAll('.row').length;
+        statScroll.textContent = Math.round(viewport.scrollTop);
+        statLiked.textContent = likes.size();
+        statPending.textContent = pending.size;
+      }
+
+      // --- Render ----------------------------------------------------------
+      function render() {
+        var scrollTop = viewport.scrollTop;
+        var viewportHeight = viewport.clientHeight;
+
+        // The engine does all the window math — no hand-rolled reimplementation.
+        var range = window.FeedEngine.computeVisibleRange(
+          scrollTop, viewportHeight, items, ROW_HEIGHT, OVERSCAN
+        );
+
+        if (range.start !== lastStart || range.end !== lastEnd) {
+          lastStart = range.start;
+          lastEnd = range.end;
+
+          // Rebuild only the visible window [start, end). The spacer height is
+          // constant, so the scroll position is preserved.
+          spacer.textContent = '';
+          var frag = document.createDocumentFragment();
+          for (var i = range.start; i < range.end; i++) {
+            frag.appendChild(buildRow(items[i], i));
+          }
+          spacer.appendChild(frag);
+        }
+
+        updateStats();
+      }
+
+      // --- Optimistic like flow ---------------------------------------------
+      function onLikeClick(id) {
+        if (likes.contains(id) || pending.has(id)) return; // already liked / in flight
+
+        // Optimistic: reflect the like immediately.
+        likes.add(id);
+        pending.set(id, true);
+        updateRowLikeUI(id);
+        updateStats();
+
+        // Simulated network request.
+        var delay = MIN_DELAY + Math.random() * (MAX_DELAY - MIN_DELAY);
+        var success = Math.random() < SUCCESS_RATE;
+
+        setTimeout(function () {
+          pending.delete(id);
+          if (!success) {
+            // rollback removes ONLY this id — other pending/held likes are
+            // untouched (OptimisticLikeSet invariant). Safe even if the row has
+            // scrolled out of view: state lives in the set.
+            likes.rollback(id);
+          }
+          // Refresh this row if visible; otherwise the next render catches it.
+          updateRowLikeUI(id);
+          updateStats();
+        }, delay);
+      }
+
+      // --- Wire up -----------------------------------------------------------
+      viewport.addEventListener('scroll', render);
+      window.addEventListener('resize', render);
+      render();
+    })();
+  </script>
+</body>
+</html>

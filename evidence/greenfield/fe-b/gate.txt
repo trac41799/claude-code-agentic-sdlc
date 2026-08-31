@@ -1,0 +1,32 @@
+﻿Γ£ö window math is exact at scrollTop=0 (5.8657ms)
+Γ£ö window math is exact mid-list (0.4817ms)
+Γ£ö window math clamps at the very end (bottom-clamp) (0.5564ms)
+Γ£ö negative scrollTop clamps to 0 (0.4786ms)
+Γ£ö rendered slice covers the viewport with no gaps (0.8633ms)
+Γ£ö overscan is clipped at the start boundary (0.3899ms)
+Γ£ö overscan is clipped at the end boundary (0.3446ms)
+Γ£ö overscan=0 renders exactly the visible window (0.3582ms)
+Γ£ö empty items list renders nothing (0.5097ms)
+Γ£ö list shorter than the viewport renders every row (0.5816ms)
+Γ£ö non-integer scroll offsets are handled (0.4125ms)
+Γ£ö items must be an array (1.2445ms)
+Γ£ö OptimisticLikeSet interleaving: add A, add B, rollback A -> B remains (0.5405ms)
+Γ£ö OptimisticLikeSet rollback of a never-added id is a no-op (0.7519ms)
+Γ£ö OptimisticLikeSet multiple rollbacks do not go below zero (0.3877ms)
+Γ£ö starts empty (0.2217ms)
+Γ£ö add marks an id as liked and updates size (0.2097ms)
+Γ£ö add is idempotent for distinct ids (0.3478ms)
+Γ£ö rollback of one id does not disturb a different id added after it (0.2698ms)
+Γ£ö rollback of a never-added id is a no-op and leaves size unchanged (0.231ms)
+Γ£ö interleaved add/rollback keeps the net correct count per id (0.2166ms)
+Γ£ö rollback never removes an id added after it (0.2285ms)
+Γ£ö a failed like can be rolled back without disturbing other pending likes (0.2969ms)
+Γ£ö re-adding after a full rollback works (0.2038ms)
+Γä╣ tests 24
+Γä╣ suites 0
+Γä╣ pass 24
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 435.3196

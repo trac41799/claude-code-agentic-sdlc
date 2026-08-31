@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Research Request Pipeline</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; color: #1f2933; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.15rem; margin-top: 2rem; }
+  form { display: flex; flex-direction: column; gap: .5rem; max-width: 460px; }
+  label { font-weight: 600; font-size: .9rem; }
+  input { padding: .5rem .6rem; border: 1px solid #cbd2d9; border-radius: 6px; font-size: 1rem; }
+  button { padding: .55rem .9rem; background: #2563eb; color: #fff; border: 0; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  button:disabled { opacity: .6; cursor: default; }
+  ul { list-style: none; padding: 0; }
+  li { border: 1px solid #e4e7eb; border-radius: 8px; padding: .8rem; margin-bottom: .6rem; }
+  .topic { font-weight: 600; }
+  .meta { font-size: .8rem; color: #52606d; margin-top: .3rem; }
+  .result { margin-top: .4rem; font-size: .9rem; color: #323f4b; }
+  .status { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .8rem; font-weight: 600; text-transform: capitalize; }
+  .queued { background: #fef3c7; color: #92400e; }
+  .processing { background: #dbeafe; color: #1e40af; }
+  .done { background: #d1fae5; color: #065f46; }
+  .failed { background: #fee2e2; color: #991b1b; }
+  .error { color: #991b1b; }
+</style>
+</head>
+<body>
+  <h1>Research Request Pipeline</h1>
+  <form id="form">
+    <label for="topic">Research topic</label>
+    <input id="topic" name="topic" type="text" placeholder="e.g. climate resilience" required />
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" placeholder="you@example.com" required />
+    <button id="submit-btn" type="submit">Submit request</button>
+  </form>
+  <p id="form-error" class="error" hidden></p>
+
+  <h2>Requests</h2>
+  <ul id="requests"></ul>
+
+  <script>
+    const form = document.getElementById("form");
+    const topicInput = document.getElementById("topic");
+    const emailInput = document.getElementById("email");
+    const submitBtn = document.getElementById("submit-btn");
+    const formError = document.getElementById("form-error");
+    const list = document.getElementById("requests");
+
+    const streams = new Map(); // request id -> EventSource
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, (c) => (
+        { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+      ));
+    }
+
+    function statusBadge(status) {
+      return `<span class="status ${status}">${status}</span>`;
+    }
+
+    function openStream(id) {
+      if (streams.has(id)) return;
+      const es = new EventSource(`/requests/${id}/events`);
+      es.addEventListener("status", (ev) => {
+        const data = JSON.parse(ev.data);
+        const row = document.querySelector(`li[data-id="${data.id}"]`);
+        if (row) {
+          row.querySelector(".status").outerHTML = statusBadge(data.status);
+          if (data.status === "done" || data.status === "failed") es.close();
+        }
+      });
+      streams.set(id, es);
+    }
+
+    function render(requests) {
+      const existing = new Set(requests.map((r) => r.id));
+      for (const [id, es] of streams) {
+        if (!existing.has(id)) { es.close(); streams.delete(id); }
+      }
+      for (const r of requests) openStream(r.id);
+      list.innerHTML = requests.map((r) => `
+        <li data-id="${r.id}">
+          <div class="topic">${escapeHtml(r.topic)}</div>
+          <div class="meta">${statusBadge(r.status)} &middot; ${escapeHtml(r.email)} &middot; submitted ${escapeHtml(r.created_at)}</div>
+          ${r.result ? `<div class="result">${escapeHtml(r.result)}</div>` : ""}
+        </li>
+      `).join("");
+    }
+
+    async function refresh() {
+      try {
+        const resp = await fetch("/requests");
+        if (!resp.ok) throw new Error(`list failed: ${resp.status}`);
+        render(await resp.json());
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      submitBtn.disabled = true;
+      formError.hidden = true;
+      const topic = topicInput.value.trim();
+      const email = emailInput.value.trim();
+      try {
+        const resp = await fetch("/requests", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic, email }),
+        });
+        if (!resp.ok) {
+          const body = await resp.json().catch(() => ({}));
+          formError.textContent = body.detail || `Error ${resp.status}`;
+          formError.hidden = false;
+          return;
+        }
+        topicInput.value = "";
+        emailInput.value = "";
+        await refresh();
+      } catch (err) {
+        formError.textContent = "Network error - is the server running?";
+        formError.hidden = false;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    refresh();
+    setInterval(refresh, 3000);
+  </script>
+</body>
+</html>

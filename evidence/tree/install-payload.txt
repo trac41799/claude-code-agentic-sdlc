@@ -1,0 +1,79 @@
+﻿Folder PATH listing for volume Data
+Volume serial number is 0000000D 7CCF:9DE9
+D:\TRANSFER DATA\CODING\OPENCODE\FROAM-BENCH\GREENFIELD-WAVE\BE-WAVE\.CLAUDE
++---agents
+|       developer.md
+|       devops.md
+|       product-manager.md
+|       qa.md
+|       
++---rules
+|       agent-routing.md
+|       global-engineering.md
+|       
+\---skills
+    +---asdlc-wave-off
+    |       SKILL.md
+    |       
+    +---asdlc-wave-on
+    |       SKILL.md
+    |       
+    +---dev-agent-router
+    |       SKILL.md
+    |       
+    +---dev-feature-plan
+    |       SKILL.md
+    |       
+    +---dev-multi-agent
+    |       SKILL.md
+    |       
+    +---dev-tdd
+    |       SKILL.md
+    |       
+    +---devops-cicd
+    |       SKILL.md
+    |       
+    +---devops-git-guardrails
+    |       SKILL.md
+    |       
+    +---devops-ops
+    |       SKILL.md
+    |       
+    +---devops-setup-pre-commit
+    |       SKILL.md
+    |       
+    +---plan-protocol
+    |   |   SKILL.md
+    |   |   
+    |   \---assets
+    |           AGENTS-template.md
+    |           plan.mjs
+    |           plan.test.mjs
+    |           
+    +---pm-client-interview
+    |       SKILL.md
+    |       
+    +---pm-constitution-sync
+    |       SKILL.md
+    |       
+    +---pm-documentation
+    |       SKILL.md
+    |       
+    +---pm-epic-writing
+    |       SKILL.md
+    |       
+    +---pm-grill-with-docs
+    |       SKILL.md
+    |       
+    +---pm-project-status
+    |       SKILL.md
+    |       
+    +---pm-to-issues
+    |       SKILL.md
+    |       
+    +---qa-triage
+    |       SKILL.md
+    |       
+    \---web-publisher-publish
+            SKILL.md
+            

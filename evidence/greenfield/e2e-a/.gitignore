@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Runtime data (SQLite database lives in ./data)
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# Env / secrets
+.env
+.env.local

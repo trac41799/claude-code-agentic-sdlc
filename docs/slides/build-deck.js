@@ -405,6 +405,7 @@ function notes(s, t) { s.addNotes(t); }
   title(s, "Everything is in the repo", "Framework \u00B7 bench kit \u00B7 evidence \u00B7 demo guide \u2014 one link each, all public.");
   const links = [
     ["Recommended fork \u2014 framework \u00B7 plugin \u00B7 bench kit \u00B7 deck source", "trac41799/claude-code-agentic-sdlc"],
+    ["Raw evidence \u2014 trees + bench projects + validator", "evidence/ (README \u00B7 manifest \u00B7 validate.py)"],
     ["Benchmark evidence \u2014 12 runs, repro commands", "docs/benchmarks/BENCHMARK-SUMMARY.md"],
     ["Live demo run guide (\u226410 min)", "docs/demo/live-demo-guide.md"],
     ["Client setup \u2014 5 prompts for non-technical founders", "docs/guide/CLIENT-SETUP.md"],
@@ -414,14 +415,14 @@ function notes(s, t) { s.addNotes(t); }
     ["Client cases", "janet.care \u00B7 occuspan.com"],
     ["Tool stack", "claude.com \u00B7 github.com \u00B7 vercel.com \u00B7 supabase.com"],
   ];
-  let y = 2.2;
+  let y = 2.1;
   links.forEach(([t, u]) => {
-    card(s, 0.75, y, 11.85, 0.46, CARD, BORDER);
-    s.addText(t, { x: 1.0, y: y + 0.07, w: 6.2, h: 0.34, fontFace: B, fontSize: 13.5, bold: true, color: NAVY, margin: 0 });
-    s.addText(u, { x: 7.3, y: y + 0.07, w: 5.1, h: 0.34, fontFace: MONO, fontSize: 13, bold: true, color: "1F4FBF", align: "right", margin: 0 });
-    y += 0.5;
+    card(s, 0.75, y, 11.85, 0.44, CARD, BORDER);
+    s.addText(t, { x: 1.0, y: y + 0.06, w: 6.2, h: 0.32, fontFace: B, fontSize: 13, bold: true, color: NAVY, margin: 0 });
+    s.addText(u, { x: 7.3, y: y + 0.06, w: 5.1, h: 0.32, fontFace: MONO, fontSize: 12.5, bold: true, color: "1F4FBF", align: "right", margin: 0 });
+    y += 0.47;
   });
-  s.addText("Every number on the results slides reruns with one command from the bench kit.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
+  s.addText("Every number on the results slides reruns with one command from the bench kit.", { x: 0.75, y: 6.95, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Give this slide time: every artifact referenced here exists and is public.");
 }
 

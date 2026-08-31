@@ -1,0 +1,24 @@
+﻿Γ£ö AC-1: exact window math at a mid-list scroll position (3.4487ms)
+Γ£ö AC-2: window math at the top (scrollTop = 0) (0.2179ms)
+Γ£ö AC-3: window math at the maximum scroll position (bottom clamp) (0.1752ms)
+Γ£ö AC-3: over-large scrollTop clamps to the bottom window (0.1706ms)
+Γ£ö AC-4: empty items list returns { start: 0, end: 0 } (0.2262ms)
+Γ£ö AC-5: overscan clips end to items.length on a small list (0.2475ms)
+Γ£ö AC-5: overscan clips start to 0 on a small list (0.212ms)
+Γ£ö AC-1: window invariants hold across a spread of scrollTops (0.3521ms)
+Γ£ö AC-6 interleaving: rollback of one id leaves other pending likes intact (0.3271ms)
+Γ£ö AC-6 rollback removes only the target id (0.2984ms)
+Γ£ö AC-7 rollback of never-added id is a no-op on an empty set (0.4667ms)
+Γ£ö AC-7 rollback of never-added id leaves existing ids unchanged (0.1488ms)
+Γ£ö add returns new size and is idempotent (duplicate add keeps size 1) (0.1216ms)
+Γ£ö contains on an empty set is false (0.1028ms)
+Γ£ö set semantics: duplicate adds collapse, rollback fully removes the id (0.1078ms)
+Γ£ö mixed ids stay independent across add and rollback at scale (0.3565ms)
+Γä╣ tests 16
+Γä╣ suites 0
+Γä╣ pass 16
+Γä╣ fail 0
+Γä╣ cancelled 0
+Γä╣ skipped 0
+Γä╣ todo 0
+Γä╣ duration_ms 213.783

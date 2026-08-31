@@ -1,0 +1,285 @@
+﻿Folder PATH listing for volume Data
+Volume serial number is 0000005E 7CCF:9DE9
+D:\TRANSFER DATA\CODING\CLAUDE-CODE-AGENTIC-SDLC\TEMPLATES\PROJECT-SCAFFOLD
+|   .gitignore
+|   CLAUDE.md
+|   FOLDER-STRUCTURE.md
+|   README.md
+|   
++---.claude
+|   +---rules
+|   |       global-engineering.md
+|   |       
+|   \---skills
+|       \---PH-skill-name
+|               SKILL.md
+|               
++---.specify
+|   \---extensions
+|       \---git
+|               git-config.yml
+|               
++---agents
+|   +---developer
+|   |   \---context
+|   |           persona.md
+|   |           
+|   +---devops
+|   |   \---context
+|   |           persona.md
+|   |           
+|   +---product-manager
+|   |   \---context
+|   |           persona.md
+|   |           
+|   \---qa
+|       \---context
+|               persona.md
+|               
++---content
+|   +---content-calendar
+|   |       PH-content-calendar.md
+|   |       
+|   \---topics
+|       \---YYYY-MM-DD-PH-topic-slug
+|               blog.md
+|               brief.md
+|               seo.md
+|               social-facebook.md
+|               social-linkedin.md
+|               social-twitter.md
+|               
++---context
+|   +---general-project-agent-context
+|   |       blog-index.md
+|   |       publish-log.md
+|   |       
+|   \---source-material
+|       \---PH-research-topic
+|               PH-notes.md
+|               
++---docs
+|   |   project-status.html
+|   |   
+|   +---architecture
+|   |   |   README.md
+|   |   |   
+|   |   +---plans
+|   |   |       PH-plan-name.md
+|   |   |       
+|   |   +---readings
+|   |   |       PH-reading-topic.md
+|   |   |       
+|   |   +---templates
+|   |   |       PH-template-name.md
+|   |   |       
+|   |   \---workflows
+|   |           PH-workflow-name.md
+|   |           
+|   +---archive
+|   |       README.md
+|   |       
+|   +---brand
+|   |       style-guide.md
+|   |       
+|   +---engineering
+|   |   +---changes
+|   |   |       YYYY-MM-DD-PH-change.md
+|   |   |       
+|   |   \---prompts
+|   |           PH-setup-prompt.md
+|   |           
+|   +---features
+|   |   \---PH-feature-slug
+|   |           design.md
+|   |           proposal.md
+|   |           
+|   +---plans
+|   |       PH-plan-name.md
+|   |       
+|   +---product
+|   |       epic-status.md
+|   |       epics.md
+|   |       product.md
+|   |       
+|   \---qa
+|           PH-regression-report.md
+|           qa-plan.md
+|           
++---resources
+|       README.md
+|       
+\---website
+    |   .env.local.example
+    |   README.md
+    |   vitest.config.mts
+    |   vitest.setup.ts
+    |   
+    +---app
+    |   |   providers.tsx
+    |   |   robots.ts
+    |   |   sitemap.ts
+    |   |   
+    |   +---(auth)
+    |   |   +---login
+    |   |   |       page.tsx
+    |   |   |       
+    |   |   \---signup
+    |   |           page.tsx
+    |   |           
+    |   +---api
+    |   |   +---chat
+    |   |   |       route.ts
+    |   |   |       
+    |   |   +---notifications
+    |   |   |   |   route.ts
+    |   |   |   |   
+    |   |   |   \---[id]
+    |   |   |       \---read
+    |   |   |               route.ts
+    |   |   |               
+    |   |   +---sessions
+    |   |   |   |   route.ts
+    |   |   |   |   
+    |   |   |   \---[id]
+    |   |   |       |   route.ts
+    |   |   |       |   
+    |   |   |       \---messages
+    |   |   |               route.ts
+    |   |   |               
+    |   |   \---upload
+    |   |       \---signed-url
+    |   |               route.ts
+    |   |               
+    |   +---auth
+    |   |   \---callback
+    |   |           route.ts
+    |   |           
+    |   +---chat
+    |   |       page.tsx
+    |   |       
+    |   \---dashboard
+    |           layout.tsx
+    |           loading.tsx
+    |           
+    +---components
+    |   +---auth
+    |   |       LoginForm.tsx
+    |   |       LogoutButton.tsx
+    |   |       SignupForm.tsx
+    |   |       
+    |   +---chat
+    |   |       ChatInput.test.tsx
+    |   |       ChatInput.tsx
+    |   |       ChatLayout.tsx
+    |   |       ChatWindow.tsx
+    |   |       ChatWindowInner.tsx
+    |   |       elements.tsx
+    |   |       EmptyState.tsx
+    |   |       LoadingSkeleton.tsx
+    |   |       MessageBubble.test.tsx
+    |   |       MessageBubble.tsx
+    |   |       MessageList.tsx
+    |   |       SessionItem.tsx
+    |   |       SessionSidebar.tsx
+    |   |       StreamingIndicator.tsx
+    |   |       ToolCallBlock.tsx
+    |   |       
+    |   +---dashboard
+    |   |       Breadcrumbs.tsx
+    |   |       DashboardLayout.tsx
+    |   |       Header.tsx
+    |   |       MobileDrawer.tsx
+    |   |       Sidebar.tsx
+    |   |       SidebarItem.tsx
+    |   |       
+    |   +---editor
+    |   |       MarkdownEditor.tsx
+    |   |       MDXEditorFull.tsx
+    |   |       
+    |   +---markdown
+    |   |       CodeBlock.tsx
+    |   |       MarkdownRenderer.tsx
+    |   |       
+    |   +---notifications
+    |   |       NotificationBell.tsx
+    |   |       NotificationItem.tsx
+    |   |       NotificationList.tsx
+    |   |       
+    |   +---seo
+    |   |       JsonLd.tsx
+    |   |       
+    |   +---ui
+    |   |   \---skeletons
+    |   |           AvatarSkeleton.tsx
+    |   |           CardSkeleton.tsx
+    |   |           index.ts
+    |   |           PageHeaderSkeleton.tsx
+    |   |           TableSkeleton.tsx
+    |   |           TextSkeleton.tsx
+    |   |           
+    |   \---upload
+    |           FilePreview.test.tsx
+    |           FilePreview.tsx
+    |           FileUpload.tsx
+    |           
+    +---docs
+    |   |   chat-qa-checklist.md
+    |   |   
+    |   +---markdown
+    |   |       setup-notes.md
+    |   |       
+    |   +---performance
+    |   |       patterns.md
+    |   |       
+    |   +---seo
+    |   |       page-metadata-examples.md
+    |   |       
+    |   \---upload
+    |           setup-notes.md
+    |           
+    +---lib
+    |   +---ai
+    |   |       gateway.test.ts
+    |   |       
+    |   +---auth
+    |   |       actions.ts
+    |   |       guards.ts
+    |   |       
+    |   +---chat
+    |   |       constants.ts
+    |   |       queries.test.ts
+    |   |       queries.ts
+    |   |       store.test.ts
+    |   |       store.ts
+    |   |       
+    |   +---dashboard
+    |   |       nav-config.ts
+    |   |       
+    |   +---markdown
+    |   |       plugins.ts
+    |   |       
+    |   +---notifications
+    |   |       queries.ts
+    |   |       
+    |   +---perf
+    |   |       dynamic.ts
+    |   |       
+    |   +---seo
+    |   |       fonts.ts
+    |   |       metadata.ts
+    |   |       structured-data.ts
+    |   |       
+    |   +---supabase
+    |   |       client.ts
+    |   |       server.ts
+    |   |       
+    |   \---upload
+    |           config.ts
+    |           hooks.ts
+    |           
+    \---supabase
+        \---migrations
+                20260522000000_chat_tables.sql
+                20260524000000_notifications_table.sql
+                

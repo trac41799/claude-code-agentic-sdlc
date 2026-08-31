@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Status — Infinite (FE-only)</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f0f2f5; color: #1c1e21; margin: 0; padding: 24px; }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: #65676b; margin-bottom: 16px; font-size: 14px; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .badge.done { background: #d9fbe6; color: #0b6b3a; }
+  .card { background: #fff; border: 1px solid #e4e6eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .card h2 { font-size: 16px; margin: 0 0 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e4e6eb; }
+  th { color: #65676b; font-weight: 600; }
+  .ok { color: #0b6b3a; font-weight: 700; }
+  code { background: #f0f2f5; border-radius: 4px; padding: 1px 5px; font-size: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Project Status — Infinite</h1>
+  <div class="sub">FE-only activity feed: virtualized rendering + optimistic likes · Updated 2026-08-29</div>
+
+  <div class="card">
+    <span class="badge done">✅ Epic complete</span>
+    <span class="badge done">QA: PASS</span>
+  </div>
+
+  <div class="card">
+    <h2>Deliverables</h2>
+    <table>
+      <tr><th>File</th><th>Exports / purpose</th><th>Status</th></tr>
+      <tr><td><code>engine.js</code></td><td><code>computeVisibleRange</code>, <code>OptimisticLikeSet</code></td><td class="ok">✅</td></tr>
+      <tr><td><code>demo.html</code></td><td>10,000-item virtualized feed, optimistic likes (30% simulated failure)</td><td class="ok">✅</td></tr>
+      <tr><td><code>tests/engine.test.js</code></td><td>Window-math / clamping / overscan tests</td><td class="ok">✅</td></tr>
+      <tr><td><code>tests/optimistic.test.js</code></td><td>OptimisticLikeSet interleaving tests</td><td class="ok">✅</td></tr>
+      <tr><td><code>tests/index.js</code></td><td>Entry point for <code>node --test tests/</code> on Windows</td><td class="ok">✅</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Acceptance</h2>
+    <table>
+      <tr><th>#</th><th>Criterion</th><th>Result</th></tr>
+      <tr><td>1</td><td><code>node --test tests/</code> passes</td><td class="ok">22/22</td></tr>
+      <tr><td>2</td><td><code>engine.js</code> dependency-free (no <code>import</code>/<code>require</code>)</td><td class="ok">✅</td></tr>
+      <tr><td>3</td><td><code>demo.html</code> renders windowed rows (DOM &lt;&lt; 10,000)</td><td class="ok">11–14 rows observed</td></tr>
+      <tr><td>4</td><td>Optimistic-like interleaving holds (rollback never disturbs another id)</td><td class="ok">✅</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Artifacts</h2>
+    <p>Spec: <code>.specify/features/infinite-feed/spec.md</code> · Plan: <code>.specify/features/infinite-feed/impl-plan.md</code> · Tasks: <code>.specify/features/infinite-feed/tasks.md</code> · QA: <code>docs/qa/qa-plan.md</code>, <code>docs/qa/qa-regression-report.md</code></p>
+  </div>
+</main>
+</body>
+</html>

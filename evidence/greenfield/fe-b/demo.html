@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Activity Feed — virtualized + optimistic likes</title>
+<style>
+  :root {
+    --row-height: 40px;
+    --accent: #e0245e;
+    --accent-soft: #fde8ef;
+    --border: #e4e6eb;
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #1c1e21;
+    --muted: #65676b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+  header {
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 16px;
+  }
+  header h1 { font-size: 20px; margin: 0 0 4px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  #stats {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px 10px 0 0;
+    padding: 8px 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  #stats b { color: var(--text); font-weight: 600; }
+  #feed {
+    width: 100%;
+    max-width: 640px;
+    height: 60vh;
+    min-height: 300px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 0 0 10px 10px;
+    overflow-y: scroll;
+    overflow-anchor: none;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+    contain: strict;
+  }
+  #spacer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px;
+    pointer-events: none;
+  }
+  #window {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    will-change: transform;
+  }
+  .row {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: var(--row-height);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card);
+    font-size: 13px;
+  }
+  .row .avatar {
+    flex: 0 0 28px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    user-select: none;
+  }
+  .row .body {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .row .body .name { font-weight: 600; }
+  .row .body .ts { color: var(--muted); margin-left: 6px; font-size: 11px; }
+  .row .like {
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, transform 0.08s;
+    line-height: 1;
+  }
+  .row .like:hover { border-color: var(--accent); color: var(--accent); }
+  .row .like:active { transform: scale(0.94); }
+  .row .like.liked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .row .like.flash-ok { background: #1a9e5c; border-color: #1a9e5c; color: #fff; }
+  .row .like.flash-fail { background: #fff; border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Infinite Activity Feed</h1>
+    <p>10,000 items · virtualized rendering (visible window + overscan) · optimistic likes, 30% simulated failure</p>
+  </header>
+
+  <div id="stats">
+    <span>DOM rows: <b id="stat-rows">0</b></span>
+    <span>Window: <b id="stat-window">–</b></span>
+    <span>Liked (optimistic): <b id="stat-liked">0</b></span>
+    <span>Scroll: <b id="stat-scroll">0px</b></span>
+  </div>
+
+  <div id="feed" role="feed" aria-busy="false" aria-label="Infinite activity feed">
+    <div id="spacer"></div>
+    <div id="window"></div>
+  </div>
+
+  <script src="engine.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var ROW_HEIGHT = 40;
+      var OVERSCAN = 3;
+      var FAIL_RATE = 0.3;
+      var ITEM_COUNT = 10000;
+
+      var NAMES = ['Ada', 'Ben', 'Cleo', 'Dana', 'Eli', 'Fay', 'Gus', 'Ida', 'Jin', 'Kai'];
+      var VERBS = ['shipped', 'commented on', 'liked', 'merged', 'deployed', 'reviewed', 'drafted', 'released'];
+
+      function makeItems(count) {
+        var items = [];
+        for (var i = 0; i < count; i++) {
+          var name = NAMES[i % NAMES.length];
+          var verb = VERBS[i % VERBS.length];
+          items.push({
+            id: 'post-' + i,
+            name: name + ' ' + (1 + Math.floor(i / NAMES.length)),
+            text: verb + ' update #' + i,
+            ts: (i % 60) + 'm',
+            color: 'hsl(' + ((i * 47) % 360) + ', 55%, 52%)'
+          });
+        }
+        return items;
+      }
+
+      var items = makeItems(ITEM_COUNT);
+      var likes = new InfiniteFeed.OptimisticLikeSet();
+
+      var feed = document.getElementById('feed');
+      var spacer = document.getElementById('spacer');
+      var windowEl = document.getElementById('window');
+
+      var statRows = document.getElementById('stat-rows');
+      var statWindow = document.getElementById('stat-window');
+      var statLiked = document.getElementById('stat-liked');
+      var statScroll = document.getElementById('stat-scroll');
+
+      var rendered = new Map(); // index -> row element
+      var rafPending = false;
+
+      spacer.style.height = (items.length * ROW_HEIGHT) + 'px';
+      spacer.style.width = '1px';
+
+      function rowElFor(item, index, start) {
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.dataset.index = index;
+        row.style.top = ((index - start) * ROW_HEIGHT) + 'px';
+
+        var avatar = document.createElement('span');
+        avatar.className = 'avatar';
+        avatar.style.background = item.color;
+        avatar.textContent = item.name.charAt(0);
+
+        var body = document.createElement('span');
+        body.className = 'body';
+        var name = document.createElement('span');
+        name.className = 'name';
+        name.textContent = item.name;
+        var ts = document.createElement('span');
+        ts.className = 'ts';
+        ts.textContent = item.ts;
+        body.appendChild(name);
+        body.appendChild(document.createTextNode(' ' + item.text));
+        body.appendChild(ts);
+
+        var btn = document.createElement('button');
+        btn.className = 'like';
+        btn.type = 'button';
+        btn.addEventListener('click', function () {
+          onLikeClick(item.id, btn);
+        });
+
+        row.appendChild(avatar);
+        row.appendChild(body);
+        row.appendChild(btn);
+        return row;
+      }
+
+      function setButtonState(btn, id) {
+        var liked = likes.contains(id);
+        btn.classList.toggle('liked', liked);
+        btn.textContent = liked ? '♥ Liked' : '♡ Like';
+        btn.setAttribute('aria-pressed', String(liked));
+      }
+
+      function flash(btn, kind) {
+        btn.classList.add('flash-' + kind);
+        setTimeout(function () {
+          btn.classList.remove('flash-' + kind);
+        }, 500);
+      }
+
+      function onLikeClick(id, btn) {
+        var op;
+        if (likes.contains(id)) {
+          likes.rollback(id); // optimistic unlike
+          op = 'unlike';
+        } else {
+          likes.add(id); // optimistic like
+          op = 'like';
+        }
+        setButtonState(btn, id);
+        updateStats();
+
+        var delay = 150 + Math.random() * 350;
+        setTimeout(function () {
+          var failed = Math.random() < FAIL_RATE;
+          if (failed) {
+            // Revert the optimistic change for THIS operation only. The
+            // OptimisticLikeSet's per-id counter keeps other pending ops intact.
+            if (op === 'like') { likes.rollback(id); } else { likes.add(id); }
+          }
+          setButtonState(btn, id);
+          flash(btn, failed ? 'fail' : 'ok');
+          updateStats();
+        }, delay);
+      }
+
+      function render() {
+        var viewportHeight = feed.clientHeight;
+        var range = InfiniteFeed.computeVisibleRange(feed.scrollTop, viewportHeight, items, ROW_HEIGHT, OVERSCAN);
+        var start = range.start;
+        var end = range.end;
+
+        windowEl.style.transform = 'translateY(' + (start * ROW_HEIGHT) + 'px)';
+
+        // Drop rows that fell out of the window.
+        for (var it = rendered.keys(); ; ) {
+          var step = it.next();
+          if (step.done) break;
+          var idx = step.value;
+          if (idx < start || idx >= end) {
+            rendered.get(idx).remove();
+            rendered.delete(idx);
+          }
+        }
+
+        // Recycle or create rows for the current window.
+        for (var i = start; i < end; i++) {
+          var el = rendered.get(i);
+          if (!el) {
+            el = rowElFor(items[i], i, start);
+            windowEl.appendChild(el);
+            rendered.set(i, el);
+          } else {
+            el.style.top = ((i - start) * ROW_HEIGHT) + 'px';
+            setButtonState(el.querySelector('.like'), items[i].id);
+          }
+        }
+
+        statRows.textContent = rendered.size;
+        statWindow.textContent = start + ' – ' + end + ' of ' + items.length;
+        statScroll.textContent = Math.round(feed.scrollTop) + 'px';
+      }
+
+      function updateStats() {
+        statLiked.textContent = likes.size();
+      }
+
+      function requestRender() {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(function () {
+          rafPending = false;
+          render();
+        });
+      }
+
+      feed.addEventListener('scroll', requestRender);
+      window.addEventListener('resize', requestRender);
+
+      updateStats();
+      render();
+    })();
+  </script>
+</body>
+</html>

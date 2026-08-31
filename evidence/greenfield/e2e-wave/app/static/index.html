@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Request Pipeline</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --success-bg: #dcfce7;
+    --success-text: #166534;
+    --error-bg: #fee2e2;
+    --error-text: #991b1b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 16px 64px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 28px; }
+  header p { margin: 0 0 24px; color: var(--muted); }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  }
+
+  #submit-section label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  #submit-section input[type="text"],
+  #submit-section input[type="email"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    background: #fff;
+  }
+  #submit-section input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  #submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #submit-btn:hover { background: var(--accent-hover); }
+  #submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .form-message {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .form-message.success { background: var(--success-bg); color: var(--success-text); }
+  .form-message.error { background: var(--error-bg); color: var(--error-text); }
+  [hidden] { display: none !important; }
+
+  #list-section h2 { font-size: 20px; margin: 28px 0 12px; }
+  .empty-note { color: var(--muted); font-style: italic; }
+
+  .request-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  }
+  .request-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .request-id { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .request-topic { margin: 6px 0 2px; font-size: 16px; word-break: break-word; }
+  .request-meta { color: var(--muted); font-size: 13px; margin-bottom: 4px; word-break: break-word; }
+  .request-result { font-size: 14px; margin-top: 8px; }
+  .result-done {
+    color: var(--success-text);
+    background: var(--success-bg);
+    padding: 8px 10px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .result-failed {
+    color: var(--error-text);
+    background: var(--error-bg);
+    padding: 8px 10px;
+    border-radius: 8px;
+    word-break: break-word;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .status-queued { background: #e2e8f0; color: #475569; }
+  .status-processing { background: #fef3c7; color: #92400e; }
+  .status-done { background: var(--success-bg); color: var(--success-text); }
+  .status-failed { background: var(--error-bg); color: var(--error-text); }
+  .status-unknown { background: #f1f5f9; color: #334155; }
+
+  .status-processing::after {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 8px;
+    border: 2px solid rgba(146, 64, 14, 0.35);
+    border-top-color: #92400e;
+    border-radius: 50%;
+    vertical-align: -1px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Research Request Pipeline</h1>
+    <p>Submit a research topic and watch it progress live.</p>
+  </header>
+
+  <section id="submit-section" class="card">
+    <form id="request-form" novalidate>
+      <label for="topic">Research Topic</label>
+      <input type="text" id="topic" name="topic" placeholder="e.g. quantum error correction" required autocomplete="off">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+      <button type="submit" id="submit-btn">Submit Request</button>
+    </form>
+    <div id="form-message" class="form-message" role="status" hidden></div>
+  </section>
+
+  <section id="list-section">
+    <h2>Requests</h2>
+    <div id="request-list"></div>
+    <p id="list-empty" class="empty-note">No requests yet.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var form = document.getElementById('request-form');
+  var topicInput = document.getElementById('topic');
+  var emailInput = document.getElementById('email');
+  var submitBtn = document.getElementById('submit-btn');
+  var formMessage = document.getElementById('form-message');
+  var requestList = document.getElementById('request-list');
+  var listEmpty = document.getElementById('list-empty');
+
+  var cards = new Map();    // id -> card element
+  var watched = new Set();  // ids that currently have an EventSource open
+  var watchers = new Map(); // id -> EventSource instance
+
+  var STATUS_CLASS = {
+    queued: 'status-queued',
+    processing: 'status-processing',
+    done: 'status-done',
+    failed: 'status-failed'
+  };
+
+  function isTerminal(status) {
+    return status === 'done' || status === 'failed';
+  }
+
+  function setFormMessage(text, type) {
+    formMessage.textContent = text;
+    formMessage.className = 'form-message' + (type ? ' ' + type : '');
+    formMessage.hidden = !text;
+  }
+
+  function statusBadge(status) {
+    var badge = document.createElement('span');
+    badge.className = 'status-badge ' + (STATUS_CLASS[status] || 'status-unknown');
+    badge.textContent = status || 'unknown';
+    return badge;
+  }
+
+  function renderResult(el, req) {
+    if (req.status === 'done') {
+      el.className = 'request-result result-done';
+      el.textContent = (req.result != null && req.result !== '') ? req.result : 'Request completed.';
+    } else if (req.status === 'failed') {
+      el.className = 'request-result result-failed';
+      var reason = req.error || req.result || 'The request failed.';
+      el.textContent = 'Failed: ' + reason;
+    } else if (req.status === 'processing') {
+      el.className = 'request-result';
+      el.textContent = 'Processing…';
+    } else {
+      el.className = 'request-result';
+      el.textContent = 'Queued — waiting for a worker.';
+    }
+  }
+
+  function createCard(req) {
+    var card = document.createElement('article');
+    card.className = 'request-card';
+    card.dataset.id = req.id;
+    card.dataset.status = req.status || '';
+
+    var header = document.createElement('div');
+    header.className = 'request-header';
+
+    var idEl = document.createElement('span');
+    idEl.className = 'request-id';
+    idEl.textContent = 'Request #' + req.id;
+
+    var badge = statusBadge(req.status);
+
+    header.appendChild(idEl);
+    header.appendChild(badge);
+
+    var topicEl = document.createElement('h3');
+    topicEl.className = 'request-topic';
+    topicEl.textContent = req.topic;
+
+    var meta = document.createElement('div');
+    meta.className = 'request-meta';
+    meta.textContent = 'To: ' + req.email;
+
+    var resultEl = document.createElement('div');
+    resultEl.className = 'request-result';
+    renderResult(resultEl, req);
+
+    card.appendChild(header);
+    card.appendChild(topicEl);
+    card.appendChild(meta);
+    card.appendChild(resultEl);
+
+    return card;
+  }
+
+  function updateCard(card, req) {
+    card.dataset.status = req.status || '';
+    var badge = card.querySelector('.status-badge');
+    if (badge) {
+      badge.textContent = req.status || 'unknown';
+      badge.className = 'status-badge ' + (STATUS_CLASS[req.status] || 'status-unknown');
+    }
+    var resultEl = card.querySelector('.request-result');
+    if (resultEl) renderResult(resultEl, req);
+  }
+
+  function closeWatch(id) {
+    var es = watchers.get(id);
+    if (es) {
+      es.close();
+      watchers.delete(id);
+    }
+    watched.delete(id);
+  }
+
+  function watchRequest(id) {
+    if (watched.has(id)) return; // never open a duplicate EventSource
+    watched.add(id);
+
+    var es;
+    try {
+      es = new EventSource('/requests/' + id + '/events');
+    } catch (err) {
+      watched.delete(id);
+      return;
+    }
+    watchers.set(id, es);
+
+    // The backend frames each event as `event: status` + `data: {...}`.
+    es.addEventListener('status', function (evt) {
+      var payload;
+      try {
+        payload = JSON.parse(evt.data);
+      } catch (err) {
+        console.error('Could not parse SSE payload for request ' + id, err);
+        return;
+      }
+      var req = payload.request || { id: id, status: payload.status };
+      var card = cards.get(id);
+      if (card) updateCard(card, req);
+      // No further transitions are possible once terminal; free the socket.
+      if (isTerminal(req.status)) closeWatch(id);
+    });
+
+    es.onerror = function () {
+      // EventSource reconnects automatically; the polling fallback reconciles.
+    };
+  }
+
+  function renderRequests(requests) {
+    var seen = new Set();
+    requests.forEach(function (r) { seen.add(r.id); });
+
+    // Remove cards whose request no longer exists.
+    cards.forEach(function (card, id) {
+      if (!seen.has(id)) {
+        card.remove();
+        cards.delete(id);
+        closeWatch(id);
+      }
+    });
+
+    requests.forEach(function (req) {
+      var card = cards.get(req.id);
+      if (!card) {
+        card = createCard(req);
+        cards.set(req.id, card);
+        requestList.appendChild(card);
+      } else {
+        updateCard(card, req);
+      }
+    });
+
+    if (requests.length === 0) {
+      listEmpty.textContent = 'No requests yet.';
+      listEmpty.hidden = false;
+    } else {
+      listEmpty.hidden = true;
+    }
+
+    requests.forEach(function (req) {
+      if (isTerminal(req.status)) {
+        // Polling reconciles SSE events we may have missed (incl. terminal).
+        closeWatch(req.id);
+      } else {
+        watchRequest(req.id);
+      }
+    });
+  }
+
+  async function loadRequests() {
+    try {
+      var resp = await fetch('/requests');
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      var requests = await resp.json();
+      renderRequests(requests);
+    } catch (err) {
+      if (cards.size === 0) {
+        listEmpty.textContent = 'Could not load requests from the server.';
+        listEmpty.hidden = false;
+      }
+      console.error('Failed to load requests:', err);
+    }
+  }
+
+  form.addEventListener('submit', async function (evt) {
+    evt.preventDefault();
+    setFormMessage('', null);
+
+    var topic = topicInput.value.trim();
+    var email = emailInput.value.trim();
+
+    if (!topic) {
+      setFormMessage('Please enter a research topic.', 'error');
+      return;
+    }
+    if (!email || email.indexOf('@') === -1) {
+      setFormMessage('Please enter a valid email address.', 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    try {
+      var resp = await fetch('/requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topic, email: email })
+      });
+      var data = {};
+      try { data = await resp.json(); } catch (e) { /* non-JSON body */ }
+
+      if (resp.ok) {
+        setFormMessage('Request submitted! Status: ' + (data.status || 'queued') + '.', 'success');
+        topicInput.value = '';
+        emailInput.value = '';
+        loadRequests();
+      } else if (resp.status === 400) {
+        setFormMessage('Invalid request: ' + (data.detail || 'check your topic and email.'), 'error');
+      } else if (resp.status === 422) {
+        setFormMessage('Missing required fields (topic and email).', 'error');
+      } else {
+        setFormMessage('Submission failed (HTTP ' + resp.status + ').', 'error');
+      }
+    } catch (err) {
+      setFormMessage('Network error: could not reach the server.', 'error');
+      console.error('Submit failed:', err);
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // Initial load + polling fallback so missed SSE events are reconciled.
+  loadRequests();
+  setInterval(loadRequests, 5000);
+})();
+</script>
+</body>
+</html>

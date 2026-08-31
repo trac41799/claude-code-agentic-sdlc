@@ -21,6 +21,24 @@ shutdown) minus the token bucket, so it finishes comfortably on stage.
 Greenfield BE: one process, zero accounts, offline-safe, and it **is** the
 benchmark star — the numbers on the results slide come from this exact shape.
 
+## Where the devops lane is (and why it's not in this demo)
+
+The devops agent owns **CI/CD, Vercel operations, pre-commit checks, and git
+guardrails** (`devops-cicd` · `devops-ops` · `devops-setup-pre-commit` ·
+`devops-git-guardrails`). Its lanes fire **only against live targets** — CI runs
+when a PR is pushed; `vercel ls`/`logs` need a real deployment. This demo is
+offline-safe by design, so devops's work shows up as:
+
+- the branch-protection + `ci.yml` conversation after the PR is opened (ask the
+  team: "add CI like devops-cicd" and it writes the workflow, secrets list, and
+  branch-protection steps),
+- on a real project: preview deploys per PR, the <60-second rollback procedure,
+  and the guardrails that block `push --force` / `add .` / `reset --hard`.
+
+The benchmarks measured the same offline lanes — devops was never exercised in
+the lab either; its claims are VERIFIED on live client projects, not in the
+bench.
+
 ## Before the talk (prep, ~20 min once)
 
 - [ ] `claude` CLI installed and authenticated (`claude doctor` passes)

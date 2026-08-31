@@ -341,7 +341,8 @@ function notes(s, t) { s.addNotes(t); }
     s.addText(l, { x: 7.0, y: ly, w: 5.6, h: 0.3, fontFace: b ? B : MONO, fontSize: 13, bold: b, color: b ? (l.startsWith("B ") ? "B91C1C" : GREEND) : TXT, margin: 0 });
     ly += 0.31;
   });
-  s.addText("Deliverables are the difference: the framework arm left a traceability trail \u2014 and finished 4.2\u00D7 faster.", { x: 0.75, y: 6.6, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
+  s.addText("Deliverables are the difference: the framework arm left a traceability trail \u2014 and finished 4.2\u00D7 faster.", { x: 0.75, y: 6.5, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, bold: true, color: NAVY });
+  s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 60s rollback) fire on live projects; a lab bench never exercises them.", { x: 0.75, y: 6.88, w: 11.85, h: 0.35, fontFace: B, fontSize: 12, italic: true, color: MUT });
   notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
 }
 // ============ 13 · BENCHMARK (MEASURED MATRIX) ============
@@ -387,21 +388,101 @@ function notes(s, t) { s.addNotes(t); }
     ["Client setup \u2014 5 prompts for non-technical founders", "github.com/trac41799/claude-code-agentic-sdlc/blob/main/docs/guide/CLIENT-SETUP.md"],
     ["Benchmark product \u2014 FE (froam)", "github.com/trac41799/froam-journey-platform-fe"],
     ["Benchmark product \u2014 BE (froam)", "github.com/trac41799/travelbuddy-agentic-be"],
+    ["v1 (Infinite Leverage) \u2014 public history, commit tree", "github.com/talentedgeai/infinite-leverage"],
     ["Client cases", "janet.care \u00B7 occuspan.com"],
     ["Tool stack", "claude.com \u00B7 github.com \u00B7 vercel.com \u00B7 supabase.com"],
   ];
-  let y = 2.35;
+  let y = 2.25;
   links.forEach(([t, u]) => {
-    card(s, 0.75, y, 11.85, 0.5, CARD, BORDER);
-    s.addText(t, { x: 1.0, y: y + 0.08, w: 6.0, h: 0.35, fontFace: B, fontSize: 14, bold: true, color: NAVY, margin: 0 });
-    s.addText(u, { x: 7.1, y: y + 0.08, w: 5.3, h: 0.35, fontFace: MONO, fontSize: 13, color: "2563EB", align: "right", margin: 0 });
-    y += 0.56;
+    card(s, 0.75, y, 11.85, 0.46, CARD, BORDER);
+    s.addText(t, { x: 1.0, y: y + 0.06, w: 6.0, h: 0.34, fontFace: B, fontSize: 13, bold: true, color: NAVY, margin: 0 });
+    s.addText(u, { x: 7.1, y: y + 0.06, w: 5.3, h: 0.34, fontFace: MONO, fontSize: 12, color: "2563EB", align: "right", margin: 0 });
+    y += 0.5;
   });
-  s.addText("Every number on the results slides reruns with one command from the bench kit \u2014 same model, same frozen briefs, non-merge branches.", { x: 0.75, y: 6.7, w: 11.85, h: 0.45, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
+  s.addText("Every number on the results slides reruns with one command from the bench kit \u2014 same model, same frozen briefs, non-merge branches.", { x: 0.75, y: 6.75, w: 11.85, h: 0.4, fontFace: B, fontSize: NOTE, italic: true, color: MUT });
   notes(s, "Give this slide time: every artifact referenced here exists and is public.");
 }
 
-// ============ 15 · GAPS + CLOSE ============
+// ============ 15 · THE ORIGIN (V1) ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "History");
+  title(s, "v1 \u2014 the fully automated agent-team", "\u201CInfinite Leverage\u201D (2026) \u00B7 reconstructed from the public commit tree.");
+  card(s, 0.75, 2.3, 5.85, 3.75, "FBF3E2", AMBERD);
+  s.addText("THE ORIGINAL SCOPE", { x: 1.05, y: 2.5, w: 5.25, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: "7A5C00" });
+  const scope = [
+    "8 agents \u2014 dev team + marketing team",
+    "  product-manager \u00B7 developer \u00B7 devops \u00B7 qa",
+    "  web-publisher \u00B7 writer \u00B7 designer \u00B7 email-marketer",
+    "  (+ marketing-strategist via create-agent)",
+    "Global install \u2014 ~/.claude/ agents, hooks,",
+    "  skills, scheduled-tasks via init/onboard/patch",
+    "62 workflow skills, zipped per agent",
+    "Settings: Bash(\u002A) grant \u00B7 acceptEdits default",
+  ];
+  let sy = 3.0;
+  scope.forEach((l) => {
+    s.addText(l, { x: 1.05, y: sy, w: 5.3, h: 0.3, fontFace: MONO, fontSize: 12, color: "4A3A00", margin: 0 });
+    sy += 0.32;
+  });
+  card(s, 6.85, 2.3, 5.75, 3.75, "EAF0FB", MID);
+  s.addText("ROUTINES \u2014 NO HUMAN IN THE LOOP", { x: 7.15, y: 2.5, w: 5.15, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: NAVY });
+  const sched = [
+    "pm-daily-plan         weekdays 07:03  auto-approve",
+    "pm-standup-compile    weekdays 18:07  + PR",
+    "pm-eod-summary        weekdays 18:37",
+    "pm-weekly-rag         Fridays 17:07   + PR",
+    "writer-weekly         Mondays 09:03   brief \u2192 blog.md",
+    "designer-weekly       Tuesdays 09:03  blog \u2192 hero.webp",
+    "web-publisher-weekly  Wednesdays 09:03 build + index",
+    "email-marketer-weekly Thursdays 10:03 newsletter",
+    "devops-daily health   daily 06:00",
+  ];
+  let ty = 3.0;
+  sched.forEach((l) => {
+    s.addText(l, { x: 7.15, y: ty, w: 5.25, h: 0.27, fontFace: MONO, fontSize: 11, color: TXT, margin: 0 });
+    ty += 0.29;
+  });
+  s.addText("10 durable CronCreate routines \u2192 RemoteTrigger (cloud-persistent) \u00B7 + hooks: pre-bash \u00B7 prompt-submit \u00B7 SessionStart/End \u00B7 usage-context.py \u00B7 telemetry \u2192 gh \u2192 Supabase \u00B7 SessionStart auto-update", { x: 7.15, y: 5.65, w: 5.25, h: 0.55, fontFace: B, fontSize: 11.5, italic: true, color: MUT });
+  tag(s, 0.75, 6.3, "VERIFIED");
+  s.addText("Commit trail: 5c89076 \u201C8 scheduled task templates using CronCreate\u201D (durable=true \u00B7 auto-expire 7 days) \u00B7 9291df3 \u00B7 b753023 \u00B7 a218b79 hooks \u00B7 fff7a9a telemetry \u00B7 e2d5d67 8 agent templates.", { x: 2.5, y: 6.33, w: 10.1, h: 0.4, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  notes(s, "The original pitch: an agent team that builds and markets, running overnight with no human. It worked \u2014 until the machine drifted.");
+}
+
+// ============ 16 · V1 VS V2 ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "History");
+  title(s, "v1 \u2192 v2: what changed, and why", "Same goal \u2014 leverage. Different trust model.");
+  const rows = [
+    ["Install surface", "~/.claude/ global \u2014 zip + patch", "marketplace plugin \u00B7 per-project .claude/"],
+    ["Automation", "10 cron routines \u00B7 auto-approve \u00B7 overnight", "none \u2014 every gate is a human decision"],
+    ["Hooks", "6+ silent session/tool hooks", "zero in public \u2014 guardrails/pre-commit are project-scoped, on request"],
+    ["Permissions", "Bash(\u002A) grant \u00B7 acceptEdits default", "never touches permissions"],
+    ["Agents & lanes", "8\u20139 \u2014 dev + marketing (writer/designer/email)", "4 \u2014 engineering only; publishing folded into developer"],
+    ["Telemetry", "in-product \u00B7 auto-delivered \u00B7 human-hours", "split to a private plugin"],
+    ["Updates", "zip/patch + SessionStart auto-update", "marketplace \u00B7 lockstep \u00B7 doctor diffs versions"],
+  ];
+  s.addText("DIMENSION", { x: 0.95, y: 2.05, w: 2.0, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: MUT });
+  s.addText("V1 \u00B7 INFINITE LEVERAGE", { x: 3.05, y: 2.05, w: 4.5, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: "B91C1C", align: "center" });
+  s.addText("V2 \u00B7 AGENTIC SDLC", { x: 7.65, y: 2.05, w: 5.2, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: GREEND, align: "center" });
+  let ry = 2.28;
+  rows.forEach(([dim, v1, v2]) => {
+    card(s, 0.75, ry, 11.85, 0.5, CARD, BORDER);
+    s.addText(dim, { x: 0.95, y: ry + 0.08, w: 2.0, h: 0.34, fontFace: B, fontSize: 12, bold: true, color: NAVY, margin: 0 });
+    s.addText(v1, { x: 3.05, y: ry + 0.08, w: 4.5, h: 0.34, fontFace: B, fontSize: 11.5, color: "B91C1C", margin: 0 });
+    s.addText(v2, { x: 7.65, y: ry + 0.08, w: 4.85, h: 0.34, fontFace: B, fontSize: 11.5, color: GREEND, margin: 0 });
+    ry += 0.54;
+  });
+  s.addText("V1 trade-off: autonomy + overnight output \u2014 paid in machine drift, silent cost, frozen updates (2.5 months).  V2 trade-off: repeatability + trust \u2014 paid in no overnight automation, no marketing lanes.", { x: 0.75, y: 6.15, w: 9.5, h: 0.55, fontFace: B, fontSize: 13, bold: true, color: NAVY });
+  tag(s, 10.65, 6.22, "VERIFIED");
+  s.addText("Why v1 fails: global state drifts \u00B7 routines rot silently (7-day cron expiry, nobody re-registers) \u00B7 auto-approve + Bash(\u002A) erode trust \u00B7 zip/patch froze fixes \u00B7 telemetry-in-product privacy surface \u00B7 marketing lanes unmeasured.", { x: 0.75, y: 6.78, w: 11.85, h: 0.4, fontFace: B, fontSize: 11.5, italic: true, color: MUT });
+  notes(s, "The honest version of the story: v1 worked until it drifted. v2 gave up overnight autonomy for gates that hold.");
+}
+
+// ============ 17 · GAPS + CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };

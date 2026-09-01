@@ -1,0 +1,14 @@
+{
+  "case": "hard-greenfield",
+  "arms": [
+    "B",
+    "A"
+  ],
+  "reps": 5,
+  "started": "2026-09-01T09:27:42",
+  "status": "running",
+  "pin_env": {
+    "BENCH_CLI": "fcc-claude",
+    "BENCH_MODEL": "deepseek/deepseek-chat"
+  }
+}

@@ -1,0 +1,84 @@
+[
+  {
+    "case": "hard-greenfield",
+    "arm": "B",
+    "rep": 1,
+    "wall_min": 22.970099631945292,
+    "process": {
+      "terminal": "completed",
+      "is_error": false,
+      "errors": 0,
+      "turns": 66,
+      "spawned": 0,
+      "sub_failed": 0,
+      "compute_min": 22.8,
+      "wall_min": 23.0
+    },
+    "failed": false,
+    "cost_breakdown": {
+      "in": 107386,
+      "out": 123098,
+      "cache_read": 5707008,
+      "basis": "unknown",
+      "cents_k": "unverified"
+    },
+    "cost": 6.665263999999998,
+    "is_error": false,
+    "terminal": "completed",
+    "hidden_gate": {
+      "passed": 0,
+      "failed": 1,
+      "ok": false
+    },
+    "lint": {
+      "tool": "none",
+      "errors": null,
+      "count": 0
+    },
+    "coverage": {
+      "tool": "none",
+      "pct": "n/a"
+    }
+  },
+  {
+    "case": "hard-greenfield",
+    "arm": "A",
+    "rep": 1,
+    "wall_min": 18.075258227189384,
+    "process": {
+      "terminal": "completed",
+      "is_error": false,
+      "errors": 0,
+      "turns": 4,
+      "spawned": 2,
+      "sub_failed": 0,
+      "compute_min": 0.6,
+      "wall_min": 18.1
+    },
+    "failed": false,
+    "cost_breakdown": {
+      "in": 1739,
+      "out": 1059,
+      "cache_read": 619392,
+      "basis": "unknown",
+      "cents_k": "unverified"
+    },
+    "cost": 7.7297579999999995,
+    "is_error": false,
+    "terminal": "completed",
+    "hidden_gate": {
+      "passed": 0,
+      "failed": 1,
+      "ok": false
+    },
+    "lint": {
+      "tool": "none",
+      "errors": null,
+      "count": 0
+    },
+    "coverage": {
+      "tool": "none",
+      "pct": "n/a"
+    }
+  }
+]

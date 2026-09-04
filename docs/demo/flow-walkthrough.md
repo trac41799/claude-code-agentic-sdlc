@@ -5,6 +5,11 @@ DEVELOPER·QA·DEVOPS). Use this file to present the diagram confidently and to
 answer whatever the audience throws at you. Cite the deck's evidence slide
 numbers where noted.
 
+> **Slide numbers below refer to the 20-slide deck**
+> (`docs/slides/Agentic-SDLC-Tech-Audience.pptx`). The 9-slide compact deck
+> (`-COMPACT.pptx`) has no 1:1 slide mapping — re-anchor the numbered cites
+> before presenting from it.
+
 The diagram tells one story: **the human decides, the team executes, gates
 hold.** Everything across the middle lane is produced by agents; everything
 that crosses the top lane requires a human.
@@ -77,7 +82,7 @@ you'd want to be selling: the discipline, not magic. Encourage a mental model:
 A: The gates, not the orchestration. Spec-first, test-first, QA-before-merge —
 each is an auditable artifact on disk, not a hidden pipeline state. You can
 read the spec, the plan, the task list, and the QA report after every run
-(see docs/specs/ in a project). Reproducibility beats cleverness here.
+(see `.specify/features/{slug}/` and `docs/qa/` in a project). Reproducibility beats cleverness here.
 
 **Q4. "How does this prevent context loss between sessions?"**
 A: The artifacts ARE the context. The spec, plan, tasks, and QA report live in

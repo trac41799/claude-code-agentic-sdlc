@@ -1,8 +1,8 @@
 # Global Engineering Rules
 <!-- 
-  These rules apply to every project on this machine.
-  PROMOTE to ~/.claude/rules/global-engineering.md on each team member's machine
-  so they apply across all repos, not just this one.
+  These rules apply to every project in which this file is installed.
+  `/asdlc-project` and `/asdlc-adopt` copy it into each project's `.claude/rules/`.
+  Nothing here is ever installed globally — v2 hard rule.
 -->
 
 ## Git discipline
@@ -48,7 +48,9 @@
 
 ## Supabase
 
-The Supabase MCP plugin is installed globally. When any task involves Supabase (database queries, auth, storage, edge functions, migrations, or RLS policies):
+The Supabase MCP server is configured at the user level by `/asdlc-tools` (or
+already present in `~/.claude.json`). When any task involves Supabase (database
+queries, auth, storage, edge functions, migrations, or RLS policies):
 - Use the Supabase MCP tools (`mcp__supabase__*`) — do not use raw `curl`, `psql`, or Supabase CLI calls unless MCP tools are unavailable.
 - If not authenticated, call `mcp__supabase__authenticate` first and complete the flow via `mcp__supabase__complete_authentication` before proceeding.
 - Never hardcode Supabase URLs, anon keys, or service role keys in code — read them from environment variables.

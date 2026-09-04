@@ -6,7 +6,7 @@ every gate fire in the terminal (spec → plan → RED → GREEN → QA).
 
 **Scenario chosen:** greenfield backend service, a trimmed slice of the
 benchmark's star case (GREENFIELD-3 · rate-limited SSE proxy). The full task
-measured **6.6 min · $1.08 · 24 tests** (framework) vs **27.4 min · $2.84 ·
+measured **6.5 min · $1.08 · 24 tests** (framework) vs **27.4 min · $2.84 ·
 22 tests · halted at max_turns** (bare) — same model, same brief. The live
 slice keeps the shape (SSE stream, broadcast, structured logging, clean
 shutdown) minus the token bucket, so it finishes comfortably on stage.

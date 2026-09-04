@@ -16,7 +16,7 @@ clean state or a new VM) is itself the best rehearsal.
 | Live demo script | `docs/demo/live-demo-guide.md` | ✓ (≤10 min scenario) |
 | Raw evidence bundle | `evidence/` (12 projects + sessions + trees) | ✓ — `python evidence/validate.py` → **12/12 claims reproduce** |
 | Gap analysis | `docs/slides/GAP-ANALYSIS.md` | ✓ |
-| Plugin | `plugin/` v2.9.0, marketplace tag `v2.9.0` | ✓ |
+| Plugin | `plugin/` v2.10.0, marketplace tag `v2.10.0` | ✓ |
 | Bench kit | `bench/` (brownfield + greenfield runners) | ✓ |
 | Client setup (non-technical) | `docs/guide/CLIENT-SETUP.md` | ✓ |
 
@@ -66,7 +66,7 @@ python evidence/validate.py        # reproduce the bench (needs pytest: pip inst
 - [ ] Both decks open in PowerPoint **on this machine** (or exported PDFs): the
       condensed deck for the talk, the 20-slide deck as backup appendices.
 - [ ] `claude plugin update agentic-sdlc@agentic-sdlc` → confirms you're on
-      `2.9.0` (show the version in case someone asks).
+      `2.10.0` (show the version in case someone asks).
 - [ ] Terminal windows staged: (1) repo folder (evidence path),
       (2) demo server pane (uvicorn, from the demo project), (3) curl pane.
 - [ ] Demo folder prepared (see `docs/demo/live-demo-guide.md` — the

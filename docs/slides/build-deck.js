@@ -1,4 +1,4 @@
-const pptxgen = require("C:/Users/mrtra/AppData/Local/Temp/opencode/svgconv/node_modules/pptxgenjs");
+const pptxgen = require("pptxgenjs");
 const pptx = new pptxgen();
 
 pptx.layout = "LAYOUT_WIDE";
@@ -368,7 +368,7 @@ function notes(s, t) { s.addNotes(t); }
   s.addText("Offline gates only \u2014 the devops lanes (CI \u00B7 Vercel ops \u00B7 rollback) fire on live projects, not in a lab bench.", { x: 0.75, y: 6.8, w: 11.85, h: 0.35, fontFace: B, fontSize: 14, color: "4B5563" });
   notes(s, "Verbatim bench-kit table. Read the B line out loud: halted at max_turns with more spent. The framework's value concentrates exactly here.");
 }
-// ============ 13 · BENCHMARK CASES & REPRODUCTION ============
+// ============ 14 · BENCHMARK CASES & REPRODUCTION ============
 {
   const s = pptx.addSlide();
   s.background = { color: WHITE };
@@ -605,7 +605,52 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Say the cost gap out loud BEFORE they ask — the wrong-model probe is the proof we don't hide. Exclusions: read the v1 lesson slide before they suggest 'just enable hooks'.");
 }
 
-// ============ 21 · GAPS + CLOSE ============
+// ============ 21 · OPEN POINTS → NEXT MOVES ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Roadmap \u00B7 next moves");
+  title(s, "Open points \u2192 committed moves", "Seven gaps we admit, seven fixes we're building \u2014 the post-meeting commitment list.");
+  card(s, 0.75, 2.25, 5.85, 4.6, "FBF3E2", AMBERD);
+  s.addText("OPEN POINTS", { x: 1.05, y: 2.45, w: 5.25, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: "7A5C00" });
+  const pts = [
+    ["COST", "No trusted metering, no budget"],
+    ["COMPARISON", "No arm vs another SDLC framework"],
+    ["METRICS", "N=1 cells, variance unmeasured"],
+    ["EVIDENCE", "Handoffs lean on tests; thin for UI/UX"],
+    ["QUALITY", "TDD + human review only"],
+    ["AGENTS", "Model/effort inherited from parent"],
+    ["HUMANS", "No brownfield onboarding path"],
+  ];
+  let ly = 2.95;
+  pts.forEach(([h, t]) => {
+    s.addText(h, { x: 1.05, y: ly, w: 1.4, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: "B91C1C", margin: 0 });
+    s.addText(t, { x: 2.5, y: ly, w: 3.65, h: 0.45, fontFace: B, fontSize: 11, color: TXT, margin: 0 });
+    ly += 0.55;
+  });
+  card(s, 6.85, 2.25, 5.75, 4.6, "EAF5EC", GREEN);
+  s.addText("NEXT MOVES", { x: 7.15, y: 2.45, w: 5.15, h: 0.4, fontFace: B, fontSize: 17, bold: true, color: GREEND });
+  const moves = [
+    ["GOVERNOR", "Hard USD cap per run + banner"],
+    ["BENCH ARM", "Mass real-world set + comparison arm"],
+    ["N\u22653", "Variance + context-read metrics"],
+    ["GATES", "5-tier chain \u2192 manifest per PR"],
+    ["MUTATION", "Mutation/contract/BDD tiers + freezer"],
+    ["AGENTS", "TBD \u2014 candidate: model pin, reject wrong"],
+    ["BRIEF", "Onboarding map \u00B7 commands \u00B7 risks"],
+  ];
+  let ry = 2.95;
+  moves.forEach(([h, t]) => {
+    s.addText(h, { x: 7.15, y: ry, w: 1.55, h: 0.3, fontFace: B, fontSize: 11, bold: true, color: GREEND, margin: 0 });
+    s.addText(t, { x: 8.75, y: ry, w: 3.55, h: 0.45, fontFace: B, fontSize: 11, color: TXT, margin: 0 });
+    ry += 0.55;
+  });
+  tag(s, 0.75, 6.95, "PLANNED");
+  s.addText("Seven gaps, seven committed moves \u2014 tracked in docs/demo/open-points.md \u00B7 evidence in GAP-ANALYSIS.md.", { x: 2.5, y: 6.98, w: 10, h: 0.35, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  notes(s, "One-to-one mapping of the post-meeting open points to committed moves (docs/demo/open-points.md). Row 6 (AGENTS) is the only one without a decided fix \u2014 candidate: per-agent model pin with wrong-pin rejection (GAP-ANALYSIS G1 fix path).");
+}
+
+// ============ 22 · CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };

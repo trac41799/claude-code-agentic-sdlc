@@ -11,12 +11,75 @@ Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Re
 **Added**
 - `/asdlc-tools` — machine tooling command. Checks machine status first, then installs only what is missing: `gh` CLI, Vercel CLI, Supabase CLI (platform-aware: brew / winget / npm), and configures the Supabase MCP server in the Claude Code user config (operator-directed via `SUPABASE_ACCESS_TOKEN` — never committed). Idempotent; no permissions grants; the only global write is the operator's own `~/.claude.json` mcpServers entry, at their explicit direction.
 
+## [2.10.0] — 2026-09-03
+
+**Consistency cleanup — the framework no longer contradicts itself.** Audited the
+canonical repo, the scaffold, and `docs/` for drift between what the plugin ships,
+what the scaffold produces, and what the docs claim. This release ships the fixes;
+no behavior changes to the client workflow.
+
+### Added
+- `/asdlc-project` and `/asdlc-adopt` now also install `.claude/rules/agent-routing.md`
+  into the project — it is the **canonical routing contract** (delegation table,
+  trigger map, hard rules, handoffs). The AGENT-DELEGATION block in `CLAUDE.md`
+  keeps the 4-agent summary table and points at the file for the full contract.
+- CI now asserts the plugin ships exactly 5 skills, that the AGENT-DELEGATION block
+  is byte-identical across `asdlc-project`, `asdlc-adopt`, and the scaffold
+  `CLAUDE.md`, and that both skills install `agent-routing.md`.
+
+### Fixed
+- Plugin skill count: README, CLAUDE.md, `plugin.json`, `marketplace.json`, and
+  changelog now list all **5** plugin skills (`/asdlc-tools` was shipped but
+  undocumented). README/CLAUDE.md now state precisely that `/asdlc-tools` is the one
+  operator-directed machine-touching command (CLI installs + `~/.claude.json` MCP
+  entry; never writes `~/.claude/`).
+- Scaffold README: removed the stale `SUPABASE_SECRET_KEY` / `NEXT_PUBLIC_APP_URL`
+  env vars (stripped in 2.8.0) and the removed `subscriptions` migration — aligned
+  with the canonical 3-var `.env.local.example`.
+- `website/README.md` (scaffold): `vitest.config.mts`, current migrations
+  (chat, notifications), current `lib/` layout.
+- `devops-cicd`: dropped the stale `SUPABASE_SECRET_KEY` warning (the var no longer
+  exists in the template).
+- `troubleshooting.md`: "blocked by the pre-bash hook" → project guardrails
+  (`devops-git-guardrails` / `plan-protocol` pre-push); `agent-routing.md` no longer
+  mentions retired v1 concepts (scheduled routines, image generation).
+- `global-engineering.md` (canonical): removed the v1 "PROMOTE to
+  `~/.claude/rules/`" instruction — it contradicts the nothing-global rule.
+  The divergent condensed copy in `templates/project-scaffold/.claude/rules/` is
+  deleted; the scaffold always receives the canonical copy from Step 6.
+- `FOLDER-STRUCTURE.md`: now documents the runtime/generated paths the skills
+  actually write (`docs/product/sources/`, `docs/project-status.pdf`,
+  `docs/qa/{date}-{slug}-triage.md`, `.githooks/`, root `AGENTS.md` (plan-protocol),
+  `.specify/extensions/plan-protocol/`, `website/.env.local.example`, etc.).
+- Benchmark numbers standardized: BE-A wall time is **6.5 min** everywhere (deck,
+  evidence manifest, BENCHMARK-SUMMARY, demo guides); README's evidence claim
+  corrected to "12 greenfield runs + 4 incremental runs"; BENCHMARK-SUMMARY's dead
+  reproduction paths repointed at `evidence/` and `bench/`; wave-arm counts added
+  as a footnote.
+- `flow-walkthrough.md`: `docs/specs/` → `.specify/features/{slug}/`; slide numbers
+  explicitly refer to the 20-slide deck.
+- `markdown-editor-implementation-guide.md`: path references aligned with the
+  scaffold (`components/editor/`, npm).
+- CI "no global-install" check false-positived on `mcpServers in ~/.claude.json`
+  (asdlc-tools' documented carve-out — `cp` inside "mcpServers"). Verbs are now
+  word-boundary-anchored, so the check still catches real `~/.claude/` writes.
+
+### Removed (moved to `docs/archive/`)
+- v1-era plans (`2026-06-13-restore-auto-update-hook.md`,
+  `2026-06-21-init-skill-overhaul.md`) — they describe the v1 global-install
+  system and contradict v2 hard rules.
+- `docs/guide/LARK-CLI-SETUP.md` (personal machine guide, unrelated),
+  `docs/guide/design-system.md` (orphaned, still listed the retired web-publisher
+  agent), `docs/demo/presentation-transcript.md` (raw meeting transcript).
+- The divergent template copy of `.claude/rules/global-engineering.md`.
+
 ## [Unreleased]
 
 **Rebrand: "Infinite Leverage" → "Agentic SDLC."** Canonical repo moved to
 `trac41799/claude-code-agentic-sdlc`; the plugin/marketplace name is now `agentic-sdlc`
-(install with `claude plugin install agentic-sdlc@agentic-sdlc`); the four plugin
-skills are `/asdlc-project`, `/asdlc-adopt`, `/asdlc-doctor`, `/asdlc-memory-cleanup`.
+(install with `claude plugin install agentic-sdlc@agentic-sdlc`); the five plugin
+skills are `/asdlc-project`, `/asdlc-adopt`, `/asdlc-doctor`, `/asdlc-memory-cleanup`,
+`/asdlc-tools`.
 Literal historical/v1 artifact names (`.infiniteleverage-version`, the
 `infiniteleverage-*` commands, `il_telemetry`, 2.7.1's `retired-il-<date>/`) are kept
 verbatim wherever text must match what actually shipped or what is actually on disk.

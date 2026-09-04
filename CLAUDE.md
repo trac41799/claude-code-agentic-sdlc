@@ -5,8 +5,8 @@ plugin, the 4 agent definitions, their skills, and the project scaffold.
 
 ## Structure
 - `.claude-plugin/marketplace.json` — this repo IS the plugin marketplace
-- `plugin/` — the shipped plugin payload: 4 skills (`asdlc-project`, `asdlc-adopt`,
-  `asdlc-doctor`, `asdlc-memory-cleanup`). No hooks. Telemetry + v1 cleanup live in
+- `plugin/` — the shipped plugin payload: 5 skills (`asdlc-project`, `asdlc-adopt`,
+  `asdlc-doctor`, `asdlc-memory-cleanup`, `asdlc-tools`). No hooks. Telemetry + v1 cleanup live in
   the private `agentic-sdlc-telemetry` repo
 - `.claude/agents/` — the 4 agent definitions (installed **per-project** by `asdlc-project`)
 - `.claude/skills/` — agent workflow skills (installed **per-project** by `asdlc-project`)
@@ -18,7 +18,9 @@ plugin, the 4 agent definitions, their skills, and the project scaffold.
   Never add a `cp` into `~/.claude/` anywhere. (The one carve-out:
   `asdlc-memory-cleanup` edits the operator's *own memory content* under `~/.claude/`
   at their direction, with per-item approval and a backup first — it never installs
-  plugin files, agents, hooks, or settings there.)
+  plugin files, agents, hooks, or settings there. `asdlc-tools` is the other
+  operator-directed exception: it installs missing CLIs and writes the Supabase MCP
+  entry in `~/.claude.json` — never into `~/.claude/`, and only when invoked.)
 - **Never grant permissions.** No code or skill may touch `permissions` in any
   settings file (the v1 `Bash(*)` grant is the reason v2 exists).
 - Agent `.md` files stay thin — role + hard rules + skill index; workflow detail

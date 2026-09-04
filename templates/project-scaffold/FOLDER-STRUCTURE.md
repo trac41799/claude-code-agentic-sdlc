@@ -13,6 +13,7 @@ These files have hard-coded names that skills and agents reference by path:
 | `docs/product/epic-status.md` | PM agent | `pm-epic-writing` skill |
 | `docs/project-status.html` | PM agent | `pm-project-status` skill |
 | `CLAUDE.md` | All agents | Manual / `/init` — the **root** one. `website/CLAUDE.md` is a different, create-next-app-generated file; never edit one thinking it is the other |
+| `.claude/rules/agent-routing.md` | All agents | `/asdlc-project` Step 6 / `/asdlc-adopt` — the routing contract the delegation block references |
 | `README.md` | Developer agent | Manual |
 | `.gitignore` | Developer agent | Manual |
 | `docs/brand/style-guide.md` | All agents | Manual (PM-guided during setup) |
@@ -30,7 +31,8 @@ These files have hard-coded names that skills and agents reference by path:
 │   ├── agents/                                 ← Project-scoped agent overrides (.md files)
 │   │   └── PH-project-agent.md
 │   ├── rules/
-│   │   └── global-engineering.md               ← Engineering guardrails
+│   │   ├── global-engineering.md               ← Engineering guardrails
+│   │   └── agent-routing.md                    ← Routing contract: delegation table, trigger map, hard rules
 │   ├── skills/                                 ← Project-scoped skills
 │   │   └── PH-skill-name/
 │   │       └── SKILL.md
@@ -127,6 +129,32 @@ These files have hard-coded names that skills and agents reference by path:
 ├── README.md                                   [FIXED]
 └── .gitignore                                  [FIXED]
 ```
+
+## Generated and runtime paths (not fixed specs)
+
+The fixed tree above is the layout agents plan against. The paths below are
+**created at runtime by skills, the scaffold, or tooling** — they are legitimate
+parts of a project but not fixed spec files, so agents must not hand-create or
+hand-edit them outside the skill that owns them.
+
+| Path | Created by | Notes |
+|---|---|---|
+| `website/package.json`, `website/package-lock.json`, `website/.gitignore`, `website/next.config.*`, `website/tsconfig.json`, `website/public/` | `asdlc-project` Step 9 (create-next-app merge) | The starter kit ships without a `package.json`; the merge creates the app shell |
+| `website/.env.local.example` | Scaffold template | Authoritative env-var list — CI checks every `process.env.*` against it |
+| `website/.env.local` | Operator (never committed) | `website/.gitignore` keeps it out of git |
+| `website/app/blog/` | `web-publisher-publish` | One folder per published post; the blog index is `website/app/blog/page.tsx` |
+| `website/public/images/blog/` | `web-publisher-publish` | Optimized hero images |
+| `docs/product/sources/` | `asdlc-project` Step 8.6d | Raw planning attachments, stashed verbatim for the PM agent |
+| `docs/brand/DESIGN.md` | `asdlc-project` Step 8.7 | Design reference pulled from getdesign.md or the operator's styling input |
+| `docs/project-status.pdf` | `pm-project-status` | PDF companion regenerated with `docs/project-status.html` |
+| `docs/qa/{YYYY-MM-DD}-{slug}-triage.md` | `qa-triage` | One triage report per bug |
+| `docs/engineering/changes/{YYYY-MM-DD}-{slug}.md` | `global-engineering.md` rule | Continuous-improvement entries |
+| `.claude/settings.json`, `.claude/hooks/` | `devops-git-guardrails` | Project-scoped Claude hooks — not shipped by the plugin |
+| `.husky/` | `devops-setup-pre-commit` | Pre-commit hooks |
+| `.githooks/pre-push`, root `AGENTS.md`, `.specify/ACTIVE.md`, `.specify/extensions/plan-protocol/` (engine + config.json), `.specify/features/{slug}/meta.yaml` | `plan-protocol` | The plan registry + blast-radius guard. Not installed by the scaffold — the Developer runs `plan-protocol` to enable enforcement |
+| `.specify/extensions/git/scripts/bash/` | spec-kit (`npx specify-cli init`) | spec-kit helper scripts |
+| `.github/workflows/ci.yml` | `devops-cicd` | PR pipeline (lint → types → tests → build) |
+| `.claude/retired-asdlc-<date>/` | `asdlc-project` Step 6 (refresh) | v2.4-era writer/designer files moved aside, never deleted |
 
 ## Naming conventions
 

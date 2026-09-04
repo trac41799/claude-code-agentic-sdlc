@@ -32,7 +32,10 @@ jobs:
           # The v2 invariant: the shipped payload never WRITES into ~/.claude.
           # The old check only looked for `cp` — it missed the mkdir/touch pair that
           # shipped in asdlc-project step 13 for three releases. Match any write verb.
-          if grep -rnE '(cp|mv|mkdir|touch|tee|rm|ln|install)[^|;&]*(~/\.claude|\$HOME/\.claude|\$\{HOME\}/\.claude)' \
+          # The one legit reference is asdlc-tools' documented ~/.claude.json mcpServers
+          # merge (operator-directed); verbs are word-boundary-anchored so "mcpServers"
+          # cannot trip the scan.
+          if grep -rnE '(^|[^[:alpha:]])(cp|mv|mkdir|touch|tee|rm|ln|install)[^|;&]*(~/\.claude|\$HOME/\.claude|\$\{HOME\}/\.claude)' \
                plugin/ --include="*.md" --include="*.sh" --include="*.py"; then
             echo "::error::plugin payload writes into ~/.claude — forbidden in v2"; exit 1
           fi
@@ -61,6 +64,50 @@ jobs:
           assert a and int(a.group(1)) == len(agents), \
               f"doctor.sh asserts {a and a.group(1)} agents, repo has {len(agents)}"
           print(f"{len(agents)} agents / {len(skills)} skills, doctor.sh in agreement")
+          PY
+
+      - name: Plugin ships exactly the five documented commands
+        run: |
+          python3 - <<'PY'
+          import glob
+          skills = sorted(glob.glob("plugin/skills/*/SKILL.md"))
+          assert len(skills) == 5, f"expected 5 plugin skills, found {len(skills)}"
+          names = sorted(p.split("/")[2] for p in skills)
+          assert names == ["asdlc-adopt", "asdlc-doctor", "asdlc-memory-cleanup",
+                           "asdlc-project", "asdlc-tools"], names
+          print("plugin ships:", ", ".join(names))
+          PY
+
+      - name: AGENT-DELEGATION block is byte-identical across the three copies
+        run: |
+          python3 - <<'PY'
+          import re, pathlib
+          def block(path):
+              t = pathlib.Path(path).read_text(encoding="utf-8")
+              m = re.search(r'<!-- BEGIN: AGENT-DELEGATION.*?<!-- END: AGENT-DELEGATION -->', t, re.S)
+              assert m, f"no delegation block in {path}"
+              return m.group(0)
+          copies = [
+              "plugin/skills/asdlc-project/SKILL.md",
+              "plugin/skills/asdlc-adopt/SKILL.md",
+              "templates/project-scaffold/CLAUDE.md",
+          ]
+          blocks = [block(c) for c in copies]
+          assert len(set(blocks)) == 1, \
+              "delegation blocks diverged — edit all three copies together"
+          print("delegation block identical across", len(copies), "copies")
+          PY
+
+      - name: Both install skills ship the routing contract
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          for f in ["plugin/skills/asdlc-project/SKILL.md",
+                    "plugin/skills/asdlc-adopt/SKILL.md"]:
+              t = pathlib.Path(f).read_text(encoding="utf-8")
+              assert ".claude/rules/agent-routing.md" in t, \
+                  f"{f} must install .claude/rules/agent-routing.md"
+          print("agent-routing.md installed by both /asdlc-project and /asdlc-adopt")
           PY
 
       - name: Every skill has frontmatter whose name matches its directory

@@ -10,7 +10,7 @@ This file is the entry point Claude Code reads when this repo is opened. It defi
 <!-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills — do not delete this block) -->
 ## Agent delegation (auto-routing)
 
-When you receive a request, **delegate to the right specialist agent** before doing the work yourself. The 4 agents and their triggers:
+When you receive a request, **delegate to the right specialist agent** before doing the work yourself:
 
 | Agent | Delegate when the request involves… |
 |---|---|
@@ -19,13 +19,7 @@ When you receive a request, **delegate to the right specialist agent** before do
 | **qa** | testing, regression checks, browser matrix, accessibility, QA plans, "verify this works" |
 | **devops** | CI/CD, deployments, secret management, infra escalations, Vercel/GitHub workflow issues |
 
-**Delegation rules:**
-1. Pick exactly **one** agent per turn — don't run two in parallel unless the operator explicitly says so.
-2. If a request spans agents (e.g., "build it *and* verify it"), call them **in sequence**: developer → qa.
-3. If unclear which agent fits, **ask the operator** before assuming.
-4. Cross-cutting engineering rules live in `.claude/rules/global-engineering.md` — every agent honors them.
-5. Project-level persona overrides for each agent live in `agents/<name>/context/persona.md` — read these on first invocation.
-6. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
+**Delegation rules, the full trigger map, and the hard rules live in `.claude/rules/agent-routing.md` — that file is canonical and every agent honors it.** In short: pick exactly one agent per turn (sequence if a request spans agents), ask the operator when unclear, and read `agents/<name>/context/persona.md` on first invocation. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
 <!-- END: AGENT-DELEGATION -->
 
 ## Folder conventions

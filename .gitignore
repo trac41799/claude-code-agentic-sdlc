@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
-
+docs/slides/node_modules/
+.env.local
 bench-v2-out/
-

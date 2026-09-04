@@ -25,8 +25,13 @@ differentiator on approved risky change.
 |---|---|---|
 | E2E crash-safe job pipeline | 11.0m · $1.77 · 13 tests | 7.8m · $1.24 · 17 tests + spec/plan/tasks |
 | FE virtualized feed + optimistic rollback | 7.4m · $0.97 · 24 tests | 7.3m · $1.18 · 22 tests + artifacts |
-| BE rate-limited SSE proxy (hard) | 27.4m · $2.84 · 22 tests | 6.6m · $1.08 · 24 tests + artifacts |
+| BE rate-limited SSE proxy (hard) | 27.4m · $2.84 · 22 tests | 6.5m · $1.08 · 24 tests + artifacts |
 | DB+ETL 1M rows, idempotent | 4.4m · $0.58 · 8 tests · perf ✓ | 5.8m · $1.08 · 6 tests · perf ✓ |
+
+Each case also has a third arm (W — parallel dev-review "wave" loop) with
+runnable projects and session JSONs in `evidence/`; the experiment verdict was
+negative in the headless proxy and the wave loop is **not** part of the
+canonical framework (see `docs/slides/GAP-ANALYSIS.md`, deliberate exclusions).
 
 ## Answers the evidence supports
 
@@ -39,8 +44,9 @@ differentiator on approved risky change.
    agent registration gap (fixed via `dev-agent-router`; native path intact) · token economy unmanaged
    (baseline pending) · case studies confounded (model drift, n=2, no cost tracking at the time).
 4. **SWE-bench floor check: not run.** The question it would answer — "does the framework degrade
-   capability?" — is answered by acceptance parity across 12 measured runs (framework never below bare
-   on risky tasks). SWE-bench measures model capability on isolated bugs, a dimension the framework
+   capability?" — is answered by acceptance parity across the 12 metered greenfield runs (and the
+   4 earlier incremental runs): the framework arm was never below bare on risky tasks. SWE-bench
+   measures model capability on isolated bugs, a dimension the framework
    does not claim to change; its cost (docker, days of runs) is not justified by marginal information.
 
 ## Reproduce (one-command kit)
@@ -55,6 +61,13 @@ Commands:
 
 ## Reproduce (reference runs)
 
-- Froam clones: `D:\TRANSFER DATA\Coding\OpenCode\froam-bench\{be,fe,be-bare,fe-bare,greenfield\*}`
-- Docs: `docs/benchmarks/{ASDLC-PILOT,ASDLC-BENCHMARK-SUITE,SPEC-EFFECTIVENESS,R2-DB-RLS,R2-DB-RLS-ADDENDUM,R4-FRAGILE-REFACTOR,R3-VERTICAL,GREENFIELD}.md`
-- Session JSONs + frozen briefs + rubric: `greenfield/` (TASK-1..4, RUBRIC.md, {case}-{a,b}.json)
+- **Evidence bundle (this repo)**: `evidence/` — 12 metered session JSONs
+  (`evidence/sessions/`), 12 runnable project folders (`evidence/greenfield/`),
+  tree captures (`evidence/tree/`), and the claim→evidence map
+  (`evidence/manifest.md`). `python evidence/validate.py` reruns every acceptance
+  gate and regenerates `evidence/validation-report.md` (12/12).
+- **Incremental runs R1–R4**: ran against the Froam project clones
+  (`travelbuddy-agentic-be` / `froam-journey-platform-fe`); protocol docs and
+  session JSONs live on the `exp/asdlc-bench` branch of those clones.
+- **Wave arms**: `evidence/greenfield/*-wave/` + `evidence/sessions/*-wave-a.json`;
+  experiment writeup on the `exp/wave-dev-loop` branch.

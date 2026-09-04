@@ -20,7 +20,8 @@ It prints PASS/FAIL lines for:
   the Next.js scaffold in step 9)
 - **Repo context** — git remote + author email of the current directory
 - **Project layout** — when run inside a scaffolded project: `FOLDER-STRUCTURE.md`,
-  4 agents in `.claude/agents/`, 17 skills in `.claude/skills/`, no retired v2.4-era
+  4 agents in `.claude/agents/`, 17 skills in `.claude/skills/`,
+  `.claude/rules/agent-routing.md` present, no retired v2.4-era
   agents/skills lingering (writer/designer and their content pipeline — re-running
   `/asdlc-project` step 6 moves them to `.claude/retired-asdlc-<date>/`), `CLAUDE.md`
   delegation block present

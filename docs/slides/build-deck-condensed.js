@@ -1,12 +1,12 @@
-// Agentic SDLC — CONDENSED deck (9 slides). Shares design system + assets with
+// Agentic SDLC — CONDENSED deck (10 slides). Shares design system + assets with
 // the full 20-slide deck; keeps rationale, workings, both diagrams, outputs,
 // benchmarks, strengths & weaknesses. Build: node docs/slides/build-deck-condensed.js
-const pptxgen = require("C:/Users/mrtra/AppData/Local/Temp/opencode/svgconv/node_modules/pptxgenjs");
+const pptxgen = require("pptxgenjs");
 const pptx = new pptxgen();
 
 pptx.layout = "LAYOUT_WIDE";
 pptx.author = "Agentic SDLC";
-pptx.title = "Agentic SDLC \u2014 condensed (9 slides)";
+pptx.title = "Agentic SDLC \u2014 condensed (10 slides)";
 
 const NAVY = "1E2761", ICE = "EAF0FB", MID = "5A6B9E", AMBER = "F4B400", AMBERD = "B98A00";
 const GREEN = "2E7D32", GREEND = "1B5E20", TXT = "1F2937", MUT = "6B7280", WHITE = "FFFFFF";
@@ -246,7 +246,52 @@ function notes(s, t) { s.addNotes(t); }
   notes(s, "Say the cost gap first, before they ask. The exclusions are design choices, not defects.");
 }
 
-// ============ 9 · CLOSE ============
+// ============ 9 · OPEN POINTS → NEXT MOVES ============
+{
+  const s = pptx.addSlide();
+  s.background = { color: WHITE };
+  eyebrow(s, "Roadmap \u00B7 next moves");
+  title(s, "Open points \u2192 committed moves", "Seven gaps we admit, seven fixes we're building \u2014 the post-meeting commitment list.");
+  card(s, 0.75, 2.2, 5.85, 4.5, "FBF3E2", AMBERD);
+  s.addText("OPEN POINTS", { x: 1.05, y: 2.4, w: 5.25, h: 0.35, fontFace: B, fontSize: 15, bold: true, color: "7A5C00" });
+  const pts = [
+    ["COST", "No trusted metering, no budget"],
+    ["COMPARISON", "No arm vs another SDLC framework"],
+    ["METRICS", "N=1 cells, variance unmeasured"],
+    ["EVIDENCE", "Handoffs lean on tests; thin for UI/UX"],
+    ["QUALITY", "TDD + human review only"],
+    ["AGENTS", "Model/effort inherited from parent"],
+    ["HUMANS", "No brownfield onboarding path"],
+  ];
+  let ly = 2.85;
+  pts.forEach(([h, t]) => {
+    s.addText(h, { x: 1.05, y: ly, w: 1.4, h: 0.4, fontFace: B, fontSize: 11.5, bold: true, color: "B91C1C", margin: 0 });
+    s.addText(t, { x: 2.5, y: ly, w: 3.65, h: 0.45, fontFace: B, fontSize: 11.5, color: TXT, margin: 0 });
+    ly += 0.52;
+  });
+  card(s, 6.85, 2.2, 5.75, 4.5, "EAF5EC", GREEN);
+  s.addText("NEXT MOVES", { x: 7.15, y: 2.4, w: 5.15, h: 0.35, fontFace: B, fontSize: 15, bold: true, color: GREEND });
+  const moves = [
+    ["GOVERNOR", "Hard USD cap per run + banner"],
+    ["BENCH ARM", "Mass real-world set + comparison arm"],
+    ["N\u22653", "Variance + context-read metrics"],
+    ["GATES", "5-tier chain \u2192 manifest per PR"],
+    ["MUTATION", "Mutation/contract/BDD tiers + freezer"],
+    ["AGENTS", "TBD \u2014 candidate: model pin, reject wrong"],
+    ["BRIEF", "Onboarding map \u00B7 commands \u00B7 risks"],
+  ];
+  let ry = 2.85;
+  moves.forEach(([h, t]) => {
+    s.addText(h, { x: 7.15, y: ry, w: 1.55, h: 0.4, fontFace: B, fontSize: 11.5, bold: true, color: GREEND, margin: 0 });
+    s.addText(t, { x: 8.75, y: ry, w: 3.55, h: 0.45, fontFace: B, fontSize: 11.5, color: TXT, margin: 0 });
+    ry += 0.52;
+  });
+  tag(s, 0.75, 6.85, "PLANNED");
+  s.addText("Seven gaps, seven committed moves \u2014 tracked in docs/demo/open-points.md \u00B7 evidence in GAP-ANALYSIS.md.", { x: 2.5, y: 6.88, w: 10, h: 0.35, fontFace: B, fontSize: 12, italic: true, color: MUT });
+  notes(s, "One-to-one mapping of the post-meeting open points to committed moves (docs/demo/open-points.md). Row 6 (AGENTS) is the only one without a decided fix \u2014 candidate: per-agent model pin with wrong-pin rejection (GAP-ANALYSIS G1 fix path).");
+}
+
+// ============ 10 · CLOSE ============
 {
   const s = pptx.addSlide();
   s.background = { color: NAVY };

@@ -3,11 +3,13 @@
 The Agentic SDLC system in one repo: a bare-minimum Claude Code plugin, the
 4 agent definitions, their workflow skills, and the canonical project scaffold.
 
-**v2 principle: nothing installs globally.** The plugin ships 4 skills — no
+**v2 principle: nothing installs globally.** The plugin ships 5 skills — no
 hooks, no telemetry, no background behavior; agents and workflow skills are
-installed **into each client project** by `/asdlc-project`. (Edge8-internal
-telemetry and the v1 cleanup live in the separate private `agentic-sdlc-telemetry`
-plugin.)
+installed **into each client project** by `/asdlc-project`. (The one
+operator-directed exception is `/asdlc-tools`: it installs missing CLIs and
+configures the Supabase MCP entry in `~/.claude.json` — only when invoked, only
+with the operator's approval. Edge8-internal telemetry and the v1 cleanup live
+in the separate private `agentic-sdlc-telemetry` plugin.)
 
 ## Install
 
@@ -46,7 +48,7 @@ claude plugin update agentic-sdlc@agentic-sdlc
 .claude-plugin/            ← marketplace manifest (this repo IS the marketplace)
 plugin/                    ← the shipped plugin payload
 ├── .claude-plugin/        ← plugin manifest
-└── skills/                ← asdlc-project, asdlc-adopt, asdlc-doctor, asdlc-memory-cleanup
+└── skills/                ← asdlc-project, asdlc-adopt, asdlc-doctor, asdlc-memory-cleanup, asdlc-tools
 .claude/
 ├── agents/                ← 4 agent definitions (per-project install source)
 ├── skills/                ← agent workflow skills (per-project install source)
@@ -57,8 +59,8 @@ docs/                      ← guides, plans, slides
 
 ## Where the skills live now
 
-The plugin itself exposes only `/asdlc-project`, `/asdlc-adopt`, `/asdlc-doctor`, and
-`/asdlc-memory-cleanup`. Everything else
+The plugin itself exposes only `/asdlc-project`, `/asdlc-adopt`, `/asdlc-doctor`,
+`/asdlc-memory-cleanup`, and `/asdlc-tools`. Everything else
 is **project-scoped**: `/asdlc-project` (new project) and `/asdlc-adopt` (existing
 repo) install the 4 agents and all workflow skills below into the project's own
 `.claude/`, so they are active only inside Agentic SDLC projects — never
@@ -71,7 +73,7 @@ The v1 setup skills are retired and replaced:
 | `/infiniteleverage-init` | Install the plugin + run `/asdlc-project` — there is no machine setup anymore |
 | `/infiniteleverage-onboard` | Same — any laptop just installs the plugin |
 | `/infiniteleverage-patch` | Marketplace plugin updates; projects refresh via `/asdlc-adopt` |
-| `/infiniteleverage-validate` | `/asdlc-doctor` (product checks) + `/infiniteleverage-telemetry` (Edge8-internal tracking) |
+| `/infiniteleverage-validate` | `/asdlc-doctor` (product checks) + `agentic-sdlc-telemetry` (Edge8-internal tracking) |
 | `/infiniteleverage-project` | `/asdlc-project` |
 
 Machines still carrying the v1 copies keep working until they migrate; the
@@ -107,8 +109,9 @@ had v1 and need nothing.
 
 ## Benchmarks
 
-Measured evidence (same model, frozen tasks, metered, non-merge branches): 12 runs across
-incremental and greenfield work. Summary and reproduction pointers: [docs/benchmarks/BENCHMARK-SUMMARY.md](docs/benchmarks/BENCHMARK-SUMMARY.md).
+Measured evidence (same model, frozen tasks, metered, non-merge branches): 12
+greenfield runs (4 cases × bare/passive/wave arms) plus 4 incremental runs (R1–R4).
+Summary and reproduction pointers: [docs/benchmarks/BENCHMARK-SUMMARY.md](docs/benchmarks/BENCHMARK-SUMMARY.md).
 
 ## Tests
 

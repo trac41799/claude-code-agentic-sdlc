@@ -13,8 +13,8 @@
     {
       "name": "agentic-sdlc",
       "source": "./plugin",
-      "description": "Agentic SDLC product plugin: /asdlc-project scaffolds a client project with its own 4-agent team (project-scoped, never global); /asdlc-adopt installs that team into an already-established repo; /asdlc-doctor checks the setup; /asdlc-memory-cleanup tidies a multi-account memory mess with the human in the loop. Telemetry lives in the separate private agentic-sdlc-telemetry plugin.",
-      "version": "2.9.0",
+      "description": "Agentic SDLC product plugin: /asdlc-project scaffolds a client project with its own 4-agent team (project-scoped, never global); /asdlc-adopt installs that team into an already-established repo; /asdlc-doctor checks the setup; /asdlc-memory-cleanup tidies a multi-account memory mess with the human in the loop; /asdlc-tools installs the missing CLIs and Supabase MCP config (operator-directed). Telemetry lives in the separate private agentic-sdlc-telemetry plugin.",
+      "version": "2.10.0",
       "author": {
         "name": "Edge8",
         "email": "khoa.doan@edge8.ai"

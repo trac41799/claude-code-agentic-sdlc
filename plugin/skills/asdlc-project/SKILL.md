@@ -19,7 +19,8 @@ version: 3.2.0
 | 4 agent definitions | `.claude/agents/*.md` |
 | Project skills | `.claude/skills/*/SKILL.md` |
 | Engineering rules | `.claude/rules/global-engineering.md` |
-| AGENT-DELEGATION block content | embedded below in this SKILL.md — single source for the routing table |
+| Routing contract (agent-routing.md) | `.claude/rules/agent-routing.md` — single source for the routing table |
+| AGENT-DELEGATION block content | embedded below in this SKILL.md — the summary block every project CLAUDE.md carries |
 
 **Rules:**
 1. Never modify the scaffold template locally. To change what new projects look like, edit `templates/project-scaffold/` in the canonical repo, commit, push — the next scaffold pulls it automatically.
@@ -219,8 +220,8 @@ mv "$TARGET/content/topics/YYYY-MM-DD-PH-topic-slug" \
 
 ### Step 6 — Install canonical agents + skills + rules into the project's `.claude/`
 
-The scaffold ships `.claude/rules/` and `.claude/skills/` but **not** `.claude/agents/`
-— create every destination first, or the multi-file `cp` fails with
+The scaffold ships `.claude/skills/` but **not** `.claude/agents/` and **not** the
+rules files — create every destination first, or the multi-file `cp` fails with
 `Not a directory` and the project silently ends up with no agents.
 
 ```bash
@@ -229,6 +230,7 @@ cp "$TMP/asdlc-template/.claude/agents/"*.md "$TARGET/.claude/agents/"
 cp -R "$TMP/asdlc-template/.claude/skills/." "$TARGET/.claude/skills/"
 rm -rf "$TARGET/.claude/skills/PH-skill-name"   # scaffold placeholder — not a real skill
 cp "$TMP/asdlc-template/.claude/rules/global-engineering.md" "$TARGET/.claude/rules/"
+cp "$TMP/asdlc-template/.claude/rules/agent-routing.md" "$TARGET/.claude/rules/"
 
 # Projects scaffolded on v2.4.x carry 2 agents and 8 skills that v2.6 retired
 # (writer/designer and their content pipeline). A refresh must clear them or
@@ -260,12 +262,13 @@ MISSING=""
 for a in product-manager developer qa devops; do
   [ -f "$TARGET/.claude/agents/$a.md" ] || MISSING="$MISSING $a.md"
 done
+[ -f "$TARGET/.claude/rules/agent-routing.md" ] || MISSING="$MISSING agent-routing.md"
 # find, not a glob: under zsh a non-matching glob aborts the command instead of
 # returning nothing.
 S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
 echo "agents: canonical 4 ${MISSING:+MISSING:$MISSING}${MISSING:-present} · skills: $S/17"
 [ -z "$MISSING" ] && [ "$S" -ge 17 ] || {
-  echo "❌ install incomplete — expected the 4 canonical agents and at least 17 skills"
+  echo "❌ install incomplete — expected the 4 canonical agents, agent-routing.md, and at least 17 skills"
   echo "   check that \$TMP/asdlc-template/.claude/ exists and the mkdir -p above ran"
   exit 1
 }
@@ -280,12 +283,13 @@ The scaffold ships with the block already (between `BEGIN: AGENT-DELEGATION` / `
 ```bash
 TARGET_CLAUDE_MD="$TARGET/CLAUDE.md"
 
-# Canonical block content — single source of truth lives here in the SKILL.md.
+# Canonical block content — the summary block; the full routing contract is
+# .claude/rules/agent-routing.md, installed in Step 6.
 BLOCK=$(cat <<'BLOCK_EOF'
 <!-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills — do not delete this block) -->
 ## Agent delegation (auto-routing)
 
-When you receive a request, **delegate to the right specialist agent** before doing the work yourself. The 4 agents and their triggers:
+When you receive a request, **delegate to the right specialist agent** before doing the work yourself:
 
 | Agent | Delegate when the request involves… |
 |---|---|
@@ -294,13 +298,7 @@ When you receive a request, **delegate to the right specialist agent** before do
 | **qa** | testing, regression checks, browser matrix, accessibility, QA plans, "verify this works" |
 | **devops** | CI/CD, deployments, secret management, infra escalations, Vercel/GitHub workflow issues |
 
-**Delegation rules:**
-1. Pick exactly **one** agent per turn — don't run two in parallel unless the operator explicitly says so.
-2. If a request spans agents (e.g., "build it *and* verify it"), call them **in sequence**: developer → qa.
-3. If unclear which agent fits, **ask the operator** before assuming.
-4. Cross-cutting engineering rules live in `.claude/rules/global-engineering.md` — every agent honors them.
-5. Project-level persona overrides for each agent live in `agents/<name>/context/persona.md` — read these on first invocation.
-6. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
+**Delegation rules, the full trigger map, and the hard rules live in `.claude/rules/agent-routing.md` — that file is canonical and every agent honors it.** In short: pick exactly one agent per turn (sequence if a request spans agents), ask the operator when unclear, and read `agents/<name>/context/persona.md` on first invocation. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
 <!-- END: AGENT-DELEGATION -->
 BLOCK_EOF
 )
@@ -670,6 +668,10 @@ Next steps locally:
 7. Review docs/brand/style-guide.md (seeded by Step 8.7) — adjust palette/fonts, then fill voice/tone in pm-client-interview
 8. Rename PH- placeholders deliberately as you start real work
 9. Read FOLDER-STRUCTURE.md once — canonical layout spec
+10. Invoke @developer → ask it to run `plan-protocol` — installs the plan
+    registry, root AGENTS.md, and the pre-push guard (.githooks/) for scope
+    enforcement. Not installed by the scaffold itself; recommended before real
+    feature work starts
 ```
 
 ### Step 12 — Tail-end question: push to GitHub now? (interactive, optional)
@@ -765,7 +767,11 @@ Earlier versions of this skill shipped a `scripts/substitute-placeholders.sh` an
 - Every step is now visible inline — the operator can read exactly what will run before confirming
 - No "file not found" failure mode when the skill is invoked from a context that didn't bundle the script
 
-All routing-table content for the AGENT-DELEGATION block lives in **Step 7 of this SKILL.md** — that is now the single source of truth.
+The AGENT-DELEGATION block above is the summary block every project CLAUDE.md
+carries. The full routing contract — delegation table, trigger map, hard rules,
+handoffs — lives in `.claude/rules/agent-routing.md` in the canonical repo;
+Step 6 installs it into the project. Keep the three block copies (this skill,
+`asdlc-adopt`, scaffold `CLAUDE.md`) byte-identical — CI checks it.
 
 ## References
 

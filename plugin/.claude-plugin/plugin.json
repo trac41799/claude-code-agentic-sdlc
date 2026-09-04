@@ -1,7 +1,7 @@
 {
   "name": "agentic-sdlc",
-  "version": "2.9.0",
-  "description": "Agentic SDLC v2 \u2014 the AI-team product plugin. /asdlc-project scaffolds a client project with a project-scoped 4-agent team; /asdlc-adopt installs that team into an already-established repo; /asdlc-doctor checks the setup; /asdlc-memory-cleanup tidies a multi-account memory mess with the human in the loop. No hooks, no telemetry, no writes outside the project you scaffold.",
+  "version": "2.10.0",
+  "description": "Agentic SDLC v2 \u2014 the AI-team product plugin. /asdlc-project scaffolds a client project with a project-scoped 4-agent team; /asdlc-adopt installs that team into an already-established repo; /asdlc-doctor checks the setup; /asdlc-memory-cleanup tidies a multi-account memory mess with the human in the loop; /asdlc-tools installs the missing CLIs and Supabase MCP config (operator-directed). No hooks, no telemetry, no writes outside the project you scaffold.",
   "author": {
     "name": "Edge8",
     "email": "khoa.doan@edge8.ai",

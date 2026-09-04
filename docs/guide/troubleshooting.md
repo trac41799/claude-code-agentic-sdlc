@@ -67,7 +67,9 @@ Then tell `@developer` what happened and ask it to investigate on a branch.
 
 ### "Claude is trying to push directly to main"
 
-This is blocked by design. All changes go through a pull request. If Claude tries to push to main, it will be blocked by the `pre-bash` hook with an explanation.
+This is blocked by design. All changes go through a pull request. If Claude tries
+to push to main, the project's guardrails block it: the `plan-protocol` pre-push
+hook (`.githooks/`) and/or the `devops-git-guardrails` hook (`.claude/hooks/`).
 
 If you see this: tell Claude "open a PR instead of pushing directly."
 

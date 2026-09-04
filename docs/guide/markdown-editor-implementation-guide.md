@@ -1,13 +1,13 @@
 # Markdown Editor Implementation Guide
 
-A production-grade guide for implementing a WYSIWYG markdown editor using `@mdxeditor/editor` v3.52+. Based on `src/components/custom/MarkdownEditor.tsx`.
+A production-grade guide for implementing a WYSIWYG markdown editor using `@mdxeditor/editor` v3.52+. Based on `components/editor/MarkdownEditor.tsx` in the scaffold's `website/` starter kit.
 
 ---
 
 ## 1. Dependency
 
 ```bash
-pnpm add @mdxeditor/editor
+npm install @mdxeditor/editor
 ```
 
 The library is built on Lexical (Meta) and provides a rich-text editing surface that serializes to/from markdown.

@@ -25,11 +25,16 @@ website/
 ├── app/               ← App Router pages + API routes (chat, auth, sessions)
 │   └── providers.tsx  ← QueryClientProvider — must be wired into app/layout.tsx
 ├── components/        ← chat/, dashboard/, markdown/, notifications/, editor/
-├── lib/               ← auth/, chat/, supabase/, seo/, perf/, upload/
+├── lib/               ← ai/, auth/, chat/, dashboard/, markdown/, notifications/,
+│                        perf/, seo/, supabase/, upload/
 ├── supabase/
-│   └── migrations/    ← chat, notifications, subscriptions tables
+│   └── migrations/    ← chat, notifications tables
 ├── docs/              ← per-module setup notes
 ├── public/
-├── vitest.config.ts
+├── vitest.config.mts  ← ESM — .mts, not .ts (see asdlc-project Step 9)
 └── vitest.setup.ts
 ```
+
+`package.json` does not exist in the starter kit — the create-next-app merge
+creates it, and `asdlc-project` Step 9c installs the starter's dependencies
+into it. The `.env.local.example` file is the authoritative env-var list.

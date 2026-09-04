@@ -23,9 +23,10 @@ installed per-project).
 | 4 agent definitions | `.claude/agents/*.md` |
 | Project workflow skills | `.claude/skills/*/SKILL.md` |
 | Engineering rules | `.claude/rules/global-engineering.md` |
+| Routing contract (agent-routing.md) | `.claude/rules/agent-routing.md` — single source for the routing table |
 | Persona stubs | `templates/project-scaffold/agents/<name>/context/persona.md` |
 | Doc anchors (product, brand, status) | `templates/project-scaffold/docs/` |
-| AGENT-DELEGATION block content | embedded below — same block as `/asdlc-project` Step 7 |
+| AGENT-DELEGATION block content | embedded below — same summary block as `/asdlc-project` Step 7 |
 
 ## When to invoke
 
@@ -43,7 +44,8 @@ them. Agents are installed into the project itself; nothing is ever written to
    and (b) the overwrite confirmation in Step 3 — and only if an earlier install is
    detected. Nothing else asks.
 3. **Non-destructive by default.** Canonical-managed files (`.claude/agents/`,
-   `.claude/skills/`, `.claude/rules/global-engineering.md`) may be overwritten —
+   `.claude/skills/`, `.claude/rules/global-engineering.md`,
+   `.claude/rules/agent-routing.md`) may be overwritten —
    that is what "refresh" means and Step 3 confirms it first. Everything else
    (personas, doc anchors, CLAUDE.md content outside the managed block) is written
    **only where missing**.
@@ -85,6 +87,7 @@ About to adopt the Agentic SDLC team into:
   Will install    : 4 agents → .claude/agents/
                     workflow skills → .claude/skills/
                     engineering rules → .claude/rules/global-engineering.md
+                    routing contract → .claude/rules/agent-routing.md
   Will inject     : AGENT-DELEGATION block into ./CLAUDE.md (created if missing)
   Only-if-missing : agents/<name>/context/persona.md stubs,
                     docs/product/{product,epics,epic-status}.md,
@@ -105,10 +108,11 @@ EXISTING=$(find "$TARGET/.claude/agents" -maxdepth 1 -name '*.md' 2>/dev/null | 
 
 - `EXISTING` = 0 → first install, continue silently.
 - `EXISTING` > 0 → this run is a **refresh**: the canonical agents, skills, and
-  `global-engineering.md` will be overwritten with the versions matching the running
-  plugin. Ask: *"Found an existing team install (`<EXISTING>` agents). Refresh it to
+  rules (`global-engineering.md`, `agent-routing.md`) will be overwritten with
+  the versions matching the running plugin. Ask: *"Found an existing team
+  install (`<EXISTING>` agents). Refresh it to
   the canonical v<plugin version>? Any local edits to `.claude/agents/`,
-  `.claude/skills/`, or `.claude/rules/global-engineering.md` will be overwritten —
+  `.claude/skills/`, or `.claude/rules/` will be overwritten —
   project personas and docs are untouched. (y/N)"* Stop on no.
 
 ### Step 4 — Fetch the canonical repo, pinned to the plugin's version
@@ -144,6 +148,7 @@ cp "$TMP/asdlc-canonical/.claude/agents/"*.md "$TARGET/.claude/agents/"
 cp -R "$TMP/asdlc-canonical/.claude/skills/." "$TARGET/.claude/skills/"
 rm -rf "$TARGET/.claude/skills/PH-skill-name"   # scaffold placeholder — not a real skill
 cp "$TMP/asdlc-canonical/.claude/rules/global-engineering.md" "$TARGET/.claude/rules/"
+cp "$TMP/asdlc-canonical/.claude/rules/agent-routing.md" "$TARGET/.claude/rules/"
 ```
 
 Verify — hard gate, same as `/asdlc-project`:
@@ -153,9 +158,10 @@ Verify — hard gate, same as `/asdlc-project`:
 # returning nothing, so `ls dir/*.md` would error out rather than count zero.
 A=$(find "$TARGET/.claude/agents" -maxdepth 1 -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
 S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
-echo "agents: $A/4 · skills: $S/17"
-[ "$A" -eq 4 ] && [ "$S" -ge 17 ] || {
-  echo "❌ install incomplete — expected 4 agents and at least 17 skills"
+R=0; [ -f "$TARGET/.claude/rules/agent-routing.md" ] && R=1
+echo "agents: $A/4 · skills: $S/17 · agent-routing.md: $R/1"
+[ "$A" -eq 4 ] && [ "$S" -ge 17 ] && [ "$R" -eq 1 ] || {
+  echo "❌ install incomplete — expected 4 agents, at least 17 skills, and agent-routing.md"
   echo "   check that \$TMP/asdlc-canonical/.claude/ exists and the mkdir -p above ran"
   exit 1
 }
@@ -187,12 +193,13 @@ everything else the operator wrote stays byte-for-byte. Idempotent.
 TARGET_CLAUDE_MD="$TARGET/CLAUDE.md"
 touch "$TARGET_CLAUDE_MD"
 
-# Canonical block content — kept in lockstep with /asdlc-project Step 7.
+# Canonical block content — the summary block; the full routing contract is
+# .claude/rules/agent-routing.md, installed in Step 5.
 BLOCK=$(cat <<'BLOCK_EOF'
 <!-- BEGIN: AGENT-DELEGATION (managed by agentic-sdlc skills — do not delete this block) -->
 ## Agent delegation (auto-routing)
 
-When you receive a request, **delegate to the right specialist agent** before doing the work yourself. The 4 agents and their triggers:
+When you receive a request, **delegate to the right specialist agent** before doing the work yourself:
 
 | Agent | Delegate when the request involves… |
 |---|---|
@@ -201,13 +208,7 @@ When you receive a request, **delegate to the right specialist agent** before do
 | **qa** | testing, regression checks, browser matrix, accessibility, QA plans, "verify this works" |
 | **devops** | CI/CD, deployments, secret management, infra escalations, Vercel/GitHub workflow issues |
 
-**Delegation rules:**
-1. Pick exactly **one** agent per turn — don't run two in parallel unless the operator explicitly says so.
-2. If a request spans agents (e.g., "build it *and* verify it"), call them **in sequence**: developer → qa.
-3. If unclear which agent fits, **ask the operator** before assuming.
-4. Cross-cutting engineering rules live in `.claude/rules/global-engineering.md` — every agent honors them.
-5. Project-level persona overrides for each agent live in `agents/<name>/context/persona.md` — read these on first invocation.
-6. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
+**Delegation rules, the full trigger map, and the hard rules live in `.claude/rules/agent-routing.md` — that file is canonical and every agent honors it.** In short: pick exactly one agent per turn (sequence if a request spans agents), ask the operator when unclear, and read `agents/<name>/context/persona.md` on first invocation. Trigger phrases: `@product-manager`, `@developer`, etc. — but auto-route even without the `@` when intent is clear.
 <!-- END: AGENT-DELEGATION -->
 BLOCK_EOF
 )
@@ -271,7 +272,7 @@ Print:
 ✅ Team adopted into <$TARGET>
    .claude/agents/     — 4 agents (product-manager, developer, qa, devops)
    .claude/skills/     — <S> workflow skills
-   .claude/rules/      — global-engineering.md
+   .claude/rules/      — global-engineering.md + agent-routing.md
    agents/*/context/   — persona stubs (<N> created, <M> already existed)
    CLAUDE.md           — AGENT-DELEGATION block <injected|refreshed>
    docs/               — <K> anchors seeded, existing files untouched

@@ -98,7 +98,7 @@ The build step needs environment variables. Tell the operator:
 > - `NEXT_PUBLIC_SUPABASE_URL` — copy from your `.env.local` file
 > - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — copy from your `.env.local` file
 >
-> These are safe to add here — they are public-facing keys, sent to the browser anyway. Never add `SUPABASE_SECRET_KEY` to GitHub secrets; it bypasses row-level security and CI does not need it to build."
+> These are safe to add here — they are public-facing keys, sent to the browser anyway. These two are all CI needs to build; do not add server-side secrets from the Supabase dashboard to GitHub."
 
 ---
 

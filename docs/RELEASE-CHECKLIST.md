@@ -68,7 +68,9 @@ Re-run step 6 of `/asdlc-project` against a project scaffolded from the previous
 
 ## Run 5 — the guardrails actually bite **[rel]**
 
-Not "the files exist" — the checks fire.
+Not "the files exist" — the checks fire. Precondition: `devops-git-guardrails`
+and `plan-protocol` are on-demand skills — neither is installed by the scaffold —
+so run them in the scaffolded project first.
 
 - [ ] `devops-git-guardrails`: `git push --force` denied; `git push origin feat/x` allowed;
       `--amend` allowed on an unpushed branch and denied once pushed

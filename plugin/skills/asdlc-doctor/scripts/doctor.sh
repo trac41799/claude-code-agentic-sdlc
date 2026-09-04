@@ -83,6 +83,11 @@ if [ -f "FOLDER-STRUCTURE.md" ]; then
   else
     pass "no retired v2.4 agents/skills" ""
   fi
+  if [ -f ".claude/rules/agent-routing.md" ]; then
+    pass "agent-routing.md present" "routing contract installed"
+  else
+    fail "agent-routing.md present" "fix: re-run /asdlc-project step 6 or /asdlc-adopt to install the routing contract"
+  fi
   if grep -q "BEGIN: AGENT-DELEGATION" CLAUDE.md 2>/dev/null; then
     pass "CLAUDE.md delegation block" ""
   else

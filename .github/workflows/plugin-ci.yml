@@ -135,11 +135,12 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Plan-protocol engine test suite
+      - name: Engine test suites (plan-protocol + test-lock)
         run: |
-          # A 35KB engine ships into every scaffolded project and its own suite
-          # had never run in CI. node: builtins only — no install needed.
-          node --test .claude/skills/plan-protocol/assets/plan.test.mjs
+          # Dependency-free engines ship into every scaffolded project; their
+          # suites run here. node: builtins only — no install needed.
+          node --test .claude/skills/plan-protocol/assets/plan.test.mjs \
+            .claude/skills/dev-tdd/assets/test-lock.test.mjs
 
       - name: Plan-protocol ships no client-specific vocabulary
         run: |

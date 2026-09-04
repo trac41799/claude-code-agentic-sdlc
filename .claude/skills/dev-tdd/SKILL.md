@@ -66,6 +66,37 @@ TDD requires running tests. Running `npm test` is not "starting a localhost serv
 5. Next slice
 ```
 
+## Test-Freezer (SPEC-012 FR-002)
+
+The tests you write are **frozen before implementation starts**. The lock detects
+test modification during implementation and blocks approval until a human
+explicitly re-locks. This blocks circular-oracle fixes (editing the test until the
+code passes).
+
+Engine: `.claude/skills/dev-tdd/assets/test-lock.mjs` (dependency-free, `node:`
+builtins). Lock file: `.asdlc/test-lock.json` — SHA-256 digests only, never test
+source or secrets.
+
+```
+1. After the failing test is confirmed RED, lock the suite:
+   node .claude/skills/dev-tdd/assets/test-lock.mjs create --task <task-id> --paths <test paths or dirs>
+2. Implement with the lock active. Re-run the suite; never edit a locked test.
+3. At the implementation command boundary and before pre-push/pre-merge, verify:
+   node .claude/skills/dev-tdd/assets/test-lock.mjs verify --task <task-id>
+4. Any mismatch fails the gate. The only way forward is a human-approved re-lock
+   tied to a revised plan:
+   node .claude/skills/dev-tdd/assets/test-lock.mjs relock --task <task-id> \
+     --approver <human-identity> --reason <why> --plan <revised-plan-path>
+```
+
+Hard rules:
+- No implementation while the lock is missing or failing. `verify` must pass.
+- Never `create` over another task's lock — concurrent tasks keep unique task IDs.
+- A re-lock requires a **human** approver, a reason, and a revised plan reference.
+- If the host cannot make locked files read-only, state that limitation — the
+  digest verification still fails on mismatch.
+- Symlinked, added, deleted, or renamed test paths fail verification.
+
 ## Gate
 
 Before calling a feature done:
@@ -75,6 +106,7 @@ Before calling a feature done:
 - [ ] All tests pass.
 - [ ] No test is skipped, commented out, or marked `.only` without reason.
 - [ ] Each test targets a specific acceptance criterion from `.specify/features/{slug}/spec.md` (cite it in the test name or a comment — e.g. `// AC-3: user receives confirmation email`).
+- [ ] Test lock exists and `test-lock.mjs verify` passes (SPEC-012).
 
 ---
 

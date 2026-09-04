@@ -6,6 +6,24 @@ Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Re
 
 ---
 
+## [2.11.0-rc.1] — 2026-09-04
+
+**Alpha channel — SPEC-012 Phase 1 (Quality, Evidence & Brownfield).** This branch
+ships the marketplace as `agentic-sdlc-alpha` so it can coexist with the stable
+`agentic-sdlc` marketplace on the same machine. Install from the `next` branch:
+
+```bash
+claude plugin marketplace add trac41799/claude-code-agentic-sdlc#next
+claude plugin install agentic-sdlc@agentic-sdlc-alpha
+```
+
+The baseline on `main` must be fully evaluated and stored before this branch
+merges (enforced by the baseline-gate CI check). Work in progress:
+- Brownfield onboarding brief generation (`/asdlc-adopt`)
+- SHA-256 test-integrity lock (test-freezer)
+- Machine-readable evidence manifests
+- CI validation for lock and manifest integrity
+
 ## [2.9.0] - 2026-08-31
 
 **Added**

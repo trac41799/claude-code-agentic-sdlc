@@ -1,0 +1,32 @@
+name: baseline-gate
+
+on:
+  push:
+    branches: [next]
+  pull_request:
+    branches: [main]
+
+jobs:
+  baseline-must-exist-on-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Baseline artifacts must exist on main
+        run: |
+          git fetch origin main --depth=1
+          missing=""
+          for f in evidence/baseline/manifest.json docs/architecture/baseline-status.md; do
+            if ! git cat-file -e "origin/main:$f" 2>/dev/null; then
+              missing="$missing $f"
+            fi
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::SPEC-012 hard gate: main is missing:$missing"
+            echo "::error::The baseline framework on main must be fully evaluated and stored"
+            echo "::error::(Phase 0: protocol + evidence/baseline/ + docs/architecture/baseline-status.md)"
+            echo "::error::before the improvement branch may merge. No merge signal until then."
+            exit 1
+          fi
+          echo "baseline gate: PASS — main has $(git show origin/main:evidence/baseline/manifest.json | head -c 120)..."

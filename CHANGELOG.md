@@ -9,12 +9,14 @@ Format: `## [version] — YYYY-MM-DD` with sections Added / Changed / Fixed / Re
 ## [2.11.0-rc.1] — 2026-09-04
 
 **Alpha channel — SPEC-012 Phase 1 (Quality, Evidence & Brownfield).** This branch
-ships the marketplace as `agentic-sdlc-alpha` so it can coexist with the stable
-`agentic-sdlc` marketplace on the same machine. Install from the `next` branch:
+ships a **separate plugin** (`agentic-sdlc-alpha`, marketplace
+`agentic-sdlc-alpha`) so it coexists with the stable `agentic-sdlc` plugin on the
+same machine and can be toggled on/off in Claude Code for comparative
+benchmarking. Install from the `next` branch:
 
 ```bash
 claude plugin marketplace add trac41799/claude-code-agentic-sdlc#next
-claude plugin install agentic-sdlc@agentic-sdlc-alpha
+claude plugin install agentic-sdlc-alpha@agentic-sdlc-alpha
 ```
 
 The baseline on `main` must be fully evaluated and stored before this branch

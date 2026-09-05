@@ -34,19 +34,31 @@ claude plugin update agentic-sdlc@agentic-sdlc
 
 ### Alpha channel (SPEC-012 improvement branch)
 
-The improvement work lives on the `next` branch and is installable exactly like
-the stable channel — the branch's marketplace is named `agentic-sdlc-alpha`, so
-it **coexists** with the stable marketplace on the same machine:
+The improvement work lives on the `next` branch and ships as a **separate
+plugin** (`agentic-sdlc-alpha`) so it can be installed side-by-side with the
+stable plugin and toggled on/off in Claude Code for comparative benchmarking:
 
 ```bash
+# stable (main)
+claude plugin marketplace add trac41799/claude-code-agentic-sdlc
+claude plugin install agentic-sdlc@agentic-sdlc
+
+# alpha (next branch) — same repo, one ref suffix
 claude plugin marketplace add trac41799/claude-code-agentic-sdlc#next
-claude plugin install agentic-sdlc@agentic-sdlc-alpha
+claude plugin install agentic-sdlc-alpha@agentic-sdlc-alpha
 ```
 
-Alpha installs are for trial only: the branch must not merge to `main` until the
-baseline framework on `main` is fully evaluated and stored (the baseline-gate CI
-check enforces this). Switch back to stable any time by re-adding the marketplace
-without the `#next` ref.
+Toggle which one is active (enable exactly one for a run — both ship the same
+`/asdlc-*` commands):
+
+```bash
+claude plugin disable agentic-sdlc      # or enable, to switch back
+claude plugin enable  agentic-sdlc-alpha
+```
+
+Alpha installs are for trial and benchmarking only: the branch must not merge to
+`main` until the baseline framework on `main` is fully evaluated and stored (the
+baseline-gate CI check enforces this).
 
 ## What the plugin contains
 

@@ -46,9 +46,12 @@ python -c "from benchv2.report import render; from pathlib import Path; render(P
 
 ## Pins
 
-CLI = `fcc-claude`, model = **`glm-5.3-flash`** — pilot pin, operator decision
-2026-09-05. The runner **refuses** any other model (non-glm and Claude-family
-pins are hard errors), and the run manifest records the actual `BENCH_MODEL`.
+CLI = `fcc-claude`, model = **`open_router/z-ai/glm-5.3-flash`** — pilot pin,
+operator decision 2026-09-05 (the bare `glm-5.3-flash` id routes to the NVIDIA
+NIM provider on the fcc-server and fails; the `open_router/z-ai/`-qualified id
+uses the configured OpenRouter key). The runner **refuses** any other model
+(non-glm and Claude-family pins are hard errors), and the run manifest records
+the actual `BENCH_MODEL`.
 NOTE: this differs from the v1 suite pin (`deepseek/deepseek-chat`), so v1 runs
 are NOT comparable on the model axis — compare within this pilot only.
 ~$40–90 total for the full suite; ~2–3 days wall (v1-estimated; glm pricing may

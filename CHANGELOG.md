@@ -18,11 +18,24 @@ claude plugin install agentic-sdlc@agentic-sdlc-alpha
 ```
 
 The baseline on `main` must be fully evaluated and stored before this branch
-merges (enforced by the baseline-gate CI check). Work in progress:
-- Brownfield onboarding brief generation (`/asdlc-adopt`)
-- SHA-256 test-integrity lock (test-freezer)
-- Machine-readable evidence manifests
-- CI validation for lock and manifest integrity
+merges (enforced by the baseline-gate CI check). Landed so far (Phase 1):
+- **Test-freezer (FR-002)** — `dev-tdd` asset `test-lock.mjs`: SHA-256 lock over
+  the test suite (create/verify/relock/validate, `.asdlc/test-lock.json`,
+  canonical UTF-8/LF/`/`-separator digests, deterministic path order); verify
+  fails on changed/added/deleted/renamed/symlinked locked files; relock requires
+  a human approver, reason, and revised plan reference; 17 unit tests
+- **Evidence manifests (FR-003)** — new `dev-evidence` skill: dependency-free
+  engine (`record`/`meta`/`finalize`/`validate --strict`), one manifest per task
+  at `.asdlc/evidence/<task-id>.json`, versioned JSON Schema, FR-003 rule set
+  (statuses, skip reasons, cost measured/estimated/unavailable never-zero);
+  9 unit tests
+- **Brownfield onboarding brief (FR-001)** — `/asdlc-adopt` Step 9 generates
+  `docs/project/onboarding-brief.md` (dry-run, idempotent, inferred facts marked
+  `(inferred — verify)`, never overwrites human docs, never commits)
+- **CI** — baseline-gate workflow (this branch cannot merge until
+  `evidence/baseline/manifest.json` + `docs/architecture/baseline-status.md`
+  exist on `main`); client-side `asdlc-evidence.yml` template validates locks and
+  manifests; plugin-ci runs all three engine suites (56 tests)
 
 ## [2.9.0] - 2026-08-31
 

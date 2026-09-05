@@ -92,6 +92,7 @@ About to adopt the Agentic SDLC team into:
   Only-if-missing : agents/<name>/context/persona.md stubs,
                     docs/product/{product,epics,epic-status}.md,
                     docs/brand/style-guide.md, docs/project-status.html
+  Step 9         : generate docs/project/onboarding-brief.md (repo map; skipped if it already exists)
   Will NOT touch  : your source code, package.json, CI, git history — no commits
 Proceed? (y/N)
 ```
@@ -260,7 +261,42 @@ them properly. Unlike `/asdlc-project`, this skill never seeds product content o
 styling from attachments; in an existing repo that synthesis deserves its own
 conversation with the PM agent.
 
-### Step 9 — Clean up and summarize
+### Step 9 — Generate the brownfield onboarding brief (SPEC-012 FR-001)
+
+Creates `docs/project/onboarding-brief.md` (or the path the operator configured)
+— a human-readable map of the repository for new humans and agents. Idempotent
+and non-destructive: it never overwrites an existing brief without explicit
+approval, never commits, and never writes outside the project.
+
+1. **Dry-run first if asked** (`--dry-run`): print where the brief would be
+   written and its outline; make no changes.
+2. **Existing brief?** If `docs/project/onboarding-brief.md` already exists,
+   leave it untouched and report it — a human authored it or approved the last
+   generation. Refresh only with explicit operator approval.
+3. **Gather facts** from the repo (mark every fact not read directly from a file
+   as `(inferred — verify)`):
+   - Purpose: README, `package.json` description, `docs/product/product.md`.
+   - Primary languages: extension census of `git ls-files`.
+   - Top-level architecture: first-level dirs of `git ls-files`; one line per
+     important directory (`src/`, `app/`, `lib/`, `migrations/`, …).
+   - Commands: `package.json` scripts, `Makefile` targets, CI workflow steps
+     (`.github/workflows/`), README instructions — build, lint, test, dev, deploy.
+   - Entry points: `package.json` main/bin, `src/index.*`, app routes, server files.
+   - Dependencies/integrations: manifest deps, `.env.example` key **names only**
+     (never values), external services mentioned in docs or CI.
+   - Sensitive/high-risk: migrations, auth code, secrets handling, infra config —
+     list paths and why they need human confirmation.
+   - Doc gaps: claims you could not verify; files that look stale.
+   - Suggested first task: one bounded task that exercises build + test + one edit.
+4. **Write the brief** from the template
+   (`templates/project-scaffold/docs/project/onboarding-brief.md` in the
+   canonical repo) substituting the gathered facts. Footer must carry the
+   generation timestamp, `git rev-parse HEAD` commit SHA, plugin version, and
+   the source paths used.
+5. **Report** the brief path and every `(inferred — verify)` item so the operator
+   can confirm them.
+
+### Step 10 — Clean up and summarize
 
 ```bash
 rm -rf "$TMP"
@@ -286,6 +322,7 @@ Next steps:
 1. Restart Claude Code in this repo so the project agents and skills load
 2. Invoke @product-manager → pm-client-interview (or pm-grill-with-docs if docs/product/ already has content)
 3. Review CLAUDE.md — the delegation block sits alongside your existing instructions
+4. Read docs/project/onboarding-brief.md (generated in Step 9) and confirm every `(inferred — verify)` item
 ```
 
 ## What this skill does NOT do

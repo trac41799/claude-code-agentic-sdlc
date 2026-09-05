@@ -1,0 +1,40 @@
+name: asdlc-governance
+
+# SPEC-012 Phase 1 CI validation: test-lock integrity + evidence manifests.
+# Runs only when governed artifacts exist — a repo with none is unaffected.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test-lock-and-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test-freezer integrity (if a lock exists)
+        run: |
+          if [ -f .asdlc/test-lock.json ]; then
+            node .claude/skills/dev-tdd/assets/test-lock.mjs verify
+          else
+            echo "no test lock — nothing to verify (governed tasks must lock before implementation)"
+          fi
+
+      - name: Evidence manifests validate (if present)
+        run: |
+          if ls .asdlc/evidence/*.json >/dev/null 2>&1; then
+            for m in .asdlc/evidence/*.json; do
+              task=$(basename "$m" .json)
+              # Strict (governed completion claim) for finalized manifests;
+              # structural rules for work-in-progress ones.
+              if node -e "const m=require('./'+process.argv[1]); process.exit(m.provenance&&m.provenance.generatedAt?0:1)" "$m"; then
+                node .claude/skills/dev-evidence/assets/evidence.mjs validate --task "$task" --strict
+              else
+                node .claude/skills/dev-evidence/assets/evidence.mjs validate --task "$task"
+              fi
+            done
+          else
+            echo "no evidence manifests — nothing to validate"
+          fi

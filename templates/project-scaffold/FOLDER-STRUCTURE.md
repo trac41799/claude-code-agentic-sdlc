@@ -154,6 +154,9 @@ hand-edit them outside the skill that owns them.
 | `.githooks/pre-push`, root `AGENTS.md`, `.specify/ACTIVE.md`, `.specify/extensions/plan-protocol/` (engine + config.json), `.specify/features/{slug}/meta.yaml` | `plan-protocol` | The plan registry + blast-radius guard. Not installed by the scaffold — the Developer runs `plan-protocol` to enable enforcement |
 | `.specify/extensions/git/scripts/bash/` | spec-kit (`npx specify-cli init`) | spec-kit helper scripts |
 | `.github/workflows/ci.yml` | `devops-cicd` | PR pipeline (lint → types → tests → build) |
+| `.github/workflows/asdlc-evidence.yml` | Scaffold template (SPEC-012) | Validates test-lock integrity and evidence manifests when present |
+| `docs/project/onboarding-brief.md` | `/asdlc-adopt` Step 9 (SPEC-012 FR-001) | Brownfield onboarding brief — human-readable repo map; inferred facts marked `(inferred — verify)` |
+| `.asdlc/` (`test-lock.json`, `evidence/<task-id>.json`, `task-budget.json`) | `dev-tdd` test-freezer, `dev-evidence`, cost governance | Governed-task runtime artifacts — digests and statuses only, never secrets |
 | `.claude/retired-asdlc-<date>/` | `asdlc-project` Step 6 (refresh) | v2.4-era writer/designer files moved aside, never deleted |
 
 ## Naming conventions

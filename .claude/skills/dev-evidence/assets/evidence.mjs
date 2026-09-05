@@ -92,15 +92,12 @@ export function ensureManifest(dir, taskId, repository) {
   });
 }
 
-export function validateManifest(m) {
+export function validateManifest(m, { strict = false } = {}) {
   const errs = [];
   if (m.schemaVersion !== SCHEMA_VERSION) errs.push(`schemaVersion must be ${SCHEMA_VERSION}`);
   if (!m.taskId || typeof m.taskId !== 'string') errs.push('taskId required');
   if (!m.repository || typeof m.repository !== 'string') errs.push('repository required');
   if (!m.baseCommit || typeof m.baseCommit !== 'string') errs.push('baseCommit required');
-  if (m.headCommit === undefined || m.headCommit === null) errs.push('headCommit required (set via meta --head-commit)');
-  if (!Array.isArray(m.changedPaths)) errs.push('changedPaths must be an array');
-  if (!m.plan || !m.plan.path) errs.push('plan.path required');
   for (const [name, g] of Object.entries(m.gates ?? {})) {
     if (!GATE_STATUSES.includes(g.status)) errs.push(`gates.${name}.status must be one of ${GATE_STATUSES.join('|')}`);
     if (g.status === 'skipped' && !g.reason) errs.push(`gates.${name} skipped requires a reason`);
@@ -125,6 +122,14 @@ export function validateManifest(m) {
   if (m.handoff?.followUps && !Array.isArray(m.handoff.followUps)) errs.push('handoff.followUps must be an array');
   if (m.provenance?.generatedAt && Number.isNaN(Date.parse(m.provenance.generatedAt))) {
     errs.push('provenance.generatedAt must be ISO-8601');
+  }
+  // Strict mode = the manifest claims governed completion (finalized or CI gate):
+  // the full minimum schema must be present.
+  if (strict) {
+    if (m.headCommit === undefined || m.headCommit === null) errs.push('headCommit required (set via meta --head-commit)');
+    if (!Array.isArray(m.changedPaths)) errs.push('changedPaths must be an array');
+    if (!m.plan || !m.plan.path) errs.push('plan.path required');
+    if (!m.review?.status) errs.push('review.status required');
   }
   return errs;
 }
@@ -180,18 +185,19 @@ export function cmdFinalize({ dir, taskId, pluginVersion }) {
   if (pluginVersion !== undefined) m.provenance.pluginVersion = pluginVersion;
   m.provenance.generatedAt = new Date().toISOString();
   writeManifest(dir, m);
-  const errs = validateManifest(m);
+  const errs = validateManifest(m, { strict: true });
   if (errs.length) {
     throw new Error(`manifest invalid — ${errs.join('; ')}`);
   }
   return m;
 }
 
-export function cmdValidate({ dir, taskId }) {
+export function cmdValidate({ dir, taskId, strict = false }) {
   if (!taskId) throw new Error('--task <id> is required');
   const m = readManifest(dir, taskId);
   if (!m) throw new Error(`no manifest for task ${taskId} at ${manifestPath(dir, taskId)}`);
-  return { ok: validateManifest(m).length === 0, errs: validateManifest(m) };
+  const errs = validateManifest(m, { strict });
+  return { ok: errs.length === 0, errs };
 }
 
 function parseCsv(s) {
@@ -208,7 +214,7 @@ function usage() {
            [--cost <measured|estimated|unavailable>] [--budget <usd>] [--actual <usd>] [--cost-source <x>]
            [--plugin-version <v>]
   finalize --task <id> [--plugin-version <v>]
-  validate --task <id>`);
+  validate --task <id> [--strict]`);
 }
 
 export function main(argv) {
@@ -217,7 +223,13 @@ export function main(argv) {
   const opts = {};
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
-    if (a.startsWith('--')) opts[a.slice(2)] = args[++i];
+    if (a.startsWith('--')) {
+      // kebab-case flags (--head-commit, --cost-source) map to camelCase options.
+      const key = a.slice(2).replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+      const next = args[i + 1];
+      if (next !== undefined && !next.startsWith('--')) { opts[key] = next; i++; }
+      else opts[key] = true; // boolean flag (e.g. --strict)
+    }
   }
   const num = (v) => (v === undefined ? undefined : Number(v));
   try {
@@ -240,8 +252,8 @@ export function main(argv) {
       const m = cmdFinalize({ dir: process.cwd(), taskId: opts.task, pluginVersion: opts.pluginVersion });
       console.log(`evidence: finalized ${m.taskId} — manifest valid`);
     } else if (verb === 'validate') {
-      const r = cmdValidate({ dir: process.cwd(), taskId: opts.task });
-      console.log(r.ok ? `evidence: ${opts.task} manifest valid` : `evidence: INVALID — ${r.errs.join('; ')}`);
+      const r = cmdValidate({ dir: process.cwd(), taskId: opts.task, strict: opts.strict === true });
+      console.log(r.ok ? `evidence: ${opts.task} manifest valid${opts.strict === true ? ' (strict)' : ''}` : `evidence: INVALID — ${r.errs.join('; ')}`);
       process.exit(r.ok ? 0 : 1);
     } else {
       usage();

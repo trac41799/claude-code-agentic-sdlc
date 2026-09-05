@@ -95,11 +95,15 @@ test('concurrent tasks keep separate manifests', () => {
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
-test('validate reports missing required fields', () => {
+test('validate: structural checks pass on WIP manifests, strict fails them', () => {
   const dir = tmpRepo();
   cmdRecord({ dir, taskId: 'TASK-1', gate: 'tests', status: 'passed' });
-  const r = cmdValidate({ dir, taskId: 'TASK-1' });
+  // Non-strict = structural rules only (statuses, reasons, cost states).
+  assert.equal(cmdValidate({ dir, taskId: 'TASK-1' }).ok, true);
+  // Strict = full minimum schema (governed completion claim).
+  const r = cmdValidate({ dir, taskId: 'TASK-1', strict: true });
   assert.equal(r.ok, false);
   assert.ok(r.errs.some((e) => e.includes('headCommit')));
+  assert.ok(r.errs.some((e) => e.includes('review.status')));
   fs.rmSync(dir, { recursive: true, force: true });
 });

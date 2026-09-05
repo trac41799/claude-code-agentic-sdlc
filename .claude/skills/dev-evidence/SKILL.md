@@ -27,9 +27,13 @@ Engine: `.claude/skills/dev-evidence/assets/evidence.mjs` (dependency-free,
 3. At handoff, finalize — this stamps provenance and validates everything:
    node .claude/skills/dev-evidence/assets/evidence.mjs finalize --task <task-id> \
      [--plugin-version <v>]
-4. CI validates any committed manifest:
-   node .claude/skills/dev-evidence/assets/evidence.mjs validate --task <task-id>
+4. CI validates any committed manifest (template: `.github/workflows/asdlc-evidence.yml`):
+   node .claude/skills/dev-evidence/assets/evidence.mjs validate --task <task-id> [--strict]
 ```
+`validate` without `--strict` checks structural rules (statuses, skip reasons,
+cost states) — safe for work-in-progress manifests. `--strict` additionally
+requires the full minimum schema (headCommit, changedPaths, plan, review) and is
+what CI runs on finalized manifests (those claiming governed completion).
 
 ## Hard rules
 

@@ -10,6 +10,7 @@ Usage:
 """
 import argparse
 import json
+import os
 import pathlib
 import shutil
 import subprocess
@@ -77,7 +78,7 @@ def fresh_repo(d: pathlib.Path, framework: bool, wave: bool = False):
     subprocess.run(["git", "commit", "-qm", "init"], cwd=d, check=True)
 
 
-PIN_ALIAS = ["deepseek"]
+PIN_ALIAS = ["glm"]
 
 def verify_pin(session: dict) -> bool:
     mus = session.get("modelUsage") or {}
@@ -173,6 +174,19 @@ def run_replicate(case: str, arm: str, rep: int, out: pathlib.Path) -> dict:
 
 def main(argv=None):
     args = parse_args(argv if argv is not None else sys.argv[1:])
+    # Operator pin (2026-09-05): pilot everything with glm-5.3-flash via
+    # fcc-claude. Refuse anything else — especially Claude-family models.
+    cli = os.environ.get("BENCH_CLI", "")
+    model = os.environ.get("BENCH_MODEL", "")
+    if cli != "fcc-claude":
+        raise SystemExit("BENCH_CLI must be fcc-claude — refusing to run with any other CLI")
+    if not model:
+        raise SystemExit("BENCH_MODEL must be set — pilot pin is glm-5.3-flash")
+    low = model.lower()
+    if any(x in low for x in ("claude", "opus", "sonnet", "haiku")):
+        raise SystemExit(f"BENCH_MODEL={model} is a Claude-family model — refused (operator pin: glm-5.3-flash only)")
+    if "glm" not in low:
+        raise SystemExit(f"BENCH_MODEL={model} is not a glm model — pilot runs use glm-5.3-flash only")
     out = pathlib.Path(args.out)
     runs_dir = out / "runs"
     runs_dir.mkdir(parents=True, exist_ok=True)
@@ -182,7 +196,7 @@ def main(argv=None):
     manifest = {
         "case": args.case, "arms": args.arms, "reps": args.reps,
         "started": time.strftime("%Y-%m-%dT%H:%M:%S"), "status": "running",
-        "pin_env": {"BENCH_CLI": "fcc-claude", "BENCH_MODEL": "deepseek/deepseek-chat"},
+        "pin_env": {"BENCH_CLI": cli, "BENCH_MODEL": model},
     }
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     runs_path = runs_dir / "runs.json"

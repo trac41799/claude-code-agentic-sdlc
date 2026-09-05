@@ -143,6 +143,11 @@ jobs:
             .claude/skills/dev-tdd/assets/test-lock.test.mjs \
             .claude/skills/dev-evidence/assets/test-evidence.test.mjs
 
+      - name: Bench-v2 protocol unit tests
+        run: |
+          python3 -m pip install -q pytest
+          python3 -m pytest bench-v2/tests/test_v2.py -q
+
       - name: Plan-protocol ships no client-specific vocabulary
         run: |
           python3 - <<'PY'

@@ -5,7 +5,7 @@ project's own `.claude/` — by `/asdlc-project` for a new project, or `/asdlc-a
 a repo that already exists. Nothing lives in `~/.claude/`.
 
 - Agent definitions: [`.claude/agents/`](../../.claude/agents) — 4 files
-- Workflow skills: [`.claude/skills/`](../../.claude/skills) — 17 skills
+- Workflow skills: [`.claude/skills/`](../../.claude/skills) — 18 skills
 - Routing table: [`.claude/rules/agent-routing.md`](../../.claude/rules/agent-routing.md)
 - Engineering guardrails: [`.claude/rules/global-engineering.md`](../../.claude/rules/global-engineering.md)
 

@@ -159,9 +159,9 @@ Verify — hard gate, same as `/asdlc-project`:
 A=$(find "$TARGET/.claude/agents" -maxdepth 1 -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
 S=$(find "$TARGET/.claude/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
 R=0; [ -f "$TARGET/.claude/rules/agent-routing.md" ] && R=1
-echo "agents: $A/4 · skills: $S/17 · agent-routing.md: $R/1"
-[ "$A" -eq 4 ] && [ "$S" -ge 17 ] && [ "$R" -eq 1 ] || {
-  echo "❌ install incomplete — expected 4 agents, at least 17 skills, and agent-routing.md"
+echo "agents: $A/4 · skills: $S/18 · agent-routing.md: $R/1"
+[ "$A" -eq 4 ] && [ "$S" -ge 18 ] && [ "$R" -eq 1 ] || {
+  echo "❌ install incomplete — expected 4 agents, at least 18 skills, and agent-routing.md"
   echo "   check that \$TMP/asdlc-canonical/.claude/ exists and the mkdir -p above ran"
   exit 1
 }

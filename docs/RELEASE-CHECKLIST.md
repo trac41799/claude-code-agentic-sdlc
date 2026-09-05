@@ -17,9 +17,9 @@ green.
 |---|---|
 | Manifests parse; versions in lockstep | a broken manifest disables the plugin silently |
 | No writes to `~/.claude/`, no telemetry in the payload | **nothing installs globally** — the reason v2 exists |
-| 4 agents / 17 skills, cross-checked against `doctor.sh` | the counts the tooling asserts match reality |
+| 4 agents / 18 skills, cross-checked against `doctor.sh` | the counts the tooling asserts match reality |
 | Skill frontmatter `name` matches its directory | a mismatched skill is silently unroutable |
-| Plan-protocol engine suite (32 tests) | the enforcement engine still enforces |
+| Engine suites: plan-protocol + test-lock + evidence | the enforcement engines still enforce (57 tests) |
 | Plan-protocol ships no domain vocabulary | the engine stays stack-neutral |
 | Web template imports all declared by step 9c | no dependency resolving by accidental hoisting |
 | Web template queries match its migrations | no query against a table/column that doesn't exist |

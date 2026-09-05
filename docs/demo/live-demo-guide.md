@@ -75,7 +75,7 @@ claude
 ```
 
 In Claude Code, run: `/asdlc-adopt` — confirm the repo. It installs the
-4-agent team + 17 skills into this project's `.claude/`, injects the
+4-agent team + 18 skills into this project's `.claude/`, injects the
 delegation block, touches nothing else, commits nothing. Then run
 `/asdlc-doctor` — all checks pass.
 

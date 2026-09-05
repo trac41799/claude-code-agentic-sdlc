@@ -64,10 +64,10 @@ if [ -f "FOLDER-STRUCTURE.md" ]; then
     fail "project agents installed" "found $AGENTS/4 — fix: re-run /asdlc-project step 6 to refresh"
   fi
   SKILLS=$(ls -d .claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$SKILLS" -ge 17 ]; then
+  if [ "$SKILLS" -ge 18 ]; then
     pass "project skills installed" "$SKILLS skills in .claude/skills/"
   else
-    fail "project skills installed" "found $SKILLS (expected 17) — fix: re-run /asdlc-project step 6 to refresh"
+    fail "project skills installed" "found $SKILLS (expected 18) — fix: re-run /asdlc-project step 6 to refresh"
   fi
   RETIRED=""
   for f in writer designer; do

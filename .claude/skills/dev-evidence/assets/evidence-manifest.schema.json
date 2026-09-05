@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/trac41799/claude-code-agentic-sdlc/.claude/skills/dev-evidence/assets/evidence-manifest.schema.json",
+  "title": "Agentic SDLC evidence manifest (SPEC-012 FR-003)",
+  "description": "One machine-readable evidence manifest per governed task. The manifest is the authoritative index for the task handoff.",
+  "type": "object",
+  "required": ["schemaVersion", "taskId", "repository", "baseCommit", "headCommit", "plan", "changedPaths", "gates", "testFreeze", "review", "handoff", "cost", "provenance"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "taskId": { "type": "string", "minLength": 1 },
+    "repository": { "type": "string" },
+    "baseCommit": { "type": "string" },
+    "headCommit": { "type": ["string", "null"] },
+    "plan": {
+      "type": "object",
+      "required": ["path", "status"],
+      "properties": {
+        "path": { "type": ["string", "null"] },
+        "status": { "enum": ["approved", "draft", "revised", null] }
+      }
+    },
+    "changedPaths": { "type": "array", "items": { "type": "string" } },
+    "gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": { "enum": ["passed", "failed", "skipped", "not-run"] },
+          "command": { "type": ["string", "null"] },
+          "reason": { "type": ["string", "null"] }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "status": { "const": "skipped" } } },
+            "then": { "required": ["reason"], "properties": { "reason": { "type": "string", "minLength": 1 } } }
+          }
+        ]
+      }
+    },
+    "testFreeze": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["passed", "failed", "skipped", "not-run", null] },
+        "lockPath": { "type": ["string", "null"] }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["approved", "revise", "blocked", "not-run", null] },
+        "reviewer": { "type": ["string", "null"] }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "summaryPath": { "type": ["string", "null"] },
+        "knownRisks": { "type": "array", "items": { "type": "string" } },
+        "followUps": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["measured", "estimated", "unavailable", null] },
+        "budgetUsd": { "type": ["number", "null"] },
+        "actualUsd": { "type": ["number", "null"] },
+        "source": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "measured" } } },
+          "then": { "required": ["actualUsd"], "properties": { "actualUsd": { "type": "number" } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "unavailable" } } },
+          "then": { "properties": { "actualUsd": { "type": "null" } } }
+        }
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "pluginVersion": { "type": ["string", "null"] },
+        "generatedAt": { "type": ["string", "null"], "format": "date-time" }
+      }
+    }
+  }
+}

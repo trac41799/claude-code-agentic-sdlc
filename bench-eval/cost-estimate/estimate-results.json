@@ -1,0 +1,106 @@
+{
+  "prices": {
+    "glm-5.3-flash": {
+      "in": 0.15,
+      "out": 0.5,
+      "cache_read": 0.03,
+      "cache_write": 0.1875
+    },
+    "glm-5.3-flash-promo": {
+      "in": 0.075,
+      "out": 0.25,
+      "cache_read": 0.015,
+      "cache_write": 0.09375
+    },
+    "glm-5.3": {
+      "in": 1.17,
+      "out": 3.96,
+      "cache_read": 0.234,
+      "cache_write": 1.4625
+    },
+    "muse-spark-1.3": {
+      "in": 1.25,
+      "out": 4.25,
+      "cache_read": 0.15,
+      "cache_write": 1.5625
+    },
+    "claude-sonnet-5": {
+      "in": 2.0,
+      "out": 10.0,
+      "cache_read": 0.2,
+      "cache_write": 2.5
+    },
+    "deepseek-v4-flash-0731": {
+      "in": 0.045,
+      "out": 0.09,
+      "cache_read": 0.009,
+      "cache_write": 0.05625
+    }
+  },
+  "profiles": [
+    {
+      "name": "hard-greenfield-A-r1",
+      "turns": 86,
+      "input": 280870,
+      "cache_creation": 0,
+      "cache_read": 3986048,
+      "output": 66721,
+      "fcc_reported_cost": 6.302594000000002
+    },
+    {
+      "name": "hard-greenfield-B-r1",
+      "turns": 59,
+      "input": 118191,
+      "cache_creation": 0,
+      "cache_read": 2483968,
+      "output": 40203,
+      "fcc_reported_cost": 2.8380140000000007
+    },
+    {
+      "name": "preflight-1turn",
+      "turns": 1,
+      "input": 30606,
+      "cache_creation": 0,
+      "cache_read": 704,
+      "output": 15,
+      "fcc_reported_cost": 0.1531
+    }
+  ],
+  "configs": {
+    "all glm-5.3-flash (list)": [
+      0.19507243999999999,
+      0.11234918999999999,
+      0.004619519999999999
+    ],
+    "all glm-5.3-flash (50% promo)": [
+      0.09753621999999999,
+      0.056174594999999994,
+      0.0023097599999999997
+    ],
+    "all claude-sonnet-5": [
+      2.0261595999999997,
+      1.1352056,
+      0.061502799999999996
+    ],
+    "main glm-5.3 + subs glm-flash": [
+      1.1264195364,
+      0.6488198604,
+      0.0266090652
+    ],
+    "main glm-5.3 + subs deepseek-v4": [
+      1.0842533460000001,
+      0.6245028765,
+      0.025638696
+    ],
+    "main muse-spark-1.3 + subs glm-flash": [
+      0.9213129969999999,
+      0.517542447,
+      0.028284650999999997
+    ],
+    "main muse-spark-1.3 + subs deepseek-v4": [
+      0.8791468065999999,
+      0.49322546309999993,
+      0.027314281799999996
+    ]
+  }
+}

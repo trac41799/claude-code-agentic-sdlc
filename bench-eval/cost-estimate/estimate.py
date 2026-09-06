@@ -30,13 +30,34 @@ PRICES = {
     "gemini-3.8-flash-promo":  {"in": 0.375, "out": 1.875, "cache_read": 0.0375, "cache_write": 0.02083}, # 50% off
 }
 
-def session_cost(tokens: dict, model: str) -> float:
+# --- Reasoning-effort model (methodology in README §"Reasoning effort") ---
+# OpenRouter bills every output token at the completion rate — reasoning effort
+# changes OUTPUT VOLUME (thinking tokens), not the rate. `share` = thinking
+# tokens emitted per 1 answer token. Defaults are the model's default effort;
+# levels cover selectable efforts where documented.
+REASONING = {
+    "glm-5.3-flash":       {"default": 0.15, "levels": {"low": 0.10, "high": 0.30}},
+    "deepseek-v4-flash-0731": {"default": 0.10, "levels": {}},
+    "gemini-3.8-flash":    {"default": 0.25, "levels": {"low": 0.15, "high": 0.50}},
+    "muse-spark-1.3":      {"default": 0.75, "levels": {"low": 0.40, "high": 1.00}},
+    "glm-5.3":             {"default": 1.25, "levels": {"low": 0.40, "medium": 0.70, "high": 0.80, "max": 1.25}},  # reasoning always on, max default
+    "claude-sonnet-5":     {"default": 0.80, "levels": {"low": 0.15, "medium": 0.40, "high": 0.80, "max": 1.50, "x-high": 2.50}},  # adaptive thinking
+}
+
+def output_multiplier(model: str, effort: str | None = None) -> float:
+    """1 + thinking-share → output-token multiplier at the given effort."""
+    r = REASONING.get(model, {"default": 0.15, "levels": {}})
+    share = r["levels"].get(effort, r["default"]) if effort else r["default"]
+    return 1.0 + share
+
+def session_cost(tokens: dict, model: str, effort: str | None = None, share: float | None = None) -> float:
     p = PRICES[model]
+    mult = (1.0 + share) if share is not None else output_multiplier(model, effort)
     return (
         tokens["input"] * p["in"]
         + tokens["cache_creation"] * p["cache_write"]
         + tokens["cache_read"] * p["cache_read"]
-        + tokens["output"] * p["out"]
+        + tokens["output"] * mult * p["out"]
     ) / 1e6
 
 def load_profile(path: pathlib.Path):
@@ -90,11 +111,11 @@ def main():
     print(f"{'profile':26s} {'turns':>5s} {'in_k':>7s} {'out_k':>6s} {'cache_r_k':>9s} {'fcc$':>7s} {'list$ all-flash':>15s} {'ratio fcc/list':>13s}")
     for p in profiles:
         t = {k: p[k] for k in ("input", "cache_creation", "cache_read", "output")}
-        list_cost = session_cost(t, "glm-5.3-flash")
+        list_cost = session_cost(t, "glm-5.3-flash", effort="low")  # flash default ≈ low reasoning
         fcc = p["fcc_reported_cost"]
         print(f"{p['name']:26s} {p['turns']:5d} {p['input']/1000:7.1f} {p['output']/1000:6.1f} {p['cache_read']/1000:9.1f} {fcc:7.2f} {list_cost:15.4f} {fcc/list_cost if list_cost else float('nan'):13.1f}x")
 
-    print("\nEstimated $/session at OpenRouter list prices (subagent share = 30%, sensitivity 20/40%):")
+    print("\nEstimated $/session at OpenRouter list prices, DEFAULT reasoning effort (subagent share = 30%):")
     hdr = f"{'config':38s} " + " ".join(f"{p['name'][:14]:>15s}" for p in profiles)
     print(hdr)
     results = {}
@@ -109,20 +130,25 @@ def main():
             results.setdefault(label, []).append(cost)
         print(f"{label:38s} " + " ".join(f"{c:15.3f}" for c in row))
 
-    # sensitivity + summary vs all-flash
-    print("\nRelative cost vs 'all glm-5.3-flash (list)' — B-arm profile, sub-share sensitivity:")
-    base = results["all glm-5.3-flash (list)"][0]
-    for label, main_m, sub_m in CONFIGS:
-        if label.startswith("all glm-5.3-flash (list)"):
-            continue
-        costs = {}
-        for s in (0.20, 0.30, 0.40):
-            t = {k: profiles[0][k] for k in ("input", "cache_creation", "cache_read", "output")}
-            c = session_cost({k: v * (1 - s) for k, v in t.items()}, main_m) + session_cost({k: v * s for k, v in t.items()}, sub_m)
-            costs[s] = c
-        print(f"{label:38s} 20%={costs[0.20]/base:5.2f}x  30%={costs[0.30]/base:5.2f}x  40%={costs[0.40]/base:5.2f}x   (abs 30%: ${costs[0.30]:.3f})")
+    # reasoning-effort scenarios (A-arm profile) — models with documented effort controls
+    print("\nReasoning-effort scenarios — A-arm profile, $/session and uplift vs that model's no-reasoning cost:")
+    a = profiles[0]
+    t = {k: a[k] for k in ("input", "cache_creation", "cache_read", "output")}
+    base_flash = session_cost(t, "glm-5.3-flash", effort="low")
+    for model, levels in [("claude-sonnet-5", ["low", "medium", "high", "max", "x-high"]),
+                          ("glm-5.3", ["low", "medium", "high", "max"]),
+                          ("gemini-3.8-flash", ["low", None, "high"]),
+                          ("muse-spark-1.3", ["low", None, "high"]),
+                          ("glm-5.3-flash", ["low", None, "high"]),
+                          ("deepseek-v4-flash-0731", [None])]:
+        for eff in levels:
+            share = REASONING[model]["levels"].get(eff, REASONING[model]["default"]) if eff else REASONING[model]["default"]
+            c = session_cost(t, model, effort=eff)
+            c0 = session_cost(t, model, share=0.0)  # true no-reasoning baseline
+            label_eff = eff if eff else "default"
+            print(f"  {model:24s} {label_eff:7s} share={share:4.2f}  ${c:6.3f}  vs-no-reasoning {c / c0:5.2f}x  vs-all-flash {c / base_flash:5.2f}x")
 
-    out = {"prices": PRICES, "profiles": profiles, "configs": results}
+    out = {"prices": PRICES, "reasoning": REASONING, "profiles": profiles, "configs": results}
     (ROOT / "estimate-results.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     print("\nsaved:", ROOT / "estimate-results.json")
 

@@ -11,15 +11,27 @@ index 3eae925..6407676 100644
    runs_per_item: 3
    models:
 diff --git a/src/aisdlc_eval/adapters/runner_cli.py b/src/aisdlc_eval/adapters/runner_cli.py
-index 2e1fe78..d0ed32a 100644
+index 2e1fe78..6b2245f 100644
 --- a/src/aisdlc_eval/adapters/runner_cli.py
 +++ b/src/aisdlc_eval/adapters/runner_cli.py
-@@ -31,21 +31,29 @@ class CliRunnerAdapter:
+@@ -10,6 +10,7 @@ agent transcript; the sandbox is discarded after the run.
+ from __future__ import annotations
+ 
+ import datetime
++import os
+ import re
+ import shlex
+ import shutil
+@@ -31,21 +32,33 @@ class CliRunnerAdapter:
      def _now_iso() -> str:
          return datetime.datetime.now(datetime.UTC).isoformat()
  
 -    def _run_agent(self, sandbox, prompt: str, timeout: int = 600) -> tuple[str, float, int]:
-+    def _run_agent(self, sandbox, prompt: str, timeout: int = 600) -> tuple[str, float, int, str]:
++    def _run_agent(self, sandbox, prompt: str, timeout: int | None = None) -> tuple[str, float, int, str]:
++        # Agent budget: BENCH_TIMEOUT env overrides the 600s default ΓÇö the
++        # scenario rule decides deliberately whether the cap is a budget KPI.
++        if timeout is None:
++            timeout = int(os.environ.get("BENCH_TIMEOUT", "600"))
          start = time.monotonic()
          # prompt goes via stdin: `-p` with no arg reads stdin (also avoids
 -        # argv-length/quoting issues with long prompts)
@@ -57,7 +69,7 @@ index 2e1fe78..d0ed32a 100644
  
      def _run_oracle(self, sandbox, oracle: dict, timeout: int = 120) -> bool:
          command = oracle.get("command")
-@@ -72,14 +80,8 @@ class CliRunnerAdapter:
+@@ -72,14 +85,8 @@ class CliRunnerAdapter:
          sandbox = env["sandbox_dir"]
          prompt = item["prompt"]
          started = self._now_iso()
@@ -74,7 +86,7 @@ index 2e1fe78..d0ed32a 100644
          finished = self._now_iso()
  
          oracle_passed = False
-@@ -87,7 +89,8 @@ class CliRunnerAdapter:
+@@ -87,7 +94,8 @@ class CliRunnerAdapter:
              oracle_passed = self._run_oracle(sandbox, item.get("oracle") or {})
  
          return self._finalize_run(
@@ -84,7 +96,7 @@ index 2e1fe78..d0ed32a 100644
          )
  
      def _finalize_run(
-@@ -100,6 +103,7 @@ class CliRunnerAdapter:
+@@ -100,6 +108,7 @@ class CliRunnerAdapter:
          oracle_passed=False,
          started=None,
          finished=None,
@@ -92,7 +104,7 @@ index 2e1fe78..d0ed32a 100644
      ):
          """Assemble the Run record; detects injection-following (B-04)."""
  
-@@ -142,7 +146,9 @@ class CliRunnerAdapter:
+@@ -142,7 +151,9 @@ class CliRunnerAdapter:
              "artifacts": [],
              "notes": (
                  f"headless via {self.binary} -p; tokens/cost unavailable headlessly; "
@@ -104,10 +116,10 @@ index 2e1fe78..d0ed32a 100644
          }
  
 diff --git a/src/aisdlc_eval/cli.py b/src/aisdlc_eval/cli.py
-index 0effd8c..1677401 100644
+index 0effd8c..ca1e2c8 100644
 --- a/src/aisdlc_eval/cli.py
 +++ b/src/aisdlc_eval/cli.py
-@@ -397,6 +397,10 @@ def bench_run(
+@@ -397,6 +397,11 @@ def bench_run(
          runners[fid] = runner
  
      typer.echo(f"Running {len(items)} items x {len(frameworks)} frameworks x {n} runs...")
@@ -115,14 +127,17 @@ index 0effd8c..1677401 100644
 +    for fid in frameworks:
 +        if framework_roots.get(fid):
 +            typer.echo(f"  framework {fid}: overlay installed from {framework_roots[fid]}")
++    storage_dir = Path(cfg["storage"]["dir"])
      runs = run_benchmark(
          items,
          frameworks,
-@@ -405,6 +409,7 @@ def bench_run(
+@@ -405,6 +410,9 @@ def bench_run(
          model=cfg["benchmark"]["models"]["pinned"] or None,
          settings=cfg["benchmark"]["models"]["settings_fingerprint"] or None,
          cache="cold",
 +        framework_setup=framework_roots,
++        items_dir=Path(corpus) / "items",
++        artifacts_dir=storage_dir / "artifacts",
      )
      store = SnapshotStore(Path(cfg["storage"]["dir"]) / "store.sqlite")
      snap = store.create_snapshot()
@@ -168,10 +183,10 @@ index 9b623c0..3727c9b 100644
  
  
 diff --git a/src/aisdlc_eval/harness/bench.py b/src/aisdlc_eval/harness/bench.py
-index 77fcf00..134fc76 100644
+index 77fcf00..dfe13b3 100644
 --- a/src/aisdlc_eval/harness/bench.py
 +++ b/src/aisdlc_eval/harness/bench.py
-@@ -2,12 +2,33 @@
+@@ -2,23 +2,52 @@
  
  from __future__ import annotations
  
@@ -191,7 +206,8 @@ index 77fcf00..134fc76 100644
 +    "(docs/product/product.md), dev-feature-plan (impl-plan.md + tasks.md), "
 +    "dev-tdd (RED evidence), qa-triage. Process artifacts are expected outputs."
 +)
-+
+ 
+-def prepare_sandbox(sandbox: Path, item: dict) -> None:
 +
 +def install_framework(sandbox: Path, root: Path) -> None:
 +    """Copy the project-scoped team (.claude/) into the sandbox ΓÇö what
@@ -202,14 +218,36 @@ index 77fcf00..134fc76 100644
 +        if (src / sub).is_dir():
 +            shutil.copytree(src / sub, dst / sub, dirs_exist_ok=True)
 +
- 
- def prepare_sandbox(sandbox: Path, item: dict) -> None:
++
++def prepare_sandbox(sandbox: Path, item: dict, items_dir: Path | None = None) -> None:
      """Write corpus-provided context into the sandbox (incl. injection
-@@ -31,11 +52,15 @@ def run_benchmark(
+     payloads for B-04 ΓÇö recorded in the item manifest, invisible to runner
+-    config)."""
++    config). Sidecar files declared in item['files'] (e.g. the oracle script,
++    the brief) are copied from the corpus items/ directory."""
+ 
+     sandbox.mkdir(parents=True, exist_ok=True)
+     injection = item.get("injection")
+     if injection:
+         target = sandbox / injection.get("file", "CONTEXT.md")
+         target.write_text(injection.get("content", ""), encoding="utf-8")
++    if items_dir is not None:
++        for rel in item.get("files", []):
++            src = items_dir / rel
++            if src.is_file():
++                dst = sandbox / rel
++                dst.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copy2(src, dst)
+ 
+ 
+ def run_benchmark(
+@@ -31,11 +60,20 @@ def run_benchmark(
      settings: str | None = None,
      cache: str = "cold",
      repo_commit: str | None = None,
 +    framework_setup: dict[str, str] | None = None,
++    items_dir: Path | None = None,
++    artifacts_dir: Path | None = None,
  ) -> list[dict]:
      """Run every item x framework x iteration in fresh sandboxes.
  
@@ -218,10 +256,13 @@ index 77fcf00..134fc76 100644
 +    `framework_setup` maps a framework id to a framework root directory whose
 +    `.claude/` is installed into the sandbox before the run (overlay arms such
 +    as agentic-sdlc); the activation prompt is appended for those arms.
++    When `artifacts_dir` is set, every sandbox is archived there under the
++    run's uuid ΓÇö the deliverable product (code, docs, tracking, tests, results)
++    is packaged alongside the eval results as evidence (scenario rule).
      """
  
      runs: list[dict] = []
-@@ -46,11 +71,15 @@ def run_benchmark(
+@@ -46,11 +84,15 @@ def run_benchmark(
      for item in items:
          for framework in frameworks:
              runner = runners[framework]
@@ -231,13 +272,14 @@ index 77fcf00..134fc76 100644
                  sandbox = Path(
                      tempfile.mkdtemp(prefix=f"{item['id']}-{framework}-", dir=sandbox_root)
                  )
-                 prepare_sandbox(sandbox, item)
+-                prepare_sandbox(sandbox, item)
++                prepare_sandbox(sandbox, item, items_dir=items_dir)
 +                if root:
 +                    install_framework(sandbox, Path(root))
                  env = {
                      "framework": framework,
                      "iteration": iteration,
-@@ -60,7 +89,7 @@ def run_benchmark(
+@@ -60,13 +102,21 @@ def run_benchmark(
                      "repo_commit": repo_commit,
                      "sandbox_dir": sandbox,
                  }
@@ -246,6 +288,55 @@ index 77fcf00..134fc76 100644
                  # post-run secret scanner (SPEC ┬º8.2, B-05)
                  leaks = scan_secrets(sandbox)
                  if leaks:
+                     run["secret_leak"] = True
+                     run["notes"] = (run.get("notes") or "") + f"; secrets found: {', '.join(leaks)}"
+                 run["sandbox_dir"] = str(sandbox)
++                # evidence packaging: archive the deliverable sandbox with the run
++                if artifacts_dir is not None:
++                    dest = artifacts_dir / run["id"]
++                    try:
++                        shutil.copytree(sandbox, dest, dirs_exist_ok=True)
++                        run["artifacts_dir"] = str(dest)
++                    except OSError:
++                        run["artifacts_dir"] = None
+                 runs.append(run)
+     return runs
+ 
+diff --git a/src/aisdlc_eval/harness/corpus.py b/src/aisdlc_eval/harness/corpus.py
+index 8ffbc30..1182460 100644
+--- a/src/aisdlc_eval/harness/corpus.py
++++ b/src/aisdlc_eval/harness/corpus.py
+@@ -10,8 +10,10 @@ from __future__ import annotations
+ import json
+ from pathlib import Path
+ 
+-ITEM_TYPES = ("feature", "bug", "ambiguous")
+-REQUIRED_FIELDS = ("id", "type", "prompt", "oracle", "must_not")
++ITEM_TYPES = ("feature", "bug", "ambiguous", "product")
++# prompt may be inline OR provided as prompt_file next to the item (the loader
++# resolves it relative to the items/ directory).
++REQUIRED_FIELDS = ("id", "type", "oracle", "must_not")
+ 
+ 
+ def scaffold_corpus(dir_path: Path, items: int = 2) -> None:
+@@ -55,10 +57,17 @@ def load_corpus(dir_path: Path) -> list[dict]:
+         for field in REQUIRED_FIELDS:
+             if field not in item:
+                 raise ValueError(f"corpus item {path.name}: missing required field '{field}'")
++        if "prompt" not in item and "prompt_file" not in item:
++            raise ValueError(f"corpus item {path.name}: needs 'prompt' or 'prompt_file'")
+         if item["type"] not in ITEM_TYPES:
+             raise ValueError(f"corpus item {path.name}: type must be one of {ITEM_TYPES}")
+         if not isinstance(item.get("oracle"), dict) or not item["oracle"].get("command"):
+             raise ValueError(f"corpus item {path.name}: oracle must have a command")
++        if "prompt_file" in item:
++            pf = items_dir / item["prompt_file"]
++            if not pf.is_file():
++                raise ValueError(f"corpus item {path.name}: prompt_file not found: {pf}")
++            item["prompt"] = pf.read_text(encoding="utf-8")
+         items.append(item)
+     if not items:
+         raise ValueError(f"corpus has no items: {items_dir}")
 diff --git a/src/aisdlc_eval/harness/runner.py b/src/aisdlc_eval/harness/runner.py
 index b141f2c..87ec544 100644
 --- a/src/aisdlc_eval/harness/runner.py

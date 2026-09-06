@@ -10,7 +10,7 @@ or human can reproduce the analysis without rerunning anything.
 | `bench/corpus/` | The benchmark corpus (FIX-1, FIX-2 — self-contained fib tasks with materializing oracles) |
 | `.aisdlc-eval/store.sqlite` | The evidence store: snapshots, runs, KPIs, pipeline rows (committed as evidence) |
 | `.aisdlc-eval/exports/` | Generated reports: `comparison_matrix.csv`, `limitation_annex.md`, `weekly_metrics.*` |
-| `patches/aisdlc-eval-framework-arms.patch` | **Required patch** for the v0.2.0 package: overlay framework arms, UTF-8 fix, failure-detail capture, `framework_roots` config schema |
+| `patches/aisdlc-eval-framework-arms.patch` | Record of the overlay-arm changes (framework arms, sidecar files, artifact capture, `BENCH_TIMEOUT`, UTF-8 fix, failure detail) — **merged upstream** on the package repo's `main` (2026-09-06); kept here for reference and for installing against the registry wheel |
 
 ## How to use
 

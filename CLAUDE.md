@@ -26,6 +26,12 @@ plugin, the 4 agent definitions, their skills, and the project scaffold.
   entry in `~/.claude.json` — never into `~/.claude/`, and only when invoked.)
 - **Never grant permissions.** No code or skill may touch `permissions` in any
   settings file (the v1 `Bash(*)` grant is the reason v2 exists).
+- **Design the scenario before any benchmark.** Every eval round (greenfield or
+  brownfield) needs a designed test scenario — product requirements, acceptance
+  criteria, task breakdown, and a deliverables contract — BEFORE runs, and the
+  deliverable product (code, docs, tracking, tests, results) is captured with
+  the eval results as evidence. Procedure + template: `docs/guide/EVAL-GUIDE.md`
+  §"Scenario design rule" and `bench-eval/scenarios/`.
 - Agent `.md` files stay thin — role + hard rules + skill index; workflow detail
   lives in skills. Keep each agent under ~4KB.
 - No telemetry, hooks, or company-internal content in this public repo —

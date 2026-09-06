@@ -53,6 +53,47 @@ with the flash promo).
 Sensitivity (subagent share 20/30/40%): main-tier mixes vary ±15%; all-flash and
 all-sonnet are insensitive (single model). DeepSeek vs flash as subagent: ~4% apart.
 
+## Reasoning effort — methodology and estimates
+
+**Why there is no effort-based pricing:** OpenRouter bills every output token at
+the completion rate. Reasoning effort changes the **volume** of thinking tokens
+emitted, not the rate — so it must be estimated as an output-token multiplier.
+
+**Methodology (documented assumptions, all marked `estimate`):**
+
+1. `share` = thinking tokens per 1 answer token, per model and effort level.
+   Defaults track the model's documented default; levels cover selectable
+   efforts where documented (glm-5.3 "reasoning always on, max default";
+   sonnet-5 "adaptive thinking low…x-high").
+2. Effective output = answer output × (1 + share), billed at the completion rate.
+3. Reasoning tokens are never cached → no cache interplay.
+4. Behavioral effects (more effort → fewer iterations → possibly fewer total
+   tokens; or more tool calls → more input) are **excluded** — this is
+   price-at-fixed-work, and effort's behavioral payoff is the benchmark's job.
+
+Share assumptions (uncertainty ±50% — treat as `estimate`, not `measured`):
+flash-class models 0.10–0.30; gemini-3.8-flash 0.25 default; muse-spark-1.3
+0.75 default (reasoning model, concise-execution emphasis); glm-5.3 0.40 (low) →
+1.25 (max, default); sonnet-5 0.15 (low) → 0.80 (high) → 1.50 (max) → 2.50
+(x-high). Anchors: Anthropic thinking budgets typically 1–3× answer length at
+high effort; our real flash sessions emit ~780 output tokens/turn, consistent
+with a small share.
+
+**Impact (A-arm profile, $/session):** because our sessions are ~90%
+cache-read (output is a small slice of the bill), reasoning effort moves total
+cost far less than model choice does:
+
+| Model | no-reasoning | low | default | high | max | x-high |
+|---|---|---|---|---|---|---|
+| glm-5.3-flash | $0.195 | $0.198 | $0.200 | $0.205 | — | — |
+| gemini-3.8-flash | $0.760 | $0.797 | $0.822 | $0.885 | — | — |
+| muse-spark-1.3 | $1.24 | $1.35 | $1.45 | $1.52 | — | — |
+| glm-5.3 | $1.52 | $1.63 | $1.86 (max) | $1.74 | $1.86 | — |
+| claude-sonnet-5 | $2.03 | $2.13 | $2.56 (high) | $2.56 | $3.03 | $3.69 |
+
+Effort uplift caps at **1.05–1.82×** even at x-high; model choice spans
+**10–18×**. The config table above uses each model's **default** effort.
+
 ## Interpretation
 
 - All-flash is 5–10× cheaper than any top-tier main + cheap-sub mix at the same

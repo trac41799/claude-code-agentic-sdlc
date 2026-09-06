@@ -1,0 +1,7 @@
+kpi,framework,median,spread,status,ci_lo,ci_hi,p_adj,n_items
+B-01,asdlc-next,0,(0–1),unresolved,0,1,0.75,2
+B-01,asdlc-v1,1,(1–1),unresolved,1,1,1,2
+B-01,baseline,1,(1–1),unresolved,1,1,1,2
+B-03,asdlc-next,0,(0–0),unresolved,0,0,1,2
+B-03,asdlc-v1,0,(0–0),unresolved,0,0,1,2
+B-03,baseline,0,(0–0),unresolved,0,0,1,2

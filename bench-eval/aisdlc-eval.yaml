@@ -1,0 +1,28 @@
+project:
+  name: aisdlc-eval-run
+  task_system: none
+  code_host: gitlab
+  docs_system: none
+  usage: none
+  ci: gitlab
+cohorts:
+  baseline:
+    window: null
+  frameworks: []
+kpi:
+  window: weekly
+  custom: []
+benchmark:
+  corpus_dir: bench/corpus/
+  runs_per_item: 3
+  models:
+    pinned: "open_router/z-ai/glm-5.3-flash"
+    settings_fingerprint: "fcc-claude 2.1.218 · fcc-server default (2026-09-05, operator pin: glm-5.3-flash only)"
+  framework_roots:
+    baseline: null
+    asdlc-v1: "C:/Users/TracNguyen/Personal/BrainStorm/Research-Hub/asdlc-main-bench"
+    asdlc-next: "C:/Users/TracNguyen/Personal/BrainStorm/Research-Hub/claude-code-agentic-sdlc"
+storage:
+  dir: .aisdlc-eval/
+secrets:
+  env_prefix: AISDLC_EVAL_

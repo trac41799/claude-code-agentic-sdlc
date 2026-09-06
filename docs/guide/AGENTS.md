@@ -74,6 +74,13 @@ operator provides finished post + hero image in content/topics/{slug}/
 
 Canonical layout: [`templates/project-scaffold/FOLDER-STRUCTURE.md`](../../templates/project-scaffold/FOLDER-STRUCTURE.md).
 
+## Evaluating the framework
+
+When asked to measure, benchmark, or compare the framework (baseline vs
+`asdlc-v1` vs `asdlc-next`), follow [`EVAL-GUIDE.md`](EVAL-GUIDE.md) — install,
+model pin (`glm-5.3-flash` only), framework arms, run commands, and the
+interpretation rules. Results so far: [`EVALUATION-LOG-2026-09.md`](../benchmarks/EVALUATION-LOG-2026-09.md).
+
 ## Something not working?
 
 See [`troubleshooting.md`](troubleshooting.md), or run `/asdlc-doctor`.

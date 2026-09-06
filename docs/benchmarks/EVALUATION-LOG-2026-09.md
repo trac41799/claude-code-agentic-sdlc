@@ -60,7 +60,7 @@ The first launch was "canceled" by the operator but its Python child **survived 
 
 | Finding | Status |
 |---|---|
-| `aisdlc-eval` not on PyPI | Install from `git+https://git.garage.epam.com/trac_nguyen/aisdlc-eval-package.git` (v0.2.0 @ `3cc773b5`) |
+| `aisdlc-eval` distribution | GitLab native PyPI registry (project 3931, v0.2.0 wheel) for observe loops; `git+main` for benchmark installs (overlay-arm patches merged upstream 2026-09-06 @ `3e87b02`) |
 | Harness has no framework-overlay arms | **Patched** locally (bench-eval/patches/) — sandbox `.claude/` install + activation + `framework_roots` config + RUNNER_MAP entries; **not yet pushed upstream** |
 | Windows UTF-8 bug — stdout reader thread crashed on non-Latin-1 bytes | **Patched** locally (`encoding="utf-8", errors="replace"`); same patch file |
 | Agent failures recorded as bare `exit -1` | **Patched** — `agent error: <Type>: <detail>` now captured (this is how the timeouts were diagnosed) |
@@ -75,10 +75,29 @@ The first launch was "canceled" by the operator but its Python child **survived 
 - `bench-v2-out/smoke` (gitignored) — bench-v2 smoke manifest/sessions
 - fcc-server/gateway state, `.env.local` keys — never committed
 
-## Next steps (pending operator decisions)
+## Scenario rule (2026-09-06, mandatory)
 
-1. Re-run `asdlc-next` with a raised harness timeout (600s → 1800s) — distinguishes true completion rate from budget-miss (~$5–10).
-2. bench-v2 **N=5 hard-greenfield** (~$30–40, one case) — the hard-task arbiter for the merge decision.
-3. Restore `bench-v2/tasks/series-1/seed-repo` (author's copy) — unblocks the brownfield series case.
-4. Push the eval-package patches upstream (EPAM GitLab) so the guide's install is patch-free.
-5. Human sign-off (eval kit R6) before anything here is quoted externally.
+Designed evaluation scenarios must exist **before** any eval round — greenfield
+or brownfield — with product requirements, acceptance criteria, a task
+breakdown, a deliverables contract (codebase + docs + tracking + tests +
+results), and a mechanical oracle; the deliverable sandbox is archived with the
+eval results as evidence. Template: `bench-eval/scenarios/GREENFIELD-001-sprintpulse/`
+(SprintPulse — a mid-size web service with a timezone trap, chosen to
+differentiate correctness, evidence discipline, ceremony cost, and
+traceability). Rule also in `CLAUDE.md` hard rules and `EVAL-GUIDE.md`.
+
+## Next steps
+
+1. 🔄 Raised-budget rerun (BENCH_TIMEOUT=1800) of all three arms on the FIX
+   corpus — same-budget comparison, distinguishes true completion from
+   budget-miss (~$15–25, launched 2026-09-06).
+2. 🔄 bench-v2 **N=5 hard-greenfield** (~$30–40, one case) — the hard-task
+   arbiter for the merge decision (launched 2026-09-06).
+3. ⏳ **Real evaluation round** — GREENFIELD-001 (SprintPulse) across
+   baseline/asdlc-v1/asdlc-next once the above complete + human sign-off
+   (~$40–80 for n=3 × 3 arms).
+4. Restore `bench-v2/tasks/series-1/seed-repo` (author's copy) — unblocks the
+   brownfield series case.
+5. Push the eval-package patches upstream (EPAM GitLab) so the guide's install
+   is patch-free.
+6. Human sign-off (eval kit R6) before anything here is quoted externally.

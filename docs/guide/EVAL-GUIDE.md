@@ -48,12 +48,18 @@ fcc-claude --version   # 2.1.218 expected
 ### 2.2 aisdlc-eval (v0.2.0)
 
 ```bash
+# Option A — GitLab native PyPI registry (base 0.2.0 wheel; observe loops only —
+# the published wheel predates the overlay-arm patches):
+py -m pip install aisdlc-eval --index-url "https://__token__:<GITLAB_EVAL_REPO_TOKEN>@git.garage.epam.com/api/v4/projects/3931/packages/pypi/simple" --extra-index-url https://pypi.org/simple
+
+# Option B — git+main (benchmarks with framework arms; the overlay-arm patches,
+# UTF-8 fix, and failure detail are merged upstream on main):
 py -m pip install "git+https://git.garage.epam.com/trac_nguyen/aisdlc-eval-package.git"
-# REQUIRED patch (framework arms + UTF-8 fix + failure detail) — pending upstream:
-git clone https://git.garage.epam.com/trac_nguyen/aisdlc-eval-package $env:TEMP/aisdlc-eval-package
-git -C $env:TEMP/aisdlc-eval-package apply <repo>/bench-eval/patches/aisdlc-eval-framework-arms.patch
-py -m pip install -e $env:TEMP/aisdlc-eval-package
+# or editable for development: git clone … && py -m pip install -e <clone>
 ```
+
+`bench-eval/patches/aisdlc-eval-framework-arms.patch` is kept as the record of
+the overlay-arm changes (now upstream); no manual patching needed.
 
 ### 2.3 bench-v2 (in this repo)
 
@@ -80,6 +86,36 @@ git -C <repo> worktree add <repo>/../asdlc-main-bench main
 ```
 
 The overlay is what `/asdlc-adopt` installs: `.claude/agents`, `.claude/skills`, `.claude/rules` copied into the sandbox, plus the activation prompt ("route through the delegation block; produce spec/plan/tasks/TDD/QA artifacts").
+
+## 4b. Scenario design rule (mandatory — every benchmark)
+
+> **Design the test/eval scenario BEFORE any eval runs — greenfield or
+> brownfield.** A run without a designed scenario produces numbers nobody can
+> interpret fairly. (Rule recorded 2026-09-06; template:
+> `bench-eval/scenarios/GREENFIELD-001-sprintpulse/`.)
+
+A scenario must contain, before the first run:
+
+1. **Product requirements** — a brief with functional + non-functional
+   requirements and acceptance criteria, "humanly comprehensive yet complex
+   enough to prove worth and edge out the difference between frameworks"
+   (mid-size, multi-file, with at least one subtle correctness trap).
+2. **Task breakdown** — the tasks the framework is expected to track.
+3. **The deliverables contract (evidence)** — the product codebase, documentation,
+   task tracking, test suites, and test results that must be present after the
+   run; enforced mechanically by the oracle, not by hope.
+4. **The oracle** — an automated gate (build + tests + deliverable presence).
+5. **Complexity rationale** — which axes the scenario is meant to differentiate
+   (correctness under subtlety, evidence discipline, ceremony cost,
+   traceability).
+
+After a run, the sandbox (the deliverable product) is **archived alongside the
+eval results** (`<storage>/artifacts/<run-id>/`, path recorded in the run row)
+and committed as evidence — the eval result is the comparison of evidence, not
+just pass/fail.
+
+The harness enforces: `BENCH_TIMEOUT` (default 600s) is a deliberate budget
+choice — record it in the run notes; `artifacts_dir` capture is always on.
 
 ## 5. Observe loop (weekly)
 

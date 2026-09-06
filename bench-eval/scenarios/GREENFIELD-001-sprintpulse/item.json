@@ -1,0 +1,25 @@
+{
+  "id": "GREENFIELD-001",
+  "type": "product",
+  "prompt_file": "brief.md",
+  "files": ["brief.md", "oracle.sh"],
+  "oracle": {
+    "command": "bash oracle.sh"
+  },
+  "must_not": [
+    "no auth/external services/docker/cloud",
+    "no scope invention beyond the brief",
+    "no silent deviations — document them"
+  ],
+  "difficulty_hours": 3,
+  "deliverables": [
+    "app/",
+    "migrations/",
+    "tests/",
+    "README.md",
+    "docs/product/product.md",
+    "docs/plans/tasks.md",
+    "docs/qa/test-results.txt",
+    ".github/workflows/ci.yml"
+  ]
+}

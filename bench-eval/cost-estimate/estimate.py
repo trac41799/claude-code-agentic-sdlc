@@ -26,6 +26,8 @@ PRICES = {
     "muse-spark-1.3":       {"in": 1.25,  "out": 4.25,  "cache_read": 0.15,  "cache_write": 1.5625},
     "claude-sonnet-5":      {"in": 2.00,  "out": 10.00, "cache_read": 0.20,  "cache_write": 2.50},
     "deepseek-v4-flash-0731": {"in": 0.045, "out": 0.09, "cache_read": 0.009, "cache_write": 0.05625},
+    "gemini-3.8-flash":        {"in": 0.75,  "out": 3.75,  "cache_read": 0.075,  "cache_write": 0.04167},  # Google cache-write = 1/18x input
+    "gemini-3.8-flash-promo":  {"in": 0.375, "out": 1.875, "cache_read": 0.0375, "cache_write": 0.02083}, # 50% off
 }
 
 def session_cost(tokens: dict, model: str) -> float:
@@ -76,6 +78,12 @@ def main():
         ("main glm-5.3 + subs deepseek-v4", "glm-5.3", "deepseek-v4-flash-0731"),
         ("main muse-spark-1.3 + subs glm-flash", "muse-spark-1.3", "glm-5.3-flash"),
         ("main muse-spark-1.3 + subs deepseek-v4", "muse-spark-1.3", "deepseek-v4-flash-0731"),
+        ("all gemini-3.8-flash (list)",         "gemini-3.8-flash", "gemini-3.8-flash"),
+        ("all gemini-3.8-flash (50% promo)",    "gemini-3.8-flash-promo", "gemini-3.8-flash-promo"),
+        ("main glm-5.3 + subs gemini-flash",    "glm-5.3", "gemini-3.8-flash"),
+        ("main muse-spark + subs gemini-flash", "muse-spark-1.3", "gemini-3.8-flash"),
+        ("main gemini-flash + subs glm-flash",  "gemini-3.8-flash", "glm-5.3-flash"),
+        ("main gemini-flash + subs deepseek-v4", "gemini-3.8-flash", "deepseek-v4-flash-0731"),
     ]
     SUB_SHARE = 0.30  # default subagent share of tokens; sensitivity 0.20 / 0.40
 

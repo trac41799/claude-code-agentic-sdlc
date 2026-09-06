@@ -14,6 +14,7 @@ SSE: arm A framework, arm B bare, plus a 1-turn preflight). Repro:
 | `meta/muse-spark-1.3` | 1.25 | 4.25 | 0.15 | single provider (Meta) |
 | `anthropic/claude-sonnet-5` | 2.00 | 10.00 | 0.20 | |
 | `deepseek/deepseek-v4-flash-0731` | 0.045 | 0.09 | 0.009 | |
+| `google/gemini-3.8-flash` | 0.75 | 3.75 | 0.075 | cache-write $0.04167 (1/18× input — cache-friendly); 50% promo → 0.375/1.875 |
 
 Cache-write assumed 1.25× input (OpenRouter convention).
 
@@ -43,6 +44,11 @@ with the flash promo).
 | main glm-5.3 + subs deepseek-v4-flash | $1.08 | $0.63 | 5.6× |
 | main muse-spark-1.3 + subs glm-flash | $0.92 | $0.52 | 4.7× |
 | main muse-spark-1.3 + subs deepseek-v4-flash | $0.88 | $0.49 | 4.5× |
+| all gemini-3.8-flash (list / promo) | $0.76 / $0.38 | $0.43 / $0.21 | 3.9× / 1.95× |
+| main glm-5.3 + subs gemini-flash | $1.30 | $0.74 | 6.6× |
+| main muse-spark-1.3 + subs gemini-flash | $1.09 | $0.61 | 5.6× |
+| main gemini-flash + subs glm-flash | $0.59 | $0.33 | 3.0× |
+| main gemini-flash + subs deepseek-v4-flash | $0.55 | $0.31 | 2.8× |
 
 Sensitivity (subagent share 20/30/40%): main-tier mixes vary ±15%; all-flash and
 all-sonnet are insensitive (single model). DeepSeek vs flash as subagent: ~4% apart.
@@ -51,6 +57,12 @@ all-sonnet are insensitive (single model). DeepSeek vs flash as subagent: ~4% ap
 
 - All-flash is 5–10× cheaper than any top-tier main + cheap-sub mix at the same
   token volume; the 50% flash promo halves it.
+- Gemini 3.8 Flash slots between: ~4× all-flash standalone (2× with its promo),
+  and as a **main** with cheap subs it is the cheapest non-flash-leading team
+  (~3× all-flash); as a **subagent** it costs more than flash/deepseek subs but
+  less than raising the main's share. Its 1/18× cache-write makes it
+  disproportionately cheap in long, cache-heavy sessions (our profiles are
+  90%+ cache-read).
 - The subagent model choice is nearly irrelevant to cost (flash vs deepseek ≈ 4%)
   because the main agent dominates spend in mixed configs.
 - This is **price at fixed work** — real behavior differs (a stronger main model

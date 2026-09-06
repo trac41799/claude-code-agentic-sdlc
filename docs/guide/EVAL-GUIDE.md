@@ -74,7 +74,7 @@ py -m pytest bench-v2/tests/test_v2.py -q    # 7 passed, 1 skipped (series-1 see
   ```bash
   $env:BENCH_CLI="fcc-claude"; $env:BENCH_MODEL="open_router/z-ai/glm-5.3-flash"
   ```
-- The aisdlc-eval harness records `benchmark.models.pinned` in every run + annex (set it in `bench-eval/aisdlc-eval.yaml`). It does **not** pass `--model` to the CLI — safe only because the fcc-server default is already the glm pin (verify with a bare `fcc-claude -p "say OK"` and check `modelUsage`).
+- The aisdlc-eval harness **enforces** `benchmark.models.pinned`: it passes the pinned id as `--model` and **refuses to start** on Claude-family or non-glm pins (upstream `a0e80cb`). With no pin configured it falls back to the fcc-server default — verify that default with a bare `fcc-claude -p "say OK"` and check `modelUsage`.
 - Record the pin in every manifest; a run with an unpinned/other model is `PIN VIOLATION` (bench-v2) and not comparable.
 
 ## 4. Framework versions — checkouts

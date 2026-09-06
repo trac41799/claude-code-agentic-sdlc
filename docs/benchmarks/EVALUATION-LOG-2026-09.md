@@ -61,7 +61,8 @@ The first launch was "canceled" by the operator but its Python child **survived 
 | Finding | Status |
 |---|---|
 | `aisdlc-eval` distribution | GitLab native PyPI registry (project 3931, v0.2.0 wheel) for observe loops; `git+main` for benchmark installs (overlay-arm patches merged upstream 2026-09-06 @ `3e87b02`) |
-| Harness has no framework-overlay arms | **Patched** locally (bench-eval/patches/) — sandbox `.claude/` install + activation + `framework_roots` config + RUNNER_MAP entries; **not yet pushed upstream** |
+| Harness has no framework-overlay arms | **Fixed upstream** (`3e87b02`) — sandbox `.claude/` install + activation + `framework_roots` config + RUNNER_MAP entries; patch record in bench-eval/patches/ |
+| Harness trusted the server default for the model | **Fixed upstream** (`a0e80cb`) — `models.pinned` is passed as `--model` and Claude-family/non-glm pins are refused |
 | Windows UTF-8 bug — stdout reader thread crashed on non-Latin-1 bytes | **Patched** locally (`encoding="utf-8", errors="replace"`); same patch file |
 | Agent failures recorded as bare `exit -1` | **Patched** — `agent error: <Type>: <detail>` now captured (this is how the timeouts were diagnosed) |
 | `FakeRunner` trap | If a framework binary is missing, `bench run` silently persists **fabricated passes** (notes say "fake runner"; matrix can't distinguish) — do not run arms whose binary is absent |

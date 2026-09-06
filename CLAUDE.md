@@ -12,6 +12,9 @@ plugin, the 4 agent definitions, their skills, and the project scaffold.
 - `.claude/skills/` — agent workflow skills (installed **per-project** by `asdlc-project`)
 - `.claude/rules/` — engineering guardrails copied into projects
 - `templates/project-scaffold/` — the canonical new-project layout
+- `bench-eval/` + `docs/guide/EVAL-GUIDE.md` + `docs/benchmarks/EVALUATION-LOG-2026-09.md` —
+  evaluation workspace, end-to-end procedure (install → pin → framework arms → run → interpret),
+  and the measured record. Read EVAL-GUIDE before running any evaluation; quote numbers only per its rules.
 
 ## Hard rules for edits here
 - **Nothing installs globally.** No file in this repo may write to `~/.claude/`.

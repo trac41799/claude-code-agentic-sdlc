@@ -1,0 +1,16 @@
+kpi_id,cohort,window,value,unit,status,ci_lo,ci_hi,formula,sources,snapshot,vs_baseline,notes
+U-07,baseline,2026-W36,,rate,unavailable,,,MRs with ai_usage != human_only / measured MRs,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,no MRs with known ai_usage
+U-07,claude-code,2026-W36,,rate,unavailable,,,MRs with ai_usage != human_only / measured MRs,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,no MRs with known ai_usage
+U-13,baseline,2026-W36,,hours,unresolved,,,median(merged_at - created_at) in working hours,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-13,claude-code,2026-W36,,hours,unresolved,,,median(merged_at - created_at) in working hours,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-14,baseline,2026-W36,,hours,unavailable,,,median(merged_at - ready_for_review_at) in working hours,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-14,claude-code,2026-W36,,hours,unavailable,,,median(merged_at - ready_for_review_at) in working hours,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-15,claude-code,2026-W36,,ratio,unresolved,,,1 - AI_cycle/baseline_cycle,"['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,no baseline cohort — value claims require a declared baseline (SPEC R7)
+U-16,baseline,2026-W36,,usd/sp,unresolved,,,"sum(AI cost) / validated SP — AI cost only, labor excluded",['usage-*'],2026-09-06T00:25:52.952820+00:00,,AI cost only (labor excluded) — requires a usage adapter (SPEC §7)
+U-16,claude-code,2026-W36,,usd/sp,unresolved,,,"sum(AI cost) / validated SP — AI cost only, labor excluded",['usage-*'],2026-09-06T00:25:52.952820+00:00,,AI cost only (labor excluded) — requires a usage adapter (SPEC §7)
+U-18,baseline,2026-W36,,defects/sp,unresolved,,,pre-release bugs / delivered SP,"['task-jira', 'task-github', 'ci-*']",2026-09-06T00:25:52.952820+00:00,,requires defect/release data (ci adapter)
+U-18,claude-code,2026-W36,,defects/sp,unresolved,,,pre-release bugs / delivered SP,"['task-jira', 'task-github', 'ci-*']",2026-09-06T00:25:52.952820+00:00,,requires defect/release data (ci adapter)
+U-21,baseline,2026-W36,,rate,unavailable,,,"fix/hotfix/revert MRs / total MRs — heuristic, always proxy","['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-21,claude-code,2026-W36,,rate,unavailable,,,"fix/hotfix/revert MRs / total MRs — heuristic, always proxy","['code-gitlab', 'code-github']",2026-09-06T00:25:52.952820+00:00,,
+U-22,baseline,2026-W36,,ratio,unavailable,,,(SP/FTE AI) / (SP/FTE baseline) — needs team-roster adapter,"['task-*', 'roster']",2026-09-06T00:25:52.952820+00:00,,v1.1 — requires team-roster adapter (FTE)
+U-22,claude-code,2026-W36,,ratio,unavailable,,,(SP/FTE AI) / (SP/FTE baseline) — needs team-roster adapter,"['task-*', 'roster']",2026-09-06T00:25:52.952820+00:00,,v1.1 — requires team-roster adapter (FTE)

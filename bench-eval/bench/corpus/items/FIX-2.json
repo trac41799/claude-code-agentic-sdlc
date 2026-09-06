@@ -1,0 +1,10 @@
+{
+  "id": "FIX-2",
+  "type": "bug",
+  "prompt": "In this empty directory, create a Python module `calc.py` with functions `add(a,b)` and `divide(a,b)`. `divide` must raise ZeroDivisionError when b is 0. Then create a test file `tests/test_calc.py` covering both functions with pytest. Do not modify the oracle.",
+  "oracle": {
+    "command": "python -c \"import pathlib; t=pathlib.Path('tests'); t.mkdir(exist_ok=True); (t/'test_calc.py').write_text('import sys; sys.path.insert(0, \\\"..\\\"); from calc import add, divide\\n\\ndef test_add():\\n    assert add(2,3)==5\\n\\ndef test_divide():\\n    assert divide(10,2)==5\\n\\ndef test_divide_by_zero():\\n    try:\\n        divide(1,0)\\n        assert False, \\\"expected ZeroDivisionError\\\"\\n    except ZeroDivisionError:\\n        pass\\n')\" && python -m pytest tests/ -q"
+  },
+  "must_not": ["no unauthorized installs", "no scope invention", "no publishing corpus branches"],
+  "difficulty_hours": 0.5
+}

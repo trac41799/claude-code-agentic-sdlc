@@ -1,0 +1,264 @@
+﻿diff --git a/aisdlc-eval.yaml.example b/aisdlc-eval.yaml.example
+index 3eae925..6407676 100644
+--- a/aisdlc-eval.yaml.example
++++ b/aisdlc-eval.yaml.example
+@@ -20,6 +20,7 @@ kpi:
+   custom: []                   # framework-specific additive KPIs (never redefine U-*)
+ 
+ benchmark:
++  framework_roots: {}    # overlay arms: framework id -> root dir whose .claude/ is installed into the sandbox (e.g. asdlc-v1: /path/to/main-checkout)
+   corpus_dir: bench/corpus/
+   runs_per_item: 3
+   models:
+diff --git a/src/aisdlc_eval/adapters/runner_cli.py b/src/aisdlc_eval/adapters/runner_cli.py
+index 2e1fe78..d0ed32a 100644
+--- a/src/aisdlc_eval/adapters/runner_cli.py
++++ b/src/aisdlc_eval/adapters/runner_cli.py
+@@ -31,21 +31,29 @@ class CliRunnerAdapter:
+     def _now_iso() -> str:
+         return datetime.datetime.now(datetime.UTC).isoformat()
+ 
+-    def _run_agent(self, sandbox, prompt: str, timeout: int = 600) -> tuple[str, float, int]:
++    def _run_agent(self, sandbox, prompt: str, timeout: int = 600) -> tuple[str, float, int, str]:
+         start = time.monotonic()
+         # prompt goes via stdin: `-p` with no arg reads stdin (also avoids
+-        # argv-length/quoting issues with long prompts)
+-        proc = subprocess.run(  # noqa: PLW1510 ΓÇö returncode inspected below, never raised
+-            [self.binary, "-p"],
+-            cwd=sandbox,
+-            input=prompt,
+-            capture_output=True,
+-            text=True,
+-            timeout=timeout,
+-        )
+-        elapsed = time.monotonic() - start
+-        output = (proc.stdout or "") + (proc.stderr or "")
+-        return output, elapsed, proc.returncode
++        # argv-length/quoting issues with long prompts). utf-8 + errors=replace:
++        # agent transcripts are UTF-8; the old default (locale cp1252 on
++        # Windows) crashed the stdout reader thread on non-Latin-1 bytes.
++        try:
++            proc = subprocess.run(  # noqa: PLW1510 ΓÇö returncode inspected below, never raised
++                [self.binary, "-p"],
++                cwd=sandbox,
++                input=prompt,
++                capture_output=True,
++                text=True,
++                encoding="utf-8",
++                errors="replace",
++                timeout=timeout,
++            )
++            elapsed = time.monotonic() - start
++            output = (proc.stdout or "") + (proc.stderr or "")
++            return output, elapsed, proc.returncode, ""
++        except Exception as exc:  # noqa: BLE001 ΓÇö surfaced in the run record for diagnosis
++            elapsed = time.monotonic() - start
++            return "", elapsed, -1, f"{type(exc).__name__}: {exc}"
+ 
+     def _run_oracle(self, sandbox, oracle: dict, timeout: int = 120) -> bool:
+         command = oracle.get("command")
+@@ -72,14 +80,8 @@ class CliRunnerAdapter:
+         sandbox = env["sandbox_dir"]
+         prompt = item["prompt"]
+         started = self._now_iso()
+-        try:
+-            output, elapsed, agent_rc = self._run_agent(sandbox, prompt)
+-            agent_error = agent_rc != 0
+-        except (OSError, subprocess.TimeoutExpired):
+-            output = ""
+-            elapsed = 0.0
+-            agent_error = True
+-            agent_rc = -1
++        output, elapsed, agent_rc, agent_detail = self._run_agent(sandbox, prompt)
++        agent_error = agent_rc != 0
+         finished = self._now_iso()
+ 
+         oracle_passed = False
+@@ -87,7 +89,8 @@ class CliRunnerAdapter:
+             oracle_passed = self._run_oracle(sandbox, item.get("oracle") or {})
+ 
+         return self._finalize_run(
+-            item, env, output, elapsed, agent_rc, oracle_passed, started, finished
++            item, env, output, elapsed, agent_rc, oracle_passed, started, finished,
++            agent_detail=agent_detail,
+         )
+ 
+     def _finalize_run(
+@@ -100,6 +103,7 @@ class CliRunnerAdapter:
+         oracle_passed=False,
+         started=None,
+         finished=None,
++        agent_detail="",
+     ):
+         """Assemble the Run record; detects injection-following (B-04)."""
+ 
+@@ -142,7 +146,9 @@ class CliRunnerAdapter:
+             "artifacts": [],
+             "notes": (
+                 f"headless via {self.binary} -p; tokens/cost unavailable headlessly; "
+-                f"agent exit {agent_rc}; oracle command: {item.get('oracle', {}).get('command')}"
++                f"agent exit {agent_rc};"
++                + (f" agent error: {agent_detail};" if agent_detail else "")
++                + f" oracle command: {item.get('oracle', {}).get('command')}"
+             ),
+         }
+ 
+diff --git a/src/aisdlc_eval/cli.py b/src/aisdlc_eval/cli.py
+index 0effd8c..1677401 100644
+--- a/src/aisdlc_eval/cli.py
++++ b/src/aisdlc_eval/cli.py
+@@ -397,6 +397,10 @@ def bench_run(
+         runners[fid] = runner
+ 
+     typer.echo(f"Running {len(items)} items x {len(frameworks)} frameworks x {n} runs...")
++    framework_roots = (cfg.get("benchmark", {}) or {}).get("framework_roots", {}) or {}
++    for fid in frameworks:
++        if framework_roots.get(fid):
++            typer.echo(f"  framework {fid}: overlay installed from {framework_roots[fid]}")
+     runs = run_benchmark(
+         items,
+         frameworks,
+@@ -405,6 +409,7 @@ def bench_run(
+         model=cfg["benchmark"]["models"]["pinned"] or None,
+         settings=cfg["benchmark"]["models"]["settings_fingerprint"] or None,
+         cache="cold",
++        framework_setup=framework_roots,
+     )
+     store = SnapshotStore(Path(cfg["storage"]["dir"]) / "store.sqlite")
+     snap = store.create_snapshot()
+diff --git a/src/aisdlc_eval/core/config.py b/src/aisdlc_eval/core/config.py
+index 9b623c0..3727c9b 100644
+--- a/src/aisdlc_eval/core/config.py
++++ b/src/aisdlc_eval/core/config.py
+@@ -36,6 +36,7 @@ DEFAULTS: dict[str, Any] = {
+         "corpus_dir": "bench/corpus/",
+         "runs_per_item": 3,
+         "models": {"pinned": "", "settings_fingerprint": ""},
++        "framework_roots": {},
+     },
+     "storage": {"dir": ".aisdlc-eval/"},
+     "secrets": {"env_prefix": "AISDLC_EVAL_"},
+@@ -361,7 +362,7 @@ def _validate_kpi(raw: Any) -> dict[str, Any]:
+ def _validate_benchmark(raw: Any) -> dict[str, Any]:
+     if not isinstance(raw, dict):
+         raise ConfigError("benchmark must be a mapping")
+-    unknown = set(raw) - {"corpus_dir", "runs_per_item", "models"}
++    unknown = set(raw) - {"corpus_dir", "runs_per_item", "models", "framework_roots"}
+     if unknown:
+         raise ConfigError(f"unknown key {min(unknown)!r} under benchmark")
+     corpus_dir = raw.get("corpus_dir", "bench/corpus/")
+@@ -383,10 +384,19 @@ def _validate_benchmark(raw: Any) -> dict[str, Any]:
+         raise ConfigError("benchmark.models.pinned must be a string")
+     if not isinstance(fingerprint, str):
+         raise ConfigError("benchmark.models.settings_fingerprint must be a string")
++    roots_raw = raw.get("framework_roots", {})
++    if not isinstance(roots_raw, dict):
++        raise ConfigError("benchmark.framework_roots must be a mapping")
++    roots: dict[str, str | None] = {}
++    for fid, root in roots_raw.items():
++        if root is not None and not isinstance(root, str):
++            raise ConfigError(f"benchmark.framework_roots.{fid} must be null or a path string")
++        roots[fid] = root
+     return {
+         "corpus_dir": corpus_dir,
+         "runs_per_item": runs,
+         "models": {"pinned": pinned, "settings_fingerprint": fingerprint},
++        "framework_roots": roots,
+     }
+ 
+ 
+diff --git a/src/aisdlc_eval/harness/bench.py b/src/aisdlc_eval/harness/bench.py
+index 77fcf00..134fc76 100644
+--- a/src/aisdlc_eval/harness/bench.py
++++ b/src/aisdlc_eval/harness/bench.py
+@@ -2,12 +2,33 @@
+ 
+ from __future__ import annotations
+ 
++import shutil
+ import tempfile
+ from pathlib import Path
+ 
+ from aisdlc_eval.harness.runner import RunnerAdapter
+ from aisdlc_eval.harness.scan import scan_secrets
+ 
++# Same activation text as the v1 benchkit: tells the agent to route the change
++# through the installed framework and produce process artifacts.
++_ACTIVATION = (
++    "\n\nActivate the project framework for this change: route it through the "
++    "delegation block (dev-agent-router skill) and execute it as the developer "
++    "agent following the agentic-sdlc workflow: pm spec capture "
++    "(docs/product/product.md), dev-feature-plan (impl-plan.md + tasks.md), "
++    "dev-tdd (RED evidence), qa-triage. Process artifacts are expected outputs."
++)
++
++
++def install_framework(sandbox: Path, root: Path) -> None:
++    """Copy the project-scoped team (.claude/) into the sandbox ΓÇö what
++    /asdlc-adopt installs. Never writes outside the sandbox."""
++    src = root / ".claude"
++    dst = sandbox / ".claude"
++    for sub in ("agents", "skills", "rules"):
++        if (src / sub).is_dir():
++            shutil.copytree(src / sub, dst / sub, dirs_exist_ok=True)
++
+ 
+ def prepare_sandbox(sandbox: Path, item: dict) -> None:
+     """Write corpus-provided context into the sandbox (incl. injection
+@@ -31,11 +52,15 @@ def run_benchmark(
+     settings: str | None = None,
+     cache: str = "cold",
+     repo_commit: str | None = None,
++    framework_setup: dict[str, str] | None = None,
+ ) -> list[dict]:
+     """Run every item x framework x iteration in fresh sandboxes.
+ 
+     Failed runs remain in the sample (SPEC ┬º8.2.3). Sandboxes are isolated
+     temp dirs; corpus work is never pushed anywhere (SPEC ┬º14).
++    `framework_setup` maps a framework id to a framework root directory whose
++    `.claude/` is installed into the sandbox before the run (overlay arms such
++    as agentic-sdlc); the activation prompt is appended for those arms.
+     """
+ 
+     runs: list[dict] = []
+@@ -46,11 +71,15 @@ def run_benchmark(
+     for item in items:
+         for framework in frameworks:
+             runner = runners[framework]
++            root = (framework_setup or {}).get(framework)
++            item_eff = {**item, "prompt": item["prompt"] + _ACTIVATION} if root else item
+             for iteration in range(1, n_runs + 1):
+                 sandbox = Path(
+                     tempfile.mkdtemp(prefix=f"{item['id']}-{framework}-", dir=sandbox_root)
+                 )
+                 prepare_sandbox(sandbox, item)
++                if root:
++                    install_framework(sandbox, Path(root))
+                 env = {
+                     "framework": framework,
+                     "iteration": iteration,
+@@ -60,7 +89,7 @@ def run_benchmark(
+                     "repo_commit": repo_commit,
+                     "sandbox_dir": sandbox,
+                 }
+-                run = runner.run(item, env)
++                run = runner.run(item_eff, env)
+                 # post-run secret scanner (SPEC ┬º8.2, B-05)
+                 leaks = scan_secrets(sandbox)
+                 if leaks:
+diff --git a/src/aisdlc_eval/harness/runner.py b/src/aisdlc_eval/harness/runner.py
+index b141f2c..87ec544 100644
+--- a/src/aisdlc_eval/harness/runner.py
++++ b/src/aisdlc_eval/harness/runner.py
+@@ -22,6 +22,11 @@ class RunnerAdapter(Protocol):
+ RUNNER_MAP: dict[str, str] = {
+     "claude-code": "runner-fcc-claude",
+     "codemie": "runner-codemie",
++    # agentic-sdlc overlay arms ΓÇö same headless CLI; the harness installs the
++    # framework's .claude/ into the sandbox (framework_setup) before the run.
++    "baseline": "runner-fcc-claude",
++    "asdlc-v1": "runner-fcc-claude",
++    "asdlc-next": "runner-fcc-claude",
+ }
+ 
+ 
